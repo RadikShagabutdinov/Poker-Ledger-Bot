@@ -1,7 +1,27 @@
-import { z } from 'zod';
-
-// Shared zod schemas, API types and error codes are added in later stages (SPEC §9.3, §11).
+// Shared zod schemas, API types and error codes (SPEC §9.3, §11).
 export const SHARED_PACKAGE = '@pokerledger/shared';
 
-/** Game ID: nanoid(12) (SPEC §10). */
-export const gameIdSchema = z.string().regex(/^[A-Za-z0-9_-]{12}$/);
+export { ERROR_CODES, type ApiError, type ErrorCode } from './errors';
+export {
+  buyChipsSchema,
+  chatSettingsPatchSchema,
+  chipsSchema,
+  currencySchema,
+  displayNameSchema,
+  gameIdSchema,
+  gameNameSchema,
+  gameNameTemplateSchema,
+  guestNameSchema,
+  languageSchema,
+  mismatchModeSchema,
+  payBankSchema,
+  payNoteSchema,
+  payPhoneSchema,
+  profilePatchSchema,
+  quickBuyinsSchema,
+  stackSchema,
+  transferSchema,
+  type ChatSettingsPatch,
+  type Language,
+  type ProfilePatch,
+} from './schemas';
