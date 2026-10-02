@@ -1,5 +1,5 @@
 // Business logic shared by the bot and the HTTP API (SPEC §9.4).
-export type { Actor } from './context';
+export { touchActor, type Actor } from './context';
 export {
   DEFAULT_TIME_ZONE,
   type Membership,
@@ -31,6 +31,7 @@ export {
   addPlayerToGame,
   assertCanHaveAnotherActiveGame,
   createGame,
+  listActiveGames,
   renderGameName,
   updateGame,
   type AddGamePlayerInput,
@@ -48,6 +49,13 @@ export {
   type RecordedEvent,
 } from './events';
 export { getGameLog, getGameState, type GameState, type LogEntry } from './state';
+export {
+  loadGameMessageData,
+  setResultMessageId,
+  setStatusMessageId,
+  userLanguage,
+  type GameMessageData,
+} from './messages';
 export { finishGame, previewFinish, type FinishInput, type FinishPreview } from './finish';
 export {
   getSettlement,
@@ -57,9 +65,12 @@ export {
   type SettlementView,
 } from './settlement';
 export {
+  cancelGameEvent,
   editFinishedEvents,
+  recordGameEvent,
   updateFinishedMismatch,
   type FinishedEventsEdit,
+  type GameEventInput,
 } from './finishedEdit';
 export { deleteGame, reopenGame } from './lifecycle';
 export {

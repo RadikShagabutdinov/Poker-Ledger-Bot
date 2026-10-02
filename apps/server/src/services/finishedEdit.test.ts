@@ -6,7 +6,12 @@ import { findGame } from '../db/repositories/games';
 import { listSettlement } from '../db/repositories/settlements';
 import { cancelEvent, recordBuy } from './events';
 import { finishGame } from './finish';
-import { editFinishedEvents, updateFinishedMismatch } from './finishedEdit';
+import {
+  cancelGameEvent,
+  editFinishedEvents,
+  recordGameEvent,
+  updateFinishedMismatch,
+} from './finishedEdit';
 import { updateGame } from './games';
 import { reopenGame } from './lifecycle';
 import { saveSettlement } from './settlement';
@@ -191,5 +196,40 @@ describe('editing a finished game', () => {
     await reopenGame(deps, BOB, game.id);
     const state = await getGameState(deps, BOB, game.id);
     expect(state.players.map((pl) => pl.status)).toEqual(['left', 'seated', 'seated', 'seated']);
+  });
+});
+
+describe('events by game status (API)', () => {
+  it('records and cancels events of an active game directly', async () => {
+    const deps = createTestDeps();
+    const { game } = await setupGame(deps);
+    const p = await playExample85(deps, game.id);
+    const event = await recordGameEvent(deps, BOB, game.id, {
+      type: 'buy',
+      playerId: p.dima,
+      chips: 10_000,
+    });
+    expect(event).toMatchObject({ type: 'rebuy', chips: 10_000 });
+    expect(await cancelGameEvent(deps, BOB, game.id, event?.eventId ?? 0)).toMatchObject({
+      type: 'rebuy',
+    });
+  });
+
+  it('turns them into edit batches of a finished game (V1-EDIT-01)', async () => {
+    const deps = createTestDeps();
+    const { game, p } = await finished85(deps);
+    const rebuy = listGameEvents(deps.db, game.id).find(
+      (e) => e.type === 'rebuy' && e.playerId === p.kolya,
+    );
+    // Bob created the game; Carol is a plain member.
+    await expect(cancelGameEvent(deps, CAROL, game.id, rebuy?.id ?? 0)).rejects.toMatchObject({
+      code: 'FORBIDDEN',
+    });
+    expect(await cancelGameEvent(deps, BOB, game.id, rebuy?.id ?? 0)).toBeNull();
+    expect((await getGameState(deps, BOB, game.id)).players[2]).toMatchObject({ inChips: 30_000 });
+    // A lone buy leaves the player seated without final chips.
+    await expect(
+      recordGameEvent(deps, BOB, game.id, { type: 'buy', playerId: p.dima, chips: 1_000 }),
+    ).rejects.toMatchObject({ code: 'MISSING_FINAL_CHIPS' });
   });
 });

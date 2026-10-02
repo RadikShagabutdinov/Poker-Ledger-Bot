@@ -1,0 +1,247 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`result message (SPEC §13.3) > marks a manual settlement whose balances do not match 1`] = `
+"<b>✅ Покер 15.09 завершена · 4 игрока</b>
+
+Итоги:
+Петя +1 367 ₽
+Коля +233 ₽
+Дима 0 ₽
+Вася −1 600 ₽
+
+Переводы:
+Вася → Петя: 1 600 ₽
+
+✏️ Переводы изменены вручную
+⚠️ Переводы не совпадают с итогами"
+`;
+
+exports[`result message (SPEC §13.3) > mentions Telegram players and never shows payment details 1`] = `
+"<b>✅ Покер 15.09 finished · 2 players</b>
+
+Results:
+<a href="tg://user?id=3">Carol</a> +₽500
+Guest −₽500
+
+Transfers:
+Guest → Carol: ₽500"
+`;
+
+exports[`result message (SPEC §13.3) > renders results and transfers in en 1`] = `
+"<b>✅ Покер 15.09 finished · 4 players</b>
+
+Results:
+Петя +₽1,367
+Коля +₽233
+Дима ₽0
+Вася −₽1,600
+
+Transfers:
+Вася → Петя: ₽1,367
+Вася → Коля: ₽233"
+`;
+
+exports[`result message (SPEC §13.3) > renders results and transfers in en 2`] = `
+{
+  "inline_keyboard": [
+    [
+      {
+        "text": "📱 Details and payment info",
+        "url": "https://t.me/poker_ledger_bot/app?startapp=g_<gameId>",
+      },
+    ],
+  ],
+}
+`;
+
+exports[`result message (SPEC §13.3) > renders results and transfers in ru 1`] = `
+"<b>✅ Покер 15.09 завершена · 4 игрока</b>
+
+Итоги:
+Петя +1 367 ₽
+Коля +233 ₽
+Дима 0 ₽
+Вася −1 600 ₽
+
+Переводы:
+Вася → Петя: 1 367 ₽
+Вася → Коля: 233 ₽"
+`;
+
+exports[`result message (SPEC §13.3) > renders results and transfers in ru 2`] = `
+{
+  "inline_keyboard": [
+    [
+      {
+        "text": "📱 Детали и реквизиты",
+        "url": "https://t.me/poker_ledger_bot/app?startapp=g_<gameId>",
+      },
+    ],
+  ],
+}
+`;
+
+exports[`result message (SPEC §13.3) > warns about a chip mismatch in en 1`] = `
+"<b>✅ Покер 15.09 finished · 4 players</b>
+
+Results:
+Петя +₽1,373
+Коля +₽242
+Дима −₽27
+Вася −₽1,588
+
+Transfers:
+Вася → Петя: ₽1,373
+Вася → Коля: ₽215
+Дима → Коля: ₽27
+
+⚠️ There are 1,000 chips (≈₽33) less on the table than issued. The difference is split in proportion to chips bought."
+`;
+
+exports[`result message (SPEC §13.3) > warns about a chip mismatch in ru 1`] = `
+"<b>✅ Покер 15.09 завершена · 4 игрока</b>
+
+Итоги:
+Петя +1 373 ₽
+Коля +242 ₽
+Дима −27 ₽
+Вася −1 588 ₽
+
+Переводы:
+Вася → Петя: 1 373 ₽
+Вася → Коля: 215 ₽
+Дима → Коля: 27 ₽
+
+⚠️ На столе на 1 000 фишек (≈33 ₽) меньше, чем выдано. Разница распределена пропорционально купленным фишкам."
+`;
+
+exports[`status message (SPEC §13.2) > collapses more than 15 seated players to names and chips 1`] = `
+"<b>🃏 Покер 15.09 · кэш</b>
+Стек: 30 000 фишек = 1 000 ₽
+
+За столом:
+• Guest 1 — 45 000
+• Guest 2 — 30 000
+• Guest 3 — 30 000
+• Guest 4 — 30 000
+• Guest 5 — 30 000
+• Guest 6 — 30 000
+• Guest 7 — 30 000
+• Guest 8 — 30 000
+• Guest 9 — 30 000
+• Guest 10 — 30 000
+• Guest 11 — 30 000
+• Guest 12 — 30 000
+• Guest 13 — 30 000
+• Guest 14 — 30 000
+• Guest 15 — 30 000
+• Guest 16 — 30 000
+
+Выдано: 495 000 (16 500 ₽) · На столе: 495 000"
+`;
+
+exports[`status message (SPEC §13.2) > renders an empty game 1`] = `
+"<b>🃏 Покер 15.09 · кэш</b>
+Стек: 30 000 фишек = 1 000 ₽
+
+Пока никого нет. Нажмите «✋ Я в игре».
+
+Выдано: 0 (0 ₽) · На столе: 0"
+`;
+
+exports[`status message (SPEC §13.2) > renders seated and left players in en 1`] = `
+"<b>🃏 Покер 15.09 · cash</b>
+Stack: 30,000 chips = ₽1,000
+
+At the table:
+• Петя — 30,000 (buy-in)
+• Коля — 45,000 (buy-in, rebuy ×1)
+• Дима — 30,000 (buy-in)
+Left:
+• Вася — bought 60,000, cashed out 12,000 (−₽1,600)
+
+Issued: 165,000 (₽5,500) · On the table: 153,000"
+`;
+
+exports[`status message (SPEC §13.2) > renders seated and left players in en 2`] = `
+{
+  "inline_keyboard": [
+    [
+      {
+        "callback_data": "j:<gameId>",
+        "text": "✋ I'm in",
+      },
+      {
+        "callback_data": "r:<gameId>",
+        "text": "➕ Rebuy (1 stack)",
+      },
+    ],
+    [
+      {
+        "callback_data": "u:<gameId>",
+        "text": "↩️ Undo mine",
+      },
+      {
+        "text": "📱 Open",
+        "url": "https://t.me/poker_ledger_bot/app?startapp=g_<gameId>",
+      },
+    ],
+  ],
+}
+`;
+
+exports[`status message (SPEC §13.2) > renders seated and left players in ru 1`] = `
+"<b>🃏 Покер 15.09 · кэш</b>
+Стек: 30 000 фишек = 1 000 ₽
+
+За столом:
+• Петя — 30 000 (вход)
+• Коля — 45 000 (вход, докуп ×1)
+• Дима — 30 000 (вход)
+Вышли:
+• Вася — купил 60 000, вынес 12 000 (−1 600 ₽)
+
+Выдано: 165 000 (5 500 ₽) · На столе: 153 000"
+`;
+
+exports[`status message (SPEC §13.2) > renders seated and left players in ru 2`] = `
+{
+  "inline_keyboard": [
+    [
+      {
+        "callback_data": "j:<gameId>",
+        "text": "✋ Я в игре",
+      },
+      {
+        "callback_data": "r:<gameId>",
+        "text": "➕ Докуп (1 стек)",
+      },
+    ],
+    [
+      {
+        "callback_data": "u:<gameId>",
+        "text": "↩️ Отменить моё",
+      },
+      {
+        "text": "📱 Открыть",
+        "url": "https://t.me/poker_ledger_bot/app?startapp=g_<gameId>",
+      },
+    ],
+  ],
+}
+`;
+
+exports[`status message (SPEC §13.2) > renders the finished status without buttons 1`] = `
+"<b>🃏 Покер 15.09 · кэш</b>
+Стек: 30 000 фишек = 1 000 ₽
+
+Вышли:
+• Вася — купил 60 000, вынес 12 000 (−1 600 ₽)
+• Петя — купил 30 000, вынес 71 000 (+1 367 ₽)
+• Коля — купил 45 000, вынес 52 000 (+233 ₽)
+• Дима — купил 30 000, вынес 30 000 (0 ₽)
+
+Выдано: 165 000 (5 500 ₽) · На столе: 0
+
+🏁 Игра завершена, итоги — в сообщении ниже."
+`;

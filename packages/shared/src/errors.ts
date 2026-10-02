@@ -24,6 +24,10 @@ export const ERROR_CODES = [
   'EVENT_NOT_CANCELLABLE',
   /** There is no event to undo. */
   'NOTHING_TO_UNDO',
+  /** Too many API requests from this user (SEC-06); `Retry-After` says when to retry. */
+  'RATE_LIMITED',
+  /** Unexpected server failure. */
+  'INTERNAL_ERROR',
 ] as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[number];

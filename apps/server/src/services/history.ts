@@ -42,6 +42,9 @@ export interface HistoryPage {
 }
 
 export interface HistoryQuery {
+  readonly status?: 'active' | 'finished' | undefined;
+  /** V1 has cash games only; the filter is there for V2 (V1-HIST-02). */
+  readonly type?: GameType | undefined;
   /** Inclusive lower bound of `started_at`, ms (V1-HIST-02). */
   readonly from?: number | undefined;
   /** Exclusive upper bound of `started_at`, ms. */
@@ -77,6 +80,8 @@ export async function listGames(
   const limit = Math.min(Math.max(query.limit ?? HISTORY_PAGE_SIZE, 1), 100);
   const rows = listGamesPage(deps.db, {
     chatId: chat.id,
+    status: query.status,
+    type: query.type,
     from: query.from,
     to: query.to,
     after: query.cursor === undefined ? undefined : decodeCursor(query.cursor),
@@ -131,7 +136,7 @@ export async function getGameDetails(
   const { game, access } = await loadViewableGame(deps, actor, gameId);
   const data = loadGameData(deps.db, game);
   return {
-    state: buildGameState(deps.db, data, access),
+    state: buildGameState(deps.db, data, access, actor.tgUserId),
     settlement: game.status === 'finished' ? buildSettlementView(deps.db, game, false) : null,
     log: buildGameLog(deps.db, data),
   };

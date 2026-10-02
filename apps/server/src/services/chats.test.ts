@@ -6,6 +6,7 @@ import {
   ALICE,
   BOB,
   CAROL,
+  DAVE,
   MALLORY,
   TG_CHAT_ID,
   actor,
@@ -17,7 +18,7 @@ import { getChat, migrateChat, registerChat, setBotStatus, updateChatSettings } 
 import { addGuest, listPlayers, renamePlayer } from './players';
 import { getProfile, listMyChats, updateProfile } from './profile';
 import { getGameState } from './state';
-import { addPlayerToGame } from './games';
+import { addPlayerToGame, createGame } from './games';
 
 describe('chats', () => {
   it('creates a chat with defaults in the language of the user who added the bot', async () => {
@@ -73,6 +74,31 @@ describe('chats', () => {
     expect((await getGameState(deps, BOB, game.id)).id).toBe(game.id);
   });
 
+  it('migration replaces an empty chat registered under the new id first', async () => {
+    const deps = createTestDeps();
+    const { chat } = await setupGame(deps);
+    const early = registerChat(deps, {
+      tgChatId: -100999,
+      title: 'Poker club',
+      botStatus: 'admin',
+    });
+    migrateChat(deps, TG_CHAT_ID, -100999);
+    expect(findChat(deps.db, early.chat.id)).toBeUndefined();
+    expect(findChat(deps.db, chat.id)).toMatchObject({ tgChatId: -100999, botStatus: 'admin' });
+    // Repeating the migration is a no-op.
+    migrateChat(deps, TG_CHAT_ID, -100999);
+    expect(findChat(deps.db, chat.id)?.tgChatId).toBe(-100999);
+  });
+
+  it('migration does not overwrite a target chat that has data', async () => {
+    const deps = createTestDeps();
+    const { chat } = await setupGame(deps);
+    const other = setupChat(deps, -100999);
+    await createGame(deps, ALICE, other.id);
+    migrateChat(deps, TG_CHAT_ID, -100999);
+    expect(findChat(deps.db, chat.id)?.tgChatId).toBe(TG_CHAT_ID);
+  });
+
   it('validates settings and lets any member change them (SPEC §19.1)', async () => {
     const deps = createTestDeps();
     const chat = setupChat(deps);
@@ -124,9 +150,11 @@ describe('players', () => {
     const deps = createTestDeps();
     const { chat, game } = await setupGame(deps);
     const { playerId } = await addPlayerToGame(deps, CAROL, game.id, { self: true });
-    expect(await listPlayers(deps, BOB, chat.id)).toEqual([
-      { playerId, name: 'Carol', isGuest: false },
-    ]);
+    // Bob becomes a player by opening the chat (V1-PL-01).
+    const players = await listPlayers(deps, BOB, chat.id);
+    expect(players).toHaveLength(2);
+    expect(players).toContainEqual({ playerId, name: 'Carol', isGuest: false });
+    expect(players.map((p) => p.name)).toContain('Bob');
     expect(await renamePlayer(deps, BOB, chat.id, playerId, 'Кэрол')).toMatchObject({
       name: 'Кэрол',
     });
@@ -140,7 +168,7 @@ describe('players', () => {
     const { chat, game } = await setupGame(deps);
     await addPlayerToGame(deps, CAROL, game.id, { self: true });
     await getChat(deps, { ...CAROL, firstName: 'Caroline', lastName: 'K.' }, chat.id);
-    expect((await listPlayers(deps, BOB, chat.id))[0]?.name).toBe('Caroline K.');
+    expect((await listPlayers(deps, DAVE, chat.id)).map((p) => p.name)).toContain('Caroline K.');
   });
 });
 
@@ -174,5 +202,17 @@ describe('profile', () => {
       { chatId: chat.id, title: 'Poker club', activeGameIds: [game.id] },
     ]);
     expect(listMyChats(deps, BOB)).toEqual([]);
+  });
+});
+
+describe('opening a game (V1-PL-01)', () => {
+  it('makes a member a chat player and reports their game player', async () => {
+    const deps = createTestDeps();
+    const { chat, game } = await setupGame(deps);
+    expect((await getGameState(deps, DAVE, game.id)).myPlayerId).toBeNull();
+    expect((await listPlayers(deps, BOB, chat.id)).map((p) => p.name)).toContain('Dave');
+    const { playerId } = await addPlayerToGame(deps, DAVE, game.id, { self: true });
+    expect((await getGameState(deps, DAVE, game.id)).myPlayerId).toBe(playerId);
+    expect((await getGameState(deps, BOB, game.id)).myPlayerId).toBeNull();
   });
 });

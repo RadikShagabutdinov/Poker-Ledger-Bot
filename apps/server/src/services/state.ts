@@ -11,7 +11,7 @@ import {
 } from '@pokerledger/core';
 
 import type { DbOrTx } from '../db/client';
-import { findChatPlayersWithUsers } from '../db/repositories/chatPlayers';
+import { findChatPlayerByUser, findChatPlayersWithUsers } from '../db/repositories/chatPlayers';
 import { listGameResults } from '../db/repositories/gameResults';
 import { findUsers } from '../db/repositories/users';
 import type {
@@ -39,7 +39,7 @@ import {
   canViewGame,
   type GameAccess,
 } from './permissions';
-import { playerName } from './players';
+import { ensureChatPlayer, playerName } from './players';
 
 export interface GamePlayerState {
   readonly playerId: string;
@@ -84,6 +84,8 @@ export interface GameState {
     readonly seatedCount: number;
   };
   readonly players: readonly GamePlayerState[];
+  /** The viewer's player in this game, if any. */
+  readonly myPlayerId: string | null;
   readonly permissions: {
     readonly canManage: boolean;
     readonly canEditFinished: boolean;
@@ -109,7 +111,22 @@ export function playerNames(
   );
 }
 
-export function buildGameState(db: DbOrTx, data: GameData, access: GameAccess): GameState {
+/** The game player linked to `tgUserId`, if any. */
+function gamePlayerOf(db: DbOrTx, data: GameData, tgUserId: number | null): string | null {
+  if (tgUserId === null) {
+    return null;
+  }
+  const player = findChatPlayerByUser(db, data.game.chatId, tgUserId);
+  return player && data.players.some((p) => p.playerId === player.id) ? player.id : null;
+}
+
+/** Game state as `viewer` (a Telegram user id, `null` for system use) sees it. */
+export function buildGameState(
+  db: DbOrTx,
+  data: GameData,
+  access: GameAccess,
+  viewer: number | null,
+): GameState {
   const { game } = data;
   const view = toCoreView(data);
   const totals = computePlayerTotals(view.players, view.events);
@@ -171,6 +188,7 @@ export function buildGameState(db: DbOrTx, data: GameData, access: GameAccess): 
         moneyResult,
       };
     }),
+    myPlayerId: gamePlayerOf(db, data, viewer),
     permissions: {
       canManage: canManageGame(access) && game.status === 'active',
       canEditFinished: canEditFinished(access),
@@ -179,7 +197,10 @@ export function buildGameState(db: DbOrTx, data: GameData, access: GameAccess): 
   };
 }
 
-/** Loads a game the actor may view (SEC-02), or throws. */
+/**
+ * Loads a game the actor may view (SEC-02), or throws. A chat member opening a game
+ * becomes a player of the chat (V1-PL-01).
+ */
 export async function loadViewableGame(
   deps: ServiceDeps,
   actor: Actor,
@@ -188,7 +209,13 @@ export async function loadViewableGame(
   const { game, chat } = findVisibleGame(deps.db, gameId);
   const access = await resolveGameAccess(deps, actor, game, chat);
   assertAllowed(access, canViewGame(access, game));
-  touchUser(deps.db, actor, deps.now());
+  const now = deps.now();
+  deps.db.transaction((tx) => {
+    touchUser(tx, actor, now);
+    if (access.isMember) {
+      ensureChatPlayer(tx, game.chatId, actor.tgUserId, now);
+    }
+  });
   return { game, access };
 }
 
@@ -198,7 +225,7 @@ export async function getGameState(
   gameId: string,
 ): Promise<GameState> {
   const { game, access } = await loadViewableGame(deps, actor, gameId);
-  return buildGameState(deps.db, loadGameData(deps.db, game), access);
+  return buildGameState(deps.db, loadGameData(deps.db, game), access, actor.tgUserId);
 }
 
 export interface LogEntry {

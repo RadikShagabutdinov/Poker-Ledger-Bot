@@ -2,6 +2,7 @@
 export const SHARED_PACKAGE = '@pokerledger/shared';
 
 export { ERROR_CODES, type ApiError, type ErrorCode } from './errors';
+export { formatMoney, formatNumber, formatSignedMoney, localeOf } from './format';
 export {
   buyChipsSchema,
   chatSettingsPatchSchema,
@@ -25,3 +26,4 @@ export {
   type Language,
   type ProfilePatch,
 } from './schemas';
+export * from './api';

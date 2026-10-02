@@ -25,6 +25,14 @@ export function touchUser(db: DbOrTx, actor: Actor, now: number): void {
   );
 }
 
+/** `touchUser` in its own statement, for transports (V1-PROF-04 on every API request). */
+export function touchActor(
+  deps: { readonly db: DbOrTx; readonly now: () => number },
+  actor: Actor,
+): void {
+  touchUser(deps.db, actor, deps.now());
+}
+
 /** `ru*` → `ru`, any other code → `en`, unknown → `fallback`. */
 export function languageFromCode(code: string | undefined, fallback: 'ru' | 'en'): 'ru' | 'en' {
   if (!code) {

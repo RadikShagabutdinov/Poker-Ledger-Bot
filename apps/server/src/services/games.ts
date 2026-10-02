@@ -1,4 +1,4 @@
-import { gameNameSchema, stackSchema, type Language } from '@pokerledger/shared';
+import { gameNameSchema, localeOf, stackSchema, type Language } from '@pokerledger/shared';
 
 import type { DbOrTx } from '../db/client';
 import { findChatPlayer } from '../db/repositories/chatPlayers';
@@ -38,14 +38,17 @@ export function assertCanHaveAnotherActiveGame(db: DbOrTx, chatId: string): void
   }
 }
 
-const DATE_LOCALES: Record<Language, string> = { ru: 'ru-RU', en: 'en-US' };
+/** Active games of a chat, oldest first; at most one in V1, several in V2. */
+export function listActiveGames(deps: ServiceDeps, chatId: string): GameRow[] {
+  return listGamesByStatus(deps.db, chatId, 'active');
+}
 
 /** Fills `{date}` (day and month in the chat locale) and `{n}` (V1-SET-03). */
 export function renderGameName(
   template: string,
   values: { language: Language; timeZone: string; now: number; n: number },
 ): string {
-  const date = new Intl.DateTimeFormat(DATE_LOCALES[values.language], {
+  const date = new Intl.DateTimeFormat(localeOf(values.language), {
     day: '2-digit',
     month: '2-digit',
     timeZone: values.timeZone,

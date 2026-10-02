@@ -4,13 +4,21 @@ import {
   type Language,
 } from '@pokerledger/shared';
 
-import { findChat, findChatByTgId, insertChat, updateChat } from '../db/repositories/chats';
+import {
+  chatHasData,
+  deleteChat,
+  findChat,
+  findChatByTgId,
+  insertChat,
+  updateChat,
+} from '../db/repositories/chats';
 import { newId } from '../db/ids';
 import type { BotStatus, ChatRow } from '../db/schema';
 import { languageFromCode, touchUser, type Actor } from './context';
 import type { ServiceDeps } from './deps';
 import { ServiceError, parseInput } from './errors';
 import { assertChatMember, resolveChatAccess } from './permissions';
+import { ensureChatPlayer } from './players';
 
 /** Chat defaults (V1-SET-01..05). */
 export const CHAT_DEFAULTS = {
@@ -100,21 +108,40 @@ export function registerChat(
 }
 
 /** Bot status changes; `left` keeps all data (V1-CHAT-04). */
-export function setBotStatus(deps: ServiceDeps, tgChatId: number, botStatus: BotStatus): void {
+export function setBotStatus(
+  deps: Pick<ServiceDeps, 'db' | 'now'>,
+  tgChatId: number,
+  botStatus: BotStatus,
+): void {
   const chat = findChatByTgId(deps.db, tgChatId);
   if (chat) {
     updateChat(deps.db, chat.id, { botStatus, updatedAt: deps.now() });
   }
 }
 
-/** Group migrated to a supergroup: keep the data under the new id (V1-CHAT-03). */
+/**
+ * Group migrated to a supergroup: keep the data under the new id (V1-CHAT-03).
+ * Idempotent. An empty chat already registered under the new id (an update about
+ * the supergroup came before the migration message) is replaced by the old one.
+ */
 export function migrateChat(deps: ServiceDeps, fromTgChatId: number, toTgChatId: number): void {
   deps.db.transaction((tx) => {
     const chat = findChatByTgId(tx, fromTgChatId);
-    if (!chat || findChatByTgId(tx, toTgChatId)) {
+    if (!chat) {
       return;
     }
-    updateChat(tx, chat.id, { tgChatId: toTgChatId, updatedAt: deps.now() });
+    const target = findChatByTgId(tx, toTgChatId);
+    if (target) {
+      if (chatHasData(tx, target.id)) {
+        return;
+      }
+      deleteChat(tx, target.id);
+    }
+    updateChat(tx, chat.id, {
+      tgChatId: toTgChatId,
+      ...(target ? { botStatus: target.botStatus } : {}),
+      updatedAt: deps.now(),
+    });
   });
 }
 
@@ -122,7 +149,10 @@ export function findChatByTelegramId(deps: ServiceDeps, tgChatId: number): ChatR
   return findChatByTgId(deps.db, tgChatId);
 }
 
-/** Loads a chat and checks that the actor is its member. */
+/**
+ * Loads a chat and checks that the actor is its member. A member opening the chat in
+ * the Mini App becomes a player of the chat (V1-PL-01).
+ */
 export async function loadChatForMember(
   deps: ServiceDeps,
   actor: Actor,
@@ -134,7 +164,11 @@ export async function loadChatForMember(
   }
   const access = await resolveChatAccess(deps, chat, actor);
   assertChatMember(access);
-  touchUser(deps.db, actor, deps.now());
+  const now = deps.now();
+  deps.db.transaction((tx) => {
+    touchUser(tx, actor, now);
+    ensureChatPlayer(tx, chat.id, actor.tgUserId, now);
+  });
   return { chat, isAdmin: access.isAdmin };
 }
 

@@ -1,7 +1,7 @@
 import { and, desc, eq, gte, inArray, lt, ne, or, sql, type SQL } from 'drizzle-orm';
 
 import type { DbOrTx } from '../client';
-import { games, type GameRow, type GameStatus } from '../schema';
+import { games, type GameRow, type GameStatus, type GameType } from '../schema';
 
 export function findGame(db: DbOrTx, id: string): GameRow | undefined {
   return db.select().from(games).where(eq(games.id, id)).get();
@@ -29,6 +29,8 @@ export function listActiveGamesOfChats(db: DbOrTx, chatIds: readonly string[]): 
 
 export interface GamePageQuery {
   readonly chatId: string;
+  readonly status?: Exclude<GameStatus, 'deleted'> | undefined;
+  readonly type?: GameType | undefined;
   readonly from?: number | undefined;
   readonly to?: number | undefined;
   /** Continue after this `(startedAt, id)` position. */
@@ -39,6 +41,12 @@ export interface GamePageQuery {
 /** Not deleted games of a chat, newest first by `started_at`, then `id`. */
 export function listGamesPage(db: DbOrTx, q: GamePageQuery): GameRow[] {
   const conditions: SQL[] = [eq(games.chatId, q.chatId), ne(games.status, 'deleted')];
+  if (q.status !== undefined) {
+    conditions.push(eq(games.status, q.status));
+  }
+  if (q.type !== undefined) {
+    conditions.push(eq(games.type, q.type));
+  }
   if (q.from !== undefined) {
     conditions.push(gte(games.startedAt, q.from));
   }

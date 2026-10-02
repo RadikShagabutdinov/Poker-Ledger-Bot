@@ -101,3 +101,20 @@ describe('history', () => {
     expect(details.log[2]).toMatchObject({ playerName: 'Carol', createdBy: { name: 'Carol' } });
   });
 });
+
+describe('history filters', () => {
+  it('filters by status and type (V1-HIST-02)', async () => {
+    const deps = createTestDeps();
+    const chat = setupChat(deps);
+    const finished = await playAndFinish(deps, chat.id, 30_000);
+    deps.advance(DAY);
+    const active = await createGame(deps, BOB, chat.id);
+    const ids = async (query: Parameters<typeof listGames>[3]) =>
+      (await listGames(deps, BOB, chat.id, query)).items.map((g) => g.id);
+    expect(await ids({})).toEqual([active.id, finished.id]);
+    expect(await ids({ status: 'active' })).toEqual([active.id]);
+    expect(await ids({ status: 'finished' })).toEqual([finished.id]);
+    expect(await ids({ type: 'cash' })).toEqual([active.id, finished.id]);
+    expect(await ids({ type: 'tournament' })).toEqual([]);
+  });
+});

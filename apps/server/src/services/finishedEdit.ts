@@ -8,7 +8,14 @@ import type { GameEventRow, GameRow } from '../db/schema';
 import type { Actor } from './context';
 import type { ServiceDeps } from './deps';
 import { ServiceError, parseInput } from './errors';
-import { isChipEventType, loadGameData, type ChipEventType } from './gameData';
+import {
+  cancelEvent,
+  recordBuy,
+  recordCashOut,
+  type CancelledEvent,
+  type RecordedEvent,
+} from './events';
+import { findVisibleGame, isChipEventType, loadGameData, type ChipEventType } from './gameData';
 import { finishedGameEditor, mutateGame, type MutationContext } from './mutate';
 import { mismatchOf, recalculateFinishedGame, type SettlementPolicy } from './results';
 
@@ -151,4 +158,70 @@ export async function updateFinishedMismatch(
       recalculateFinishedGame(tx, updated, input.settlementPolicy);
     },
   );
+}
+
+/** Whether `gameId` is a finished game; `NOT_FOUND` for unknown and deleted games. */
+function isFinished(deps: ServiceDeps, gameId: string): boolean {
+  return findVisibleGame(deps.db, gameId).game.status === 'finished';
+}
+
+export interface GameEventInput {
+  readonly type: 'buy' | 'cash_out';
+  readonly playerId: string;
+  readonly chips: number;
+  /** Finished games only. */
+  readonly expectedVersion?: number | undefined;
+  readonly settlementPolicy?: SettlementPolicy | undefined;
+}
+
+/**
+ * `POST /games/:gameId/events`: in an active game a buy or a cash-out; in a finished
+ * game a one-event edit batch (V1-EDIT-01), where `buy` is a buy-in since nobody is
+ * seated. Returns the recorded event of an active game, `null` for a finished one.
+ */
+export async function recordGameEvent(
+  deps: ServiceDeps,
+  actor: Actor,
+  gameId: string,
+  input: GameEventInput,
+): Promise<RecordedEvent | null> {
+  if (isFinished(deps, gameId)) {
+    await editFinishedEvents(deps, actor, gameId, {
+      add: [
+        {
+          playerId: input.playerId,
+          type: input.type === 'buy' ? 'buy_in' : 'cash_out',
+          chips: input.chips,
+        },
+      ],
+      expectedVersion: input.expectedVersion,
+      settlementPolicy: input.settlementPolicy,
+    });
+    return null;
+  }
+  const event = { playerId: input.playerId, chips: input.chips };
+  return input.type === 'buy'
+    ? recordBuy(deps, actor, gameId, event)
+    : recordCashOut(deps, actor, gameId, event);
+}
+
+/**
+ * `POST /games/:gameId/events/:eventId/cancel`: in an active game a cancel; in a
+ * finished game a one-event edit batch (V1-EDIT-01).
+ */
+export async function cancelGameEvent(
+  deps: ServiceDeps,
+  actor: Actor,
+  gameId: string,
+  eventId: number,
+  options: {
+    readonly expectedVersion?: number | undefined;
+    readonly settlementPolicy?: SettlementPolicy | undefined;
+  } = {},
+): Promise<CancelledEvent | null> {
+  if (isFinished(deps, gameId)) {
+    await editFinishedEvents(deps, actor, gameId, { cancel: [eventId], ...options });
+    return null;
+  }
+  return cancelEvent(deps, actor, gameId, eventId);
 }
