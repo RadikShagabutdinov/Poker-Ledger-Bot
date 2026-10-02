@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { cors } from 'hono/cors';
+import type { Logger } from 'pino';
 
-import type { Logger } from '../logger';
 import type { ServiceDeps } from '../services';
 import { initDataAuth } from './auth';
 import type { AppEnv } from './env';
@@ -18,9 +18,9 @@ export interface HttpOptions {
   readonly logger: Logger;
   readonly rateLimiter: ApiRateLimiter;
   readonly botToken: string;
-  /** Dev only: accept unsigned initData (SPEC §16.6). */
+  /** Dev only: accept unsigned initData. */
   readonly skipInitDataCheck: boolean;
-  /** The Mini App origin allowed by CORS (SEC-05). */
+  /** The Mini App origin allowed by CORS. */
   readonly miniAppOrigin: string | undefined;
   /** Also allow `http://localhost:*` (development). */
   readonly allowLocalhost: boolean;
@@ -28,12 +28,12 @@ export interface HttpOptions {
 
 const LOCALHOST_ORIGIN = /^http:\/\/(localhost|127\.0\.0\.1)(:\d{1,5})?$/;
 
-/** The HTTP API under `/api` (SPEC §11), served in the bot's process. */
+/** The HTTP API under `/api`, served in the bot's process. */
 export function createApp(options: HttpOptions): Hono<AppEnv> {
   const { services, logger } = options;
   const app = new Hono<AppEnv>().basePath('/api');
 
-  // One JSON line per request: no headers, bodies or query strings (SEC-09).
+  // One JSON line per request: no headers, bodies or query strings.
   app.use(async (c, next) => {
     const started = performance.now();
     await next();

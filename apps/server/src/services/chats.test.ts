@@ -54,7 +54,7 @@ describe('chats', () => {
     expect(unknown.chat.language).toBe('ru');
   });
 
-  it('keeps data when the bot leaves and restores it on re-adding (V1-CHAT-04)', async () => {
+  it('keeps data when the bot leaves and restores it on re-adding', async () => {
     const deps = createTestDeps();
     const { chat } = await setupGame(deps);
     setBotStatus(deps, TG_CHAT_ID, 'left');
@@ -67,7 +67,7 @@ describe('chats', () => {
     expect(again).toMatchObject({ created: false, chat: { id: chat.id, title: 'Renamed' } });
   });
 
-  it('migration to a supergroup keeps all data (V1-CHAT-03)', async () => {
+  it('migration to a supergroup keeps all data', async () => {
     const deps = createTestDeps();
     const { chat, game } = await setupGame(deps);
     migrateChat(deps, TG_CHAT_ID, -100999);
@@ -101,7 +101,7 @@ describe('chats', () => {
     expect(findChat(deps.db, chat.id)?.tgChatId).toBe(TG_CHAT_ID);
   });
 
-  it('validates settings and lets any member change them (SPEC §19.1)', async () => {
+  it('validates settings and lets any member change them', async () => {
     const deps = createTestDeps();
     const chat = setupChat(deps);
     const view = await updateChatSettings(deps, BOB, chat.id, {
@@ -118,7 +118,7 @@ describe('chats', () => {
     ).rejects.toMatchObject({ code: 'NOT_CHAT_MEMBER' });
   });
 
-  it('games snapshot chat settings (V1-SET-07)', async () => {
+  it('games snapshot chat settings', async () => {
     const deps = createTestDeps();
     const { chat, game } = await setupGame(deps);
     await updateChatSettings(deps, BOB, chat.id, {
@@ -134,7 +134,7 @@ describe('chats', () => {
 });
 
 describe('players', () => {
-  it('guests are unique per chat ignoring case, Cyrillic included (V1-PL-02)', async () => {
+  it('guests are unique per chat ignoring case, Cyrillic included', async () => {
     const deps = createTestDeps();
     const chat = setupChat(deps);
     const vasya = await addGuest(deps, BOB, chat.id, '  Вася ');
@@ -148,11 +148,11 @@ describe('players', () => {
     });
   });
 
-  it('creates a Telegram player on first interaction and renames it (V1-PL-01, V1-PL-03)', async () => {
+  it('creates a Telegram player on first interaction and renames it', async () => {
     const deps = createTestDeps();
     const { chat, game } = await setupGame(deps);
     const { playerId } = await addPlayerToGame(deps, CAROL, game.id, { self: true });
-    // Bob becomes a player by opening the chat (V1-PL-01).
+    // Bob becomes a player by opening the chat.
     const players = await listPlayers(deps, BOB, chat.id);
     expect(players).toHaveLength(2);
     expect(players).toContainEqual({ playerId, name: 'Carol', isGuest: false });
@@ -165,7 +165,7 @@ describe('players', () => {
     });
   });
 
-  it('refreshes the Telegram name on every interaction (V1-PROF-04)', async () => {
+  it('refreshes the Telegram name on every interaction', async () => {
     const deps = createTestDeps();
     const { chat, game } = await setupGame(deps);
     await addPlayerToGame(deps, CAROL, game.id, { self: true });
@@ -175,7 +175,7 @@ describe('players', () => {
 });
 
 describe('profile', () => {
-  it('stores language and payment details, and clears them (V1-PROF-01..03)', () => {
+  it('stores language and payment details, and clears them', () => {
     const deps = createTestDeps();
     expect(getProfile(deps, ALICE)).toMatchObject({ language: null, effectiveLanguage: 'ru' });
     expect(getProfile(deps, BOB)).toMatchObject({ effectiveLanguage: 'en' });
@@ -207,7 +207,7 @@ describe('profile', () => {
   });
 });
 
-describe('opening a game (V1-PL-01)', () => {
+describe('opening a game', () => {
   it('makes a member a chat player and reports their game player', async () => {
     const deps = createTestDeps();
     const { chat, game } = await setupGame(deps);

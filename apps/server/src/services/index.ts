@@ -1,4 +1,4 @@
-// Business logic shared by the bot and the HTTP API (SPEC §9.4).
+// Business logic shared by the bot and the HTTP API.
 export { touchActor, type Actor } from './context';
 export {
   DEFAULT_TIME_ZONE,

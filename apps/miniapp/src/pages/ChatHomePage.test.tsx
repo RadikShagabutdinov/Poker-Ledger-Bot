@@ -20,7 +20,7 @@ const item = (id: string, overrides: Record<string, unknown> = {}) => ({
 });
 
 describe('ChatHomePage', () => {
-  it('shows the active game and the last five games (§12.3)', async () => {
+  it('shows the active game and the last five games', async () => {
     const games = ['a', 'b', 'c', 'd', 'e', 'f'].map((id) => item(`game0000000${id}`));
     games[1] = item('game0000000b', { mismatchChips: 1_000 });
     renderApp('/chats/chat1', {

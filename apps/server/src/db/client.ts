@@ -17,7 +17,7 @@ export interface DatabaseHandle {
 }
 
 /**
- * Opens SQLite (`':memory:'` for tests) with WAL and foreign keys on (SPEC §9.2).
+ * Opens SQLite (`':memory:'` for tests) with WAL and foreign keys on.
  */
 export function openDatabase(path: string): DatabaseHandle {
   const sqlite = new Database(path);

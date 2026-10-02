@@ -1,11 +1,11 @@
 import type { Api, Bot, Context } from 'grammy';
 import type { BotCommand, BotCommandScope, InlineKeyboardMarkup } from 'grammy/types';
+import type { Logger } from 'pino';
 
 import type { Language } from '@pokerledger/shared';
 
 import type { ChatRow } from '../../db/schema';
 import { translator } from '../../i18n';
-import type { Logger } from '../../logger';
 import {
   ServiceError,
   createGame,
@@ -21,7 +21,7 @@ import { urlButton } from '../render/common';
 const GROUP_COMMANDS = ['newgame', 'game', 'history', 'settings', 'help'] as const;
 const PRIVATE_COMMANDS = ['start', 'help'] as const;
 
-/** Command menus per scope and language (SPEC §13.1); `/stats` stays hidden until V2. */
+/** Command menus per scope and language; `/stats` stays hidden until V2. */
 export async function setBotCommands(
   api: Pick<Api, 'setMyCommands'>,
   logger: Logger,
@@ -53,7 +53,7 @@ function keyboard(text: string, url: string): InlineKeyboardMarkup {
   return { inline_keyboard: [[urlButton(text, url)]] };
 }
 
-/** Bot commands in groups and private chats (SPEC §13.1, V1-CHAT-05). */
+/** Bot commands in groups and private chats. */
 export function registerCommandHandlers(bot: Bot, deps: BotDeps): void {
   const { services, links, logger } = deps;
   const group = bot.chatType(['group', 'supergroup']);
@@ -110,7 +110,7 @@ export function registerCommandHandlers(bot: Bot, deps: BotDeps): void {
     const name = ctx.match.trim();
     try {
       const game = await createGame(services, actorFrom(ctx.from), chat.id, name ? { name } : {});
-      // The status message goes out now rather than after the 2 s grouping (V1-MSG-01).
+      // The status message goes out now rather than after the 2 s grouping.
       await deps.updater.flush(game.id);
     } catch (error) {
       if (error instanceof ServiceError && error.code === 'ACTIVE_GAME_EXISTS') {
@@ -157,7 +157,7 @@ export function registerCommandHandlers(bot: Bot, deps: BotDeps): void {
   const languageOf = (ctx: Context): Language =>
     ctx.from ? userLanguage(services.db, actorFrom(ctx.from)) : 'ru';
 
-  // Private chat: profile and chats in the Mini App, no games (V1-CHAT-05).
+  // Private chat: profile and chats in the Mini App, no games.
   personal.command('start', async (ctx) => {
     const t = translator(languageOf(ctx));
     const button = deps.miniAppUrl

@@ -1,4 +1,4 @@
-/** All game event types (SPEC §10 `game_events.type`), including V2 ones. */
+/** All game event types (`game_events.type`), including V2 ones. */
 export type GameEventType =
   | 'game_created'
   | 'player_added'
@@ -45,7 +45,7 @@ export interface Stack {
   readonly amount: number;
 }
 
-/** How the chip mismatch `D = OUT − IN` is distributed (V1-FIN-04). */
+/** How the chip mismatch `D = OUT − IN` is distributed. */
 export type MismatchMode =
   { readonly mode: 'proportional' } | { readonly mode: 'single_player'; readonly playerId: string };
 

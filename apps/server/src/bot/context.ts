@@ -1,6 +1,6 @@
 import type { User } from 'grammy/types';
+import type { Logger } from 'pino';
 
-import type { Logger } from '../logger';
 import type { Actor, ServiceDeps } from '../services';
 import type { MiniAppLinks } from './links';
 import type { PressRateLimiter } from './rateLimit';

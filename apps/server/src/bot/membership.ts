@@ -3,10 +3,10 @@ import type { ChatMember } from 'grammy/types';
 
 import type { Membership, MembershipChecker } from '../services';
 
-/** `getChatMember` results are cached this long (SEC-02). */
+/** `getChatMember` results are cached this long. */
 export const MEMBERSHIP_TTL_MS = 10 * 60 * 1000;
 
-/** SPEC §3: members are `creator`, `administrator`, `member`, or `restricted` with `is_member`. */
+/** Chat members are `creator`, `administrator`, `member`, or `restricted` with `is_member`. */
 export function toMembership(member: ChatMember): Membership {
   switch (member.status) {
     case 'creator':

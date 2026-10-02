@@ -3,7 +3,7 @@ import { add, cmp, floor, fromInt, rat, sub, toSafeInt, ZERO, type Rational } fr
 
 /**
  * Rounds exact values to integers whose sum is exactly `targetSum`, by the
- * largest remainder method (SPEC §8.2, V1-RES-02):
+ * largest remainder method:
  * 1. `f_i = floor(v_i)` toward −∞;
  * 2. `r_i = v_i − f_i` in [0, 1);
  * 3. `K = targetSum − Σ f_i`;

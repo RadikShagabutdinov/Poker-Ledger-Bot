@@ -1,4 +1,4 @@
-// Initial screen by `start_param` (SPEC §12.1).
+// Initial screen by `start_param`.
 
 const ID = /^[A-Za-z0-9_-]{1,64}$/;
 

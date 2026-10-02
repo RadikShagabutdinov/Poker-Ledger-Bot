@@ -13,7 +13,7 @@ import type { GameRow } from '../db/schema';
 import { ServiceError } from './errors';
 import { loadGameData, toCoreView, type CoreView, type GameData } from './gameData';
 
-/** What to do with a manual settlement when results change (V1-SETL-07). */
+/** What to do with a manual settlement when results change. */
 export type SettlementPolicy = 'recalculate' | 'keep';
 
 export function mismatchOf(game: GameRow): MismatchMode {
@@ -81,7 +81,7 @@ function writeResults(db: DbOrTx, gameId: string, result: CashGameResult): void 
 
 /**
  * Stores the results of a game whose players have all left: `game_results`,
- * `mismatch_chips` and the automatic settlement (finish, V1-RES-03).
+ * `mismatch_chips` and the automatic settlement (finish).
  */
 export function storeFinishedResults(db: DbOrTx, game: GameRow): CashGameResult {
   const result = computeResult(loadGameData(db, game), mismatchOf(game));
@@ -92,7 +92,7 @@ export function storeFinishedResults(db: DbOrTx, game: GameRow): CashGameResult 
 }
 
 /**
- * Recalculates a finished game after an edit (V1-RES-03, V1-SETL-07). An automatic
+ * Recalculates a finished game after an edit. An automatic
  * settlement is rebuilt. A manual one is kept when money results did not change;
  * otherwise `policy` decides, and without it the edit is rejected.
  */

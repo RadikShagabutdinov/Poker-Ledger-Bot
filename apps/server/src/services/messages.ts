@@ -1,5 +1,5 @@
 // System-level reads and writes for the bot's chat messages: no actor, no permission
-// checks, never payment details (SEC-04).
+// checks, never payment details.
 import type { Language } from '@pokerledger/shared';
 
 import type { DbOrTx } from '../db/client';
@@ -28,7 +28,7 @@ export interface GameMessageData {
   readonly state: GameState;
   /** Finished games only; without payment details. */
   readonly settlement: SettlementView | null;
-  /** Telegram user of each linked player, for result mentions (SPEC §13.4). */
+  /** Telegram user of each linked player, for result mentions. */
   readonly mentions: ReadonlyMap<string, number>;
 }
 
@@ -68,7 +68,7 @@ export function setResultMessageId(db: DbOrTx, gameId: string, messageId: number
 }
 
 /**
- * Language of a user's own notifications (I18N-03): the profile setting, else the
+ * Language of a user's own notifications: the profile setting, else the
  * Telegram `language_code`.
  */
 export function userLanguage(db: DbOrTx, actor: Actor): Language {

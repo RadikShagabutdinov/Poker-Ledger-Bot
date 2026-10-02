@@ -27,12 +27,12 @@ import { DEFAULT_TIME_ZONE, type ServiceDeps } from './services';
 /** drizzle-kit migrations; `main` lives one level below the package root in `src/` and `dist/`. */
 export const MIGRATIONS_FOLDER = path.resolve(import.meta.dirname, '../drizzle');
 
-// One process: the grammY bot and the Hono HTTP API share the services (SPEC §9.1).
+// One process: the grammY bot and the Hono HTTP API share the services.
 export function describeServer(): string {
   return `poker-ledger server (${CORE_PACKAGE}, ${SHARED_PACKAGE})`;
 }
 
-/** Opens the database and applies pending migrations (SPEC §16.2). */
+/** Opens the database and applies pending migrations. */
 export function startDatabase(databasePath: string): DatabaseHandle {
   if (databasePath !== ':memory:') {
     mkdirSync(path.dirname(databasePath), { recursive: true });
@@ -49,7 +49,7 @@ export async function main(): Promise<void> {
   const now = () => Date.now();
 
   const bot = new Bot(config.botToken);
-  // Retries after `retry_after` on 429 (V1-MSG-07).
+  // Retries after `retry_after` on 429.
   bot.api.config.use(autoRetry());
   const links = miniAppLinks(config);
   const updater = new BotMessageUpdater({ db: database.db, api: bot.api, links, logger, now });

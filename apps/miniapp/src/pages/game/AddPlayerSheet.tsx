@@ -1,4 +1,4 @@
-// «+ Player» (SPEC §12.5, V1-PL-02/04): known chat players, myself, or a guest.
+// «+ Player»: known chat players, myself, or a guest.
 import { guestNameSchema, type GameStateResponse } from '@pokerledger/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -51,7 +51,7 @@ export function AddPlayerSheet({
   };
 
   const onAddError = async (error: Error, body: AddBody) => {
-    // Another member may have just created this guest (V1-PL-02).
+    // Another member may have just created this guest.
     const existingId = isApiError(error, 'GUEST_NAME_TAKEN') ? error.details?.playerId : null;
     if (typeof existingId !== 'string' || !('guestName' in body)) {
       toast.error(error);

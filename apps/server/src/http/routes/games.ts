@@ -33,7 +33,7 @@ import {
 import type { AppEnv } from '../env';
 import { eventIdParam, gameIdParam, readJson } from '../validate';
 
-/** The flat mismatch fields of SPEC §11 in the services' form. */
+/** The flat mismatch fields of the API body in the services' form. */
 function mismatchOf(
   body: Pick<FinishPreviewBody, 'mismatchMode' | 'mismatchPlayerId'>,
 ): MismatchMode {
@@ -47,7 +47,7 @@ function mismatchOf(
 }
 
 /**
- * Game routes (SPEC §11). Mutations answer with the fresh game state so the Mini App
+ * Game routes. Mutations answer with the fresh game state so the Mini App
  * can update its cache without another request.
  */
 export function gameRoutes(services: ServiceDeps): Hono<AppEnv> {
@@ -60,7 +60,7 @@ export function gameRoutes(services: ServiceDeps): Hono<AppEnv> {
       const body = await readJson(c, updateGameBodySchema);
       const { expectedVersion, settlementPolicy } = body;
       if (body.mismatchMode !== undefined) {
-        // The mismatch adjustment of a finished game is a separate change (V1-EDIT-01).
+        // The mismatch adjustment of a finished game is a separate change.
         if (body.name !== undefined || body.stack !== undefined) {
           throw new ServiceError('VALIDATION', { reason: 'MISMATCH_WITH_OTHER_FIELDS' });
         }

@@ -10,13 +10,13 @@ export interface NumberFieldProps {
   readonly value: number | null;
   readonly onChange: (value: number | null) => void;
   readonly placeholder?: string;
-  /** Shown under the field, e.g. the money equivalent (V1-PLAY-01). */
+  /** Shown under the field, e.g. the money equivalent. */
   readonly hint?: ReactNode;
   readonly autoFocus?: boolean;
 }
 
 /**
- * Whole-number field (SPEC §12.5): numeric keyboard, grouped digits, no negatives or
+ * Whole-number field: numeric keyboard, grouped digits, no negatives or
  * fractions. An invalid entry keeps the typed text, shows why and reports `null`.
  */
 export function NumberField({

@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { ALICE, BOB, setupChat, setupGame } from '../services/testing';
 import { MINIAPP_ORIGIN, createTestApp, initDataFor } from './testing';
 
-describe('CORS (SEC-05)', () => {
+describe('CORS', () => {
   const preflight = (origin: string) => ({
     method: 'OPTIONS',
     headers: {
@@ -42,7 +42,7 @@ describe('CORS (SEC-05)', () => {
   });
 });
 
-describe('rate limit (SEC-06)', () => {
+describe('rate limit', () => {
   it('allows 60 requests per minute per user, then 429 with Retry-After', async () => {
     const t = createTestApp();
     for (let i = 0; i < 60; i++) {
@@ -59,7 +59,7 @@ describe('rate limit (SEC-06)', () => {
   });
 });
 
-describe('errors (I18N-06)', () => {
+describe('errors', () => {
   async function error(response: Response) {
     return { status: response.status, ...errorBodySchema.parse(await response.json()).error };
   }

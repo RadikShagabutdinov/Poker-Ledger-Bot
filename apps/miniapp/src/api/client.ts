@@ -1,5 +1,5 @@
-// HTTP API client (SPEC §11): `Authorization: tma <initDataRaw>`, responses checked by the
-// shared zod schemas, errors as codes only (I18N-06).
+// HTTP API client: `Authorization: tma <initDataRaw>`, responses checked by the
+// shared zod schemas, errors as codes only.
 import {
   addGamePlayerResponseSchema,
   chatResponseSchema,

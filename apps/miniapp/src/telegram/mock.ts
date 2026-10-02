@@ -1,4 +1,4 @@
-// Dev only (SPEC §16.6): a fake Telegram environment for the browser. The server must run with
+// Dev only: a fake Telegram environment for the browser. The server must run with
 // `DEV_SKIP_INIT_DATA_CHECK=true`; it still checks chat membership with the real Bot API, so
 // `VITE_DEV_USER_ID` has to be a member of the test group. The server also stores the name
 // it receives, hence `VITE_DEV_FIRST_NAME`.

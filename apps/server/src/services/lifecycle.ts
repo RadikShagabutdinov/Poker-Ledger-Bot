@@ -13,7 +13,7 @@ import { finishedGameEditor, mutateGame } from './mutate';
 import { assertAllowed, canEditFinished, type GameAccess } from './permissions';
 
 /**
- * `POST /games/:gameId/reopen` (V1-EDIT-02): creator or admin, only if the chat has
+ * `POST /games/:gameId/reopen`: creator or admin, only if the chat has
  * no other active game in V1. The `cash_out` events written by finishing are
  * cancelled, so those players are seated again with their chips; results and the
  * settlement are dropped until the next finish.
@@ -70,8 +70,8 @@ function gameDeleter(_game: GameRow, access: GameAccess): void {
 }
 
 /**
- * `DELETE /games/:gameId` (V1-EDIT-03): soft delete by the creator or an admin, for
- * active (e.g. empty, V1-FIN-08) and finished games. Deleted games disappear from
+ * `DELETE /games/:gameId`: soft delete by the creator or an admin, for
+ * active (e.g. empty) and finished games. Deleted games disappear from
  * history and statistics.
  */
 export async function deleteGame(deps: ServiceDeps, actor: Actor, gameId: string): Promise<void> {

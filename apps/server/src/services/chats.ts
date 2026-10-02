@@ -21,7 +21,7 @@ import { renderGameName } from './games';
 import { assertChatMember, resolveChatAccess } from './permissions';
 import { ensureChatPlayer } from './players';
 
-/** Chat defaults (V1-SET-01..05). */
+/** Chat defaults. */
 export const CHAT_DEFAULTS = {
   currency: 'RUB',
   stackChips: 30_000,
@@ -41,7 +41,7 @@ export interface ChatView {
   readonly botStatus: BotStatus;
   /** The current user is a chat admin. */
   readonly isAdmin: boolean;
-  /** The name the next game gets from the template; prefills the create form (V1-GAME-02). */
+  /** The name the next game gets from the template; prefills the create form. */
   readonly nextGameName: string;
 }
 
@@ -73,13 +73,13 @@ export interface RegisterChatInput {
   readonly tgChatId: number;
   readonly title: string;
   readonly botStatus: BotStatus;
-  /** The user who added the bot; their language becomes the chat language (V1-SET-04). */
+  /** The user who added the bot; their language becomes the chat language. */
   readonly addedBy?: Actor | undefined;
 }
 
 /**
- * Bot added to a group (V1-CHAT-01): creates the chat with defaults, or restores an
- * existing one after the bot was removed and added again (V1-CHAT-04).
+ * Bot added to a group: creates the chat with defaults, or restores an
+ * existing one after the bot was removed and added again.
  */
 export function registerChat(
   deps: ServiceDeps,
@@ -120,7 +120,7 @@ export function registerChat(
   });
 }
 
-/** Bot status changes; `left` keeps all data (V1-CHAT-04). */
+/** Bot status changes; `left` keeps all data. */
 export function setBotStatus(
   deps: Pick<ServiceDeps, 'db' | 'now'>,
   tgChatId: number,
@@ -133,7 +133,7 @@ export function setBotStatus(
 }
 
 /**
- * Group migrated to a supergroup: keep the data under the new id (V1-CHAT-03).
+ * Group migrated to a supergroup: keep the data under the new id.
  * Idempotent. An empty chat already registered under the new id (an update about
  * the supergroup came before the migration message) is replaced by the old one.
  */
@@ -164,7 +164,7 @@ export function findChatByTelegramId(deps: ServiceDeps, tgChatId: number): ChatR
 
 /**
  * Loads a chat and checks that the actor is its member. A member opening the chat in
- * the Mini App becomes a player of the chat (V1-PL-01).
+ * the Mini App becomes a player of the chat.
  */
 export async function loadChatForMember(
   deps: ServiceDeps,
@@ -192,8 +192,8 @@ export async function getChat(deps: ServiceDeps, actor: Actor, chatId: string): 
 }
 
 /**
- * `PATCH /chats/:chatId/settings`, any chat member (SPEC §19.1). Existing games
- * keep their snapshot (V1-SET-07).
+ * `PATCH /chats/:chatId/settings`, any chat member. Existing games
+ * keep their snapshot.
  */
 export async function updateChatSettings(
   deps: ServiceDeps,

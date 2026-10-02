@@ -19,7 +19,7 @@ import { seatPlayer } from './games';
 import { activeGameMember, mutateGame, type MutationContext } from './mutate';
 import { ensureChatPlayer } from './players';
 
-/** «Undo mine» in the chat reaches back this far (V1-MSG-03, SPEC §19.6). */
+/** «Undo mine» in the chat reaches back this far. */
 export const UNDO_MINE_WINDOW_MS = 15 * 60 * 1000;
 
 export interface RecordedEvent {
@@ -83,7 +83,7 @@ export interface RecordBuyInput {
 
 /**
  * `POST /games/:gameId/events` with `type: "buy"`: a buy-in if the player is not
- * seated, otherwise a rebuy (V1-PLAY-05).
+ * seated, otherwise a rebuy.
  */
 export async function recordBuy(
   deps: ServiceDeps,
@@ -98,7 +98,7 @@ export async function recordBuy(
   });
 }
 
-/** `POST /games/:gameId/events` with `type: "cash_out"` (V1-PLAY-03). */
+/** `POST /games/:gameId/events` with `type: "cash_out"`. */
 export async function recordCashOut(
   deps: ServiceDeps,
   actor: Actor,
@@ -114,7 +114,7 @@ export async function recordCashOut(
 
 /**
  * Chat buttons «I'm in» (`expect: 'buy_in'`) and «Rebuy» (`expect: 'rebuy'`)
- * (V1-MSG-03): the actor buys one stack (or `chips`) for themselves, joining the
+ *: the actor buys one stack (or `chips`) for themselves, joining the
  * chat and the game if needed. A wrong state gives `INVALID_EVENT_SEQUENCE` with
  * `reason: 'ALREADY_SEATED' | 'NOT_SEATED'` and nothing is written.
  */
@@ -143,9 +143,9 @@ export interface CancelledEvent {
 }
 
 /**
- * Cancels a chip event (V1-LOG-02). Rejects a cancel that would break the sequence
+ * Cancels a chip event. Rejects a cancel that would break the sequence
  * with `INVALID_EVENT_SEQUENCE` and `blockingEventId`, the event to cancel first
- * (V1-LOG-04). Game-level events are not cancellable.
+ *. Game-level events are not cancellable.
  */
 export function cancelChipEvent(ctx: MutationContext, eventId: number): CancelledEvent {
   const { tx, game, actor, now } = ctx;
@@ -188,8 +188,8 @@ export async function cancelEvent(
 }
 
 /**
- * `POST /games/:gameId/undo` (V1-LOG-03): cancels the last non-cancelled chip event.
- * With `mineOnly` (chat button «Undo mine», V1-MSG-03) it is the actor's last event,
+ * `POST /games/:gameId/undo`: cancels the last non-cancelled chip event.
+ * With `mineOnly` (chat button «Undo mine») it is the actor's last event,
  * and only if it is at most 15 minutes old.
  */
 export async function undoLast(

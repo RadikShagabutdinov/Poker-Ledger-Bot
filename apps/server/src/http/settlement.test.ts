@@ -45,7 +45,7 @@ async function finishedGame() {
   return { t, chat, gid, carol, dave, finish };
 }
 
-describe('settlement and payment details (SEC-04)', () => {
+describe('settlement and payment details', () => {
   it('shows payment details only to players of the game', async () => {
     const { t, gid, carol, dave } = await finishedGame();
     const forDave = settlementResponseSchema.parse(
@@ -109,7 +109,7 @@ describe('settlement and payment details (SEC-04)', () => {
       { code: 'BALANCE_MISMATCH', playerId: carol, delta: -100 },
       { code: 'BALANCE_MISMATCH', playerId: dave, delta: 100 },
     ]);
-    // Self-transfers and non-positive amounts are rejected (V1-SETL-05).
+    // Self-transfers and non-positive amounts are rejected.
     const invalid = await t.call(BOB, 'PUT', `/games/${gid}/settlement`, {
       body: {
         transfers: [{ from: dave, to: dave, amount: 0 }],

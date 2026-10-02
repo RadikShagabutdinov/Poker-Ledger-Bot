@@ -1,4 +1,4 @@
-// Game menu actions (V1-GAME-04): rename and change the stack value.
+// Game menu actions: rename and change the stack value.
 import { gameNameSchema, type GameStateResponse } from '@pokerledger/shared';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';

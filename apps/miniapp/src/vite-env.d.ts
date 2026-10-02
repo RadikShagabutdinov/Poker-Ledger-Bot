@@ -3,7 +3,7 @@
 interface ImportMetaEnv {
   /** API base URL, e.g. `https://pokerledger.duckdns.org/api`; defaults to `/api`. */
   readonly VITE_API_URL?: string;
-  /** Dev mock (SPEC §16.6): Telegram id of a member of the test group. */
+  /** Dev mock: Telegram id of a member of the test group. */
   readonly VITE_DEV_USER_ID?: string;
   /** Dev mock: first name sent in initData; the server stores it as the user's name. */
   readonly VITE_DEV_FIRST_NAME?: string;

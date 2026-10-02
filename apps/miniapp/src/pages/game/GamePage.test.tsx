@@ -46,7 +46,7 @@ afterEach(() => {
 });
 
 describe('GamePage', () => {
-  it('shows the summary and players grouped by status (V1-PLAY-06/07)', async () => {
+  it('shows the summary and players grouped by status', async () => {
     renderApp(`/games/${GAME_ID}`, {
       ...base(
         game({
@@ -83,7 +83,7 @@ describe('GamePage', () => {
     );
   });
 
-  it('polls the game every 3 seconds (V1-PLAY-08)', async () => {
+  it('polls the game every 3 seconds', async () => {
     const { queryClient } = renderApp(`/games/${GAME_ID}`, base());
     await screen.findByRole('heading', { name: 'Покер 15.09' });
     const observer = queryClient.getQueryCache().find({ queryKey: queryKeys.game(GAME_ID) })
@@ -92,7 +92,7 @@ describe('GamePage', () => {
     expect(observer?.options.refetchIntervalInBackground).toBe(false);
   });
 
-  it('buys a stack with a quick button (V1-PLAY-02/05)', async () => {
+  it('buys a stack with a quick button', async () => {
     const after = game({
       players: [player('p1', 'Вася', { inChips: 60_000, rebuyCount: 1 })],
     });
@@ -118,7 +118,7 @@ describe('GamePage', () => {
     expect(screen.queryByRole('dialog')).toBeNull();
   });
 
-  it('buys a custom number of chips and shows the money equivalent (V1-PLAY-01)', async () => {
+  it('buys a custom number of chips and shows the money equivalent', async () => {
     const { mutations } = renderApp(`/games/${GAME_ID}`, {
       ...base(),
       [`POST /games/${GAME_ID}/events`]: {
@@ -147,7 +147,7 @@ describe('GamePage', () => {
     ).toBe(true);
   });
 
-  it('cashes out with a preliminary result (V1-PLAY-03)', async () => {
+  it('cashes out with a preliminary result', async () => {
     const { mutations } = renderApp(`/games/${GAME_ID}`, {
       ...base(game({ players: [player('p1', 'Вася', { inChips: 60_000, rebuyCount: 1 })] })),
       [`POST /games/${GAME_ID}/events`]: {
@@ -167,7 +167,7 @@ describe('GamePage', () => {
     expect(plain((await screen.findByRole('status')).textContent)).toBe('Выход записан: 52 000');
   });
 
-  it('adds a guest and opens their buy-in panel (V1-PL-02)', async () => {
+  it('adds a guest and opens their buy-in panel', async () => {
     const withGuest = game({
       players: [
         player('p1', 'Вася'),
@@ -257,7 +257,7 @@ describe('GamePage', () => {
     ]);
   });
 
-  it('undoes the last action after confirmation (V1-LOG-03)', async () => {
+  it('undoes the last action after confirmation', async () => {
     const { mutations } = renderApp(`/games/${GAME_ID}`, {
       ...base(),
       [`POST /games/${GAME_ID}/undo`]: {

@@ -1,4 +1,4 @@
-// Native Telegram controls (SPEC §12): `MainButton`, `BackButton` and confirmation popups.
+// Native Telegram controls: `MainButton`, `BackButton` and confirmation popups.
 // In the browser mock and in tests Telegram draws nothing, so DOM stand-ins are rendered.
 import { backButton, mainButton } from '@tma.js/sdk-react';
 import { useContext, useEffect, useRef, type ReactNode } from 'react';
@@ -26,7 +26,7 @@ export interface MainButtonProps {
   readonly loading?: boolean;
 }
 
-/** The main action of a screen (SPEC §12): Telegram's `MainButton` while mounted. */
+/** The main action of a screen: Telegram's `MainButton` while mounted. */
 export function MainButton({ text, onClick, disabled = false, loading = false }: MainButtonProps) {
   const native = useContext(NativeUiContext);
   const handler = useLatest(onClick);

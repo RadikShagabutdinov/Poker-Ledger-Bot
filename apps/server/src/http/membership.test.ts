@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { TelegramMembershipChecker } from '../bot/membership';
+import { TelegramMembershipChecker } from '../bot';
 import { FakeTelegram, fakeApi } from '../bot/testing';
 import {
   ALICE,
@@ -15,7 +15,7 @@ import {
 } from '../services/testing';
 import { createTestApp } from './testing';
 
-/** The API with the real membership checker over a mocked Bot API (SEC-02). */
+/** The API with the real membership checker over a mocked Bot API. */
 function setup() {
   const telegram = new FakeTelegram();
   let now = 0;
@@ -36,7 +36,7 @@ function setup() {
   };
 }
 
-describe('chat membership (SEC-02)', () => {
+describe('chat membership', () => {
   it('lets members in, including restricted members with is_member', async () => {
     const t = setup();
     expect(await t.json(ALICE, 'GET', `/chats/${t.chat.id}`)).toMatchObject({ isAdmin: true });

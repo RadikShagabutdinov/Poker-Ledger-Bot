@@ -1,4 +1,4 @@
-// Chat home (SPEC §12.3): the active game or «New game», the last 5 games, links.
+// Chat home: the active game or «New game», the last 5 games, links.
 import { chipsToMoneyRounded } from '@pokerledger/core';
 import type { HistoryPageResponse } from '@pokerledger/shared';
 import { useTranslation } from 'react-i18next';

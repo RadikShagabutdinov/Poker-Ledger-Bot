@@ -33,7 +33,7 @@ afterEach(() => {
 });
 
 describe('GameLogPage', () => {
-  it('lists events newest first, cancelled ones struck through (V1-LOG-02)', async () => {
+  it('lists events newest first, cancelled ones struck through', async () => {
     renderApp(`/games/${GAME_ID}/log`, {
       [`GET /games/${GAME_ID}`]: { body: game() },
       [`GET /games/${GAME_ID}/log`]: { body: { entries } },
@@ -56,7 +56,7 @@ describe('GameLogPage', () => {
     expect(cancelled?.tagName).toBe('DIV');
   });
 
-  it('names the event that has to be cancelled first (V1-LOG-04)', async () => {
+  it('names the event that has to be cancelled first', async () => {
     const { mutations } = renderApp(`/games/${GAME_ID}/log`, {
       [`GET /games/${GAME_ID}`]: { body: game() },
       [`GET /games/${GAME_ID}/log`]: { body: { entries } },

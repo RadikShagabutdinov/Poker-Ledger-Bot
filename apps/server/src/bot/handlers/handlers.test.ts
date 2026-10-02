@@ -37,8 +37,8 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-describe('chat membership of the bot (SPEC §5.1)', () => {
-  it('registers the chat and greets it with a settings link (V1-CHAT-01/02)', async () => {
+describe('chat membership of the bot', () => {
+  it('registers the chat and greets it with a settings link', async () => {
     const t = createTestBot();
     await t.handle(botMembership(ALICE, 'left', 'member'));
     const chat = findChatByTgId(t.deps.db, TG_CHAT_ID);
@@ -58,14 +58,14 @@ describe('chat membership of the bot (SPEC §5.1)', () => {
     });
   });
 
-  it('greets in English when an English speaker adds the bot (V1-SET-04)', async () => {
+  it('greets in English when an English speaker adds the bot', async () => {
     const t = createTestBot();
     await t.handle(botMembership(actor(5, 'Eve', { languageCode: 'en-GB' }), 'left', 'member'));
     expect(findChatByTgId(t.deps.db, TG_CHAT_ID)?.language).toBe('en');
     expect(String(lastReply(t)?.text)).toContain('Hi!');
   });
 
-  it('tracks rights, keeps data on removal and restores it (V1-CHAT-04)', async () => {
+  it('tracks rights, keeps data on removal and restores it', async () => {
     const t = createTestBot();
     await t.handle(botMembership(ALICE, 'left', 'member'));
     const id = findChatByTgId(t.deps.db, TG_CHAT_ID)?.id;
@@ -83,7 +83,7 @@ describe('chat membership of the bot (SPEC §5.1)', () => {
     expect(t.telegram.calls).toEqual([]);
   });
 
-  it('moves the chat to the supergroup id on migration (V1-CHAT-03)', async () => {
+  it('moves the chat to the supergroup id on migration', async () => {
     const t = createTestBot();
     const { chat, game } = await setupGame(t.deps);
     const oldGroup = { id: TG_CHAT_ID, type: 'group', title: 'Poker club' } as const;
@@ -107,8 +107,8 @@ describe('chat membership of the bot (SPEC §5.1)', () => {
   });
 });
 
-describe('group commands (SPEC §13.1)', () => {
-  it('/newgame creates a game and posts the pinned status at once (V1-GAME-01/02)', async () => {
+describe('group commands', () => {
+  it('/newgame creates a game and posts the pinned status at once', async () => {
     const t = createTestBot();
     const chat = setupChat(t.deps);
     await t.handle(textMessage(BOB, '/newgame'));
@@ -131,7 +131,7 @@ describe('group commands (SPEC §13.1)', () => {
     expect(String(lastReply(t)?.text)).toContain('Friday &lt;night&gt;');
   });
 
-  it('/newgame with an active game links to it (V1-GAME-03)', async () => {
+  it('/newgame with an active game links to it', async () => {
     const t = createTestBot();
     const chat = setupChat(t.deps);
     await t.handle(textMessage(BOB, '/newgame'));
@@ -173,7 +173,7 @@ describe('group commands (SPEC §13.1)', () => {
     expect(listActiveGames(t.deps, chat?.id ?? '')).toHaveLength(1);
   });
 
-  it('/game links to the active game or offers to create one (V1-MSG-10)', async () => {
+  it('/game links to the active game or offers to create one', async () => {
     const t = createTestBot();
     const chat = setupChat(t.deps);
     await t.handle(textMessage(BOB, '/game'));
@@ -213,7 +213,7 @@ describe('group commands (SPEC §13.1)', () => {
   });
 });
 
-describe('private chat (V1-CHAT-05)', () => {
+describe('private chat', () => {
   it('/start opens the Mini App and creates nothing', async () => {
     const t = createTestBot();
     await t.handle(textMessage(CAROL, '/start', privateChat(CAROL)));
@@ -245,7 +245,7 @@ describe('private chat (V1-CHAT-05)', () => {
   });
 });
 
-describe('game buttons (V1-MSG-03/06)', () => {
+describe('game buttons', () => {
   async function gameWithStatus(t: TestBot): Promise<string> {
     const { game } = await setupGame(t.deps);
     await t.updater.flush();
@@ -270,7 +270,7 @@ describe('game buttons (V1-MSG-03/06)', () => {
     expect(chipEvents[0]).toMatchObject({ chips: 30_000, createdBy: BOB.tgUserId });
   });
 
-  it('answers in the presser’s language (I18N-03)', async () => {
+  it('answers in the presser’s language', async () => {
     const t = createTestBot();
     const gameId = await gameWithStatus(t);
     const english = actor(CAROL.tgUserId, 'Carol', { languageCode: 'en' });
@@ -302,7 +302,7 @@ describe('game buttons (V1-MSG-03/06)', () => {
     );
   });
 
-  it('allows one press per second (SEC-06)', async () => {
+  it('allows one press per second', async () => {
     const t = createTestBot();
     const gameId = await gameWithStatus(t);
     await t.handle(buttonPress(BOB, gameCallback('join', gameId)));
@@ -321,7 +321,7 @@ describe('game buttons (V1-MSG-03/06)', () => {
     expect(await press(t, BOB, 'x:whatever')).toBe('Эта кнопка устарела');
   });
 
-  it('every press updates the status message within 2 s (V1-MSG-07)', async () => {
+  it('every press updates the status message within 2 s', async () => {
     const t = createTestBot();
     const gameId = await gameWithStatus(t);
     await press(t, BOB, gameCallback('join', gameId));

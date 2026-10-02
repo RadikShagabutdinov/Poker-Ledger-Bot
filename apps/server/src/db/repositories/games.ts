@@ -82,7 +82,7 @@ export function updateGame(
   return db.update(games).set(patch).where(eq(games.id, id)).returning().get();
 }
 
-/** `version++`; every game mutation calls it (SPEC §9.4). */
+/** `version++`; every game mutation calls it. */
 export function bumpGameVersion(db: DbOrTx, id: string): number {
   const row = db
     .update(games)

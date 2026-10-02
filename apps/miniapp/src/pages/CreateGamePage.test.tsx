@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { apiError, CHAT, game, plain, renderApp } from '../test/testUtils';
 
 describe('CreateGamePage', () => {
-  it('prefills the form from the chat settings and creates the game (V1-GAME-02)', async () => {
+  it('prefills the form from the chat settings and creates the game', async () => {
     const { mutations } = renderApp('/chats/chat1/new', {
       'GET /chats/chat1': { body: CHAT },
       'POST /chats/chat1/games': { status: 201, body: { game: game({ name: 'Пятница' }) } },
@@ -38,7 +38,7 @@ describe('CreateGamePage', () => {
     expect(screen.getByRole('button', { name: 'Начать игру' }).hasAttribute('disabled')).toBe(true);
   });
 
-  it('opens the running game on ACTIVE_GAME_EXISTS (V1-GAME-03)', async () => {
+  it('opens the running game on ACTIVE_GAME_EXISTS', async () => {
     renderApp('/chats/chat1/new', {
       'GET /chats/chat1': { body: CHAT },
       'POST /chats/chat1/games': apiError(409, 'ACTIVE_GAME_EXISTS', { gameId: 'running00001' }),

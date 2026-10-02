@@ -43,9 +43,9 @@ export interface HistoryPage {
 
 export interface HistoryQuery {
   readonly status?: 'active' | 'finished' | undefined;
-  /** V1 has cash games only; the filter is there for V2 (V1-HIST-02). */
+  /** V1 has cash games only; the filter is there for V2. */
   readonly type?: GameType | undefined;
-  /** Inclusive lower bound of `started_at`, ms (V1-HIST-02). */
+  /** Inclusive lower bound of `started_at`, ms. */
   readonly from?: number | undefined;
   /** Exclusive upper bound of `started_at`, ms. */
   readonly to?: number | undefined;
@@ -67,7 +67,7 @@ function decodeCursor(cursor: string): { startedAt: number; id: string } {
 }
 
 /**
- * `GET /chats/:chatId/games` (V1-HIST-01/02/04): games of the chat, newest first,
+ * `GET /chats/:chatId/games`: games of the chat, newest first,
  * 20 per page, deleted games excluded.
  */
 export async function listGames(
@@ -122,12 +122,12 @@ export async function listGames(
 
 export interface GameDetails {
   readonly state: GameState;
-  /** Without payment details; those come only from `getSettlement` (SEC-04). */
+  /** Without payment details; those come only from `getSettlement`. */
   readonly settlement: SettlementView | null;
   readonly log: readonly LogEntry[];
 }
 
-/** Game details for history (V1-HIST-03). */
+/** Game details for history. */
 export async function getGameDetails(
   deps: ServiceDeps,
   actor: Actor,

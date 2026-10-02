@@ -1,7 +1,7 @@
 import { gameIdSchema } from '@pokerledger/shared';
 
 /**
- * Game message buttons (V1-MSG-03/08): `j:<gameId>` I'm in, `r:<gameId>` rebuy,
+ * Game message buttons: `j:<gameId>` I'm in, `r:<gameId>` rebuy,
  * `u:<gameId>` undo mine. The game id keeps them working with several games (V2).
  */
 export type GameAction = 'join' | 'rebuy' | 'undo';

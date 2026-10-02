@@ -47,13 +47,13 @@ export interface GamePlayerState {
   readonly buyinCount: number;
   readonly rebuyCount: number;
   /**
-   * Finished game: the stored result (V1-RES-02). Active game: a provisional result
-   * for players who left, rounded to the nearest unit (V1-PLAY-03); otherwise `null`.
+   * Finished game: the stored result. Active game: a provisional result
+   * for players who left, rounded to the nearest unit; otherwise `null`.
    */
   readonly moneyResult: number | null;
 }
 
-/** `GET /games/:gameId` (SPEC §11). */
+/** `GET /games/:gameId`. */
 export interface GameState {
   readonly id: string;
   readonly chatId: string;
@@ -192,8 +192,8 @@ export function buildGameState(
 }
 
 /**
- * Loads a game the actor may view (SEC-02), or throws. A chat member opening a game
- * becomes a player of the chat (V1-PL-01).
+ * Loads a game the actor may view, or throws. A chat member opening a game
+ * becomes a player of the chat.
  */
 export async function loadViewableGame(
   deps: ServiceDeps,
@@ -261,7 +261,7 @@ export function buildGameLog(db: DbOrTx, data: GameData): LogEntry[] {
   }));
 }
 
-/** `GET /games/:gameId/log`: all events, cancelled ones included (V1-LOG-02). */
+/** `GET /games/:gameId/log`: all events, cancelled ones included. */
 export async function getGameLog(
   deps: ServiceDeps,
   actor: Actor,

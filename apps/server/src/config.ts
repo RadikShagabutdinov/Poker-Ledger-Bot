@@ -12,7 +12,7 @@ const envSchema = z
     MINIAPP_SHORT_NAME: z.string().regex(/^[A-Za-z0-9_]{3,30}$/),
     /** Mini App URL for `web_app` buttons in private chats; optional. */
     MINIAPP_URL: optional(z.url({ protocol: /^https$/ })),
-    /** Origin of the Mini App allowed by CORS (SEC-05); required in production. */
+    /** Origin of the Mini App allowed by CORS; required in production. */
     MINIAPP_ORIGIN: optional(
       z.url({ protocol: /^https?$/ }).transform((url) => new URL(url).origin),
     ),
@@ -21,7 +21,7 @@ const envSchema = z
     LOG_LEVEL: z
       .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
       .default('info'),
-    /** Dev only (SPEC §16.6): accept unsigned initData. */
+    /** Dev only: accept unsigned initData. */
     DEV_SKIP_INIT_DATA_CHECK: optional(z.enum(['true', 'false'])).transform((v) => v === 'true'),
   })
   .superRefine((env, ctx) => {
@@ -38,7 +38,7 @@ const envSchema = z
 
 export type LogLevel = z.infer<typeof envSchema>['LOG_LEVEL'];
 
-/** Server configuration from environment variables (SPEC §16.2, SEC-07). */
+/** Server configuration from environment variables. */
 export interface Config {
   readonly nodeEnv: 'development' | 'production' | 'test';
   readonly botToken: string;

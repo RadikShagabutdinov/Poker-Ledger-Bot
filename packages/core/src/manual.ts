@@ -6,7 +6,7 @@ export interface MoneyResult {
   readonly money: number;
 }
 
-/** Soft problems of a manual settlement: shown, but saving is allowed (V1-SETL-04). */
+/** Soft problems of a manual settlement: shown, but saving is allowed. */
 export type SettlementWarning =
   | {
       readonly code: 'BALANCE_MISMATCH';
@@ -16,14 +16,14 @@ export type SettlementWarning =
     }
   | { readonly code: 'UNKNOWN_PLAYER'; readonly playerId: string };
 
-/** Hard errors: the API rejects such transfers (V1-SETL-05). */
+/** Hard errors: the API rejects such transfers. */
 export interface TransferError {
   readonly index: number;
   readonly code: 'INVALID_AMOUNT' | 'NON_POSITIVE_AMOUNT' | 'SELF_TRANSFER';
 }
 
 /**
- * Checks a (possibly manual) settlement against the results (SPEC §8.4): for each
+ * Checks a (possibly manual) settlement against the results: for each
  * player `delta = (received − paid) − money`, every non-zero delta is a warning.
  * Players in transfers that are not in `results` are reported as `UNKNOWN_PLAYER`.
  * Warnings follow the order of `results`, then unknown players by first appearance.
@@ -61,7 +61,7 @@ export function checkManualSettlement(
 }
 
 /**
- * Hard validation of transfers (V1-SETL-05): the amount must be a positive safe
+ * Hard validation of transfers: the amount must be a positive safe
  * integer and payer and receiver must differ. Returns one error per bad field.
  */
 export function validateTransfers(transfers: readonly Transfer[]): TransferError[] {

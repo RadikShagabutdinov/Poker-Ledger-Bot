@@ -28,8 +28,8 @@ import { ensureChatPlayer, insertGuest } from './players';
 import { recalculateFinishedGame, type SettlementPolicy } from './results';
 
 /**
- * V1: one active game per chat (V1-GAME-03). The only place of this rule, so V2
- * can lift it (V2-MULTI-01). Throws `ACTIVE_GAME_EXISTS` with the active game id.
+ * V1: one active game per chat. The only place of this rule, so V2
+ * can lift it. Throws `ACTIVE_GAME_EXISTS` with the active game id.
  */
 export function assertCanHaveAnotherActiveGame(db: DbOrTx, chatId: string): void {
   const active = listGamesByStatus(db, chatId, 'active');
@@ -43,7 +43,7 @@ export function listActiveGames(deps: ServiceDeps, chatId: string): GameRow[] {
   return listGamesByStatus(deps.db, chatId, 'active');
 }
 
-/** Fills `{date}` (day and month in the chat locale) and `{n}` (V1-SET-03). */
+/** Fills `{date}` (day and month in the chat locale) and `{n}`. */
 export function renderGameName(
   template: string,
   values: { language: Language; timeZone: string; now: number; n: number },
@@ -66,8 +66,8 @@ export interface CreateGameInput {
 }
 
 /**
- * `/newgame` or `POST /chats/:chatId/games` (V1-GAME-01/02), any chat member. The
- * game copies the chat settings (V1-SET-07).
+ * `/newgame` or `POST /chats/:chatId/games`, any chat member. The
+ * game copies the chat settings.
  */
 export async function createGame(
   deps: ServiceDeps,
@@ -135,7 +135,7 @@ export interface UpdateGameInput {
   readonly name?: string | undefined;
   readonly stack?: { readonly chips: number; readonly amount: number } | undefined;
   readonly expectedVersion?: number | undefined;
-  /** For a finished game with a manual settlement whose results change (V1-SETL-07). */
+  /** For a finished game with a manual settlement whose results change. */
   readonly settlementPolicy?: SettlementPolicy | undefined;
 }
 
@@ -147,8 +147,8 @@ function canUpdateGame(game: GameRow, access: GameAccess): void {
 }
 
 /**
- * `PATCH /games/:gameId`: name and stack value (V1-GAME-04). Active game: any chat
- * member; finished game: creator or admin, results are recalculated (V1-EDIT-01).
+ * `PATCH /games/:gameId`: name and stack value. Active game: any chat
+ * member; finished game: creator or admin, results are recalculated.
  */
 export async function updateGame(
   deps: ServiceDeps,
@@ -228,7 +228,7 @@ export type AddGamePlayerInput =
 
 /**
  * `POST /games/:gameId/players`: a known chat player, a new guest, or the actor
- * themselves (V1-PL-01). Adding an already seated player is a no-op.
+ * themselves. Adding an already seated player is a no-op.
  */
 export async function addPlayerToGame(
   deps: ServiceDeps,

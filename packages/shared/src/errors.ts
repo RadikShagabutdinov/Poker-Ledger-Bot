@@ -1,6 +1,6 @@
 /**
- * Error codes returned by services and the API (SPEC §11). The API returns codes
- * only; user-facing texts are translated on the client (I18N-06).
+ * Error codes returned by services and the API. The API returns codes
+ * only; user-facing texts are translated on the client.
  */
 export const ERROR_CODES = [
   'UNAUTHORIZED',
@@ -16,15 +16,15 @@ export const ERROR_CODES = [
   'INVALID_MISMATCH_PLAYER',
   /** The action is not allowed in the current game status (e.g. finishing a finished game). */
   'INVALID_GAME_STATUS',
-  /** A game without chip events can only be deleted, not finished (V1-FIN-08). */
+  /** A game without chip events can only be deleted, not finished. */
   'EMPTY_GAME',
-  /** A guest with this name already exists in the chat (V1-PL-02); details carry its id. */
+  /** A guest with this name already exists in the chat; details carry its id. */
   'GUEST_NAME_TAKEN',
   /** Only buy-ins, rebuys and cash-outs can be cancelled. */
   'EVENT_NOT_CANCELLABLE',
   /** There is no event to undo. */
   'NOTHING_TO_UNDO',
-  /** Too many API requests from this user (SEC-06); `Retry-After` says when to retry. */
+  /** Too many API requests from this user; `Retry-After` says when to retry. */
   'RATE_LIMITED',
   /** Unexpected server failure. */
   'INTERNAL_ERROR',

@@ -1,4 +1,4 @@
-// Human-readable game events for the log, toasts and confirmations (V1-LOG-01).
+// Human-readable game events for the log, toasts and confirmations.
 import type { GameLogResponse, GameStateResponse } from '@pokerledger/shared';
 import type { TFunction } from 'i18next';
 

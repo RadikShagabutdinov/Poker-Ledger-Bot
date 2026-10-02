@@ -20,7 +20,7 @@ function isPresent(member: ChatMember): boolean {
   }
 }
 
-/** Bot added to or removed from a group, its rights changed, group migrated (SPEC §5.1). */
+/** Bot added to or removed from a group, its rights changed, group migrated. */
 export function registerChatHandlers(bot: Bot, deps: BotDeps): void {
   const { services, links } = deps;
 
@@ -31,7 +31,7 @@ export function registerChatHandlers(bot: Bot, deps: BotDeps): void {
     }
     const { old_chat_member: before, new_chat_member: after } = ctx.myChatMember;
     if (!isPresent(after)) {
-      // Data stays; adding the bot again restores everything (V1-CHAT-04).
+      // Data stays; adding the bot again restores everything.
       setBotStatus(services, chat.id, 'left');
       return;
     }
@@ -40,7 +40,7 @@ export function registerChatHandlers(bot: Bot, deps: BotDeps): void {
       setBotStatus(services, chat.id, botStatus);
       return;
     }
-    // Added (V1-CHAT-01/02): the chat language follows the user who added the bot.
+    // Added: the chat language follows the user who added the bot.
     const { chat: row } = registerChat(services, {
       tgChatId: chat.id,
       title: chat.title,
@@ -55,7 +55,7 @@ export function registerChatHandlers(bot: Bot, deps: BotDeps): void {
     });
   });
 
-  // Group → supergroup (V1-CHAT-03). Both service messages arrive; the first one wins.
+  // Group → supergroup. Both service messages arrive; the first one wins.
   bot.on('message:migrate_to_chat_id', (ctx) => {
     migrateChat(services, ctx.chat.id, ctx.message.migrate_to_chat_id);
   });

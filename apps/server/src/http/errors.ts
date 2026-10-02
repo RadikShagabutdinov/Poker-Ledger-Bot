@@ -1,11 +1,11 @@
 import type { ErrorBody, ErrorCode } from '@pokerledger/shared';
 import type { Context } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
+import type { Logger } from 'pino';
 
-import type { Logger } from '../logger';
 import { ServiceError } from '../services';
 
-/** HTTP status of every error code (SPEC §11). The body carries the code only (I18N-06). */
+/** HTTP status of every error code. The body carries the code only. */
 export const ERROR_STATUS: Record<ErrorCode, ContentfulStatusCode> = {
   UNAUTHORIZED: 401,
   NOT_CHAT_MEMBER: 403,
@@ -42,7 +42,7 @@ export function handleError(logger: Logger) {
     if (error instanceof ServiceError) {
       return errorResponse(c, error.code, error.details);
     }
-    // No request body or headers here: they may carry initData or payment details (SEC-09).
+    // No request body or headers here: they may carry initData or payment details.
     logger.error({ err: error, method: c.req.method, path: c.req.path }, 'request failed');
     return errorResponse(c, 'INTERNAL_ERROR');
   };

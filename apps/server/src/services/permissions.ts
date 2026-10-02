@@ -1,4 +1,4 @@
-// The permission matrix of SPEC §3 in one module.
+// The whole permission matrix in one module.
 import type { ChatRow, GameRow } from '../db/schema';
 import type { Actor } from './context';
 import type { ServiceDeps } from './deps';
@@ -38,25 +38,25 @@ export function canManageGame(access: GameAccess): boolean {
   return access.isMember;
 }
 
-/** Edit, reopen or delete a finished game: the creator or a chat admin (V1-EDIT-01..03). */
+/** Edit, reopen or delete a finished game: the creator or a chat admin. */
 export function canEditFinished(access: GameAccess): boolean {
   return access.isMember && (access.isCreator || access.isAdmin);
 }
 
-/** Edit the settlement: players of the game, the creator, chat admins (SPEC §3). */
+/** Edit the settlement: players of the game, the creator, chat admins. */
 export function canEditSettlement(access: GameAccess): boolean {
   return access.isMember && (access.isGamePlayer || access.isCreator || access.isAdmin);
 }
 
 /**
  * View a game: chat members; a player of a finished game may view it after
- * leaving the chat (SEC-02).
+ * leaving the chat.
  */
 export function canViewGame(access: GameAccess, game: GameRow): boolean {
   return access.isMember || (access.isGamePlayer && game.status === 'finished');
 }
 
-/** Payment details of recipients are shown only to players of the game (SEC-04). */
+/** Payment details of recipients are shown only to players of the game. */
 export function canSeePaymentDetails(access: GameAccess): boolean {
   return access.isGamePlayer;
 }

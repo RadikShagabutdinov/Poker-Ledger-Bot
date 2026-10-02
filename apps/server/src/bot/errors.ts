@@ -3,7 +3,7 @@ import { GrammyError } from 'grammy';
 import { ServiceError } from '../services';
 
 /**
- * Callback notification key for an error of a button action (V1-MSG-03/06), or
+ * Callback notification key for an error of a button action, or
  * `undefined` for an unexpected error (shown as a generic one and logged).
  */
 export function notificationKey(error: unknown): string | undefined {

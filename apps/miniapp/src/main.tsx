@@ -13,7 +13,7 @@ async function start() {
   if (!rootElement) throw new Error('Root element #root not found');
   const root = createRoot(rootElement);
 
-  // The browser mock (SPEC §16.6) is only part of the dev build.
+  // The browser mock is only part of the dev build.
   let mocked = false;
   if (import.meta.env.DEV) {
     const { mockTelegramIfNeeded } = await import('./telegram/mock');

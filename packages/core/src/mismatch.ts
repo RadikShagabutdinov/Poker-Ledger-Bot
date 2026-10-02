@@ -20,7 +20,7 @@ export interface ChipResults {
 }
 
 /**
- * Chip results with the mismatch distributed (SPEC §8.1, V1-FIN-04, V1-RES-01):
+ * Chip results with the mismatch distributed:
  * - `proportional`: `c_i = (out_i − in_i) − D·in_i/IN`;
  * - `single_player` k: `c_k = (out_k − in_k) − D`, others `c_i = out_i − in_i`.
  *
@@ -73,7 +73,7 @@ export function assertValidStack(stack: Stack): void {
   }
 }
 
-/** Exact money value of `chips`: `chips · amount / stackChips` (SPEC §8.1). */
+/** Exact money value of `chips`: `chips · amount / stackChips`. */
 export function chipsToMoney(chips: Rational, stack: Stack): Rational {
   assertValidStack(stack);
   return mul(chips, rat(BigInt(stack.amount), BigInt(stack.chips)));
@@ -81,7 +81,7 @@ export function chipsToMoney(chips: Rational, stack: Stack): Rational {
 
 /**
  * Money value of a whole number of chips rounded to the nearest unit (halves up), for
- * display and provisional results (V1-PLAY-01/03). Final results use `roundLargestRemainder`.
+ * display and provisional results. Final results use `roundLargestRemainder`.
  */
 export function chipsToMoneyRounded(chips: number, stack: Stack): number {
   const money = chipsToMoney(fromInt(chips), stack);

@@ -1,4 +1,4 @@
-// Parsing of whole-number inputs (SPEC §12.5): digit grouping, no negatives or fractions.
+// Parsing of whole-number inputs: digit grouping, no negatives or fractions.
 import { formatNumber, type Language } from '@pokerledger/shared';
 
 export type IntegerInputError = 'negative' | 'fraction' | 'invalid' | 'too_large';

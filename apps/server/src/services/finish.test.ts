@@ -16,17 +16,17 @@ import {
   addGuests,
   createTestDeps,
   currentVersion,
-  playExample85,
+  playSampleGame,
   setupGame,
 } from './testing';
 
 const proportional = { mode: 'proportional' } as const;
 
 describe('finish', () => {
-  it('SPEC §8.5: no mismatch, results and minimal transfers are stored', async () => {
+  it('sample game without mismatch: results and minimal transfers are stored', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
-    const p = await playExample85(deps, game.id);
+    const p = await playSampleGame(deps, game.id);
     const finalChips = { [p.petya]: 71_000, [p.kolya]: 52_000, [p.dima]: 30_000 };
 
     const preview = await previewFinish(deps, CAROL, game.id, {
@@ -69,10 +69,10 @@ describe('finish', () => {
     expect(state.players.map((pl) => pl.moneyResult)).toEqual([-1600, 1367, 233, 0]);
   });
 
-  it('SPEC §8.6: mismatch distributed proportionally', async () => {
+  it('sample game with mismatch distributed proportionally', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
-    const p = await playExample85(deps, game.id);
+    const p = await playSampleGame(deps, game.id);
     const result = await finishGame(deps, BOB, game.id, {
       finalChips: { [p.petya]: 71_000, [p.kolya]: 52_000, [p.dima]: 29_000 },
       mismatch: proportional,
@@ -95,7 +95,7 @@ describe('finish', () => {
   it('mismatch on a single player', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
-    const p = await playExample85(deps, game.id);
+    const p = await playSampleGame(deps, game.id);
     const result = await finishGame(deps, BOB, game.id, {
       finalChips: { [p.petya]: 71_000, [p.kolya]: 52_000, [p.dima]: 29_000 },
       mismatch: { mode: 'single_player', playerId: p.dima },
@@ -108,10 +108,10 @@ describe('finish', () => {
     });
   });
 
-  it('requires chips of every seated player (V1-FIN-05) and a valid mismatch player', async () => {
+  it('requires chips of every seated player and a valid mismatch player', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
-    const p = await playExample85(deps, game.id);
+    const p = await playSampleGame(deps, game.id);
     const version = currentVersion(deps, game.id);
     await expect(
       finishGame(deps, BOB, game.id, {
@@ -142,7 +142,7 @@ describe('finish', () => {
     );
   });
 
-  it('an empty game can only be deleted (V1-FIN-08)', async () => {
+  it('an empty game can only be deleted', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
     await addGuests(deps, game.id, ['Вася']);
@@ -177,7 +177,7 @@ describe('finish', () => {
 describe('reopen and delete', () => {
   async function finishedExample(deps: ReturnType<typeof createTestDeps>) {
     const { chat, game } = await setupGame(deps);
-    const p = await playExample85(deps, game.id);
+    const p = await playSampleGame(deps, game.id);
     await finishGame(deps, BOB, game.id, {
       finalChips: { [p.petya]: 71_000, [p.kolya]: 52_000, [p.dima]: 30_000 },
       mismatch: proportional,
@@ -186,7 +186,7 @@ describe('reopen and delete', () => {
     return { chat, game, p };
   }
 
-  it('reopen seats players again with their chips; finishing again works (V1-EDIT-02)', async () => {
+  it('reopen seats players again with their chips; finishing again works', async () => {
     const deps = createTestDeps();
     const { game, p } = await finishedExample(deps);
     await reopenGame(deps, BOB, game.id);
@@ -228,7 +228,7 @@ describe('reopen and delete', () => {
     expect(findGame(deps.db, game.id)?.status).toBe('active');
   });
 
-  it('a deleted game is not found any more (V1-EDIT-03)', async () => {
+  it('a deleted game is not found any more', async () => {
     const deps = createTestDeps();
     const { game } = await finishedExample(deps);
     await deleteGame(deps, BOB, game.id);

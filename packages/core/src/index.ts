@@ -1,4 +1,4 @@
-// Pure calculation functions for games (SPEC §8). No DB, bot or HTTP dependencies.
+// Pure calculation functions for games. No DB, bot or HTTP dependencies.
 export const CORE_PACKAGE = '@pokerledger/core';
 
 export { CoreError, assertSafeInt, type Result } from './errors';

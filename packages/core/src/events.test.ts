@@ -53,7 +53,7 @@ describe('computePlayerTotals', () => {
     ]);
   });
 
-  it('counts a re-entry after leaving as a new buy-in (V1-PLAY-04)', () => {
+  it('counts a re-entry after leaving as a new buy-in', () => {
     const events = log(
       ['a', 'buy_in', 100],
       ['a', 'cash_out', 0],
@@ -91,7 +91,7 @@ describe('computePlayerTotals', () => {
 });
 
 describe('computeSummary', () => {
-  it('reports issued, cashed out, expected on table and seated count (V1-PLAY-06)', () => {
+  it('reports issued, cashed out, expected on table and seated count', () => {
     const events = log(['a', 'buy_in', 100], ['b', 'buy_in', 200], ['b', 'cash_out', 50]);
     expect(computeSummary(computePlayerTotals(players, events))).toEqual({
       issuedChips: 300,
@@ -175,7 +175,7 @@ describe('validateNewEvent', () => {
   });
 });
 
-describe('inferBuyType (V1-PLAY-05)', () => {
+describe('inferBuyType', () => {
   const events = log(['a', 'buy_in', 10], ['b', 'buy_in', 10], ['b', 'cash_out', 10]);
 
   it('is a rebuy for a seated player and a buy-in otherwise', () => {
@@ -189,7 +189,7 @@ describe('inferBuyType (V1-PLAY-05)', () => {
   });
 });
 
-describe('canCancelEvent (V1-LOG-04)', () => {
+describe('canCancelEvent', () => {
   it('forbids cancelling a buy-in followed by a cash-out and names the cash-out', () => {
     const events = log(['a', 'buy_in', 10], ['b', 'buy_in', 10], ['a', 'cash_out', 5]);
     expect(canCancelEvent(players, events, 1)).toEqual({

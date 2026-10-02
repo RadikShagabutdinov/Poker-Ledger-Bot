@@ -10,7 +10,7 @@ import {
   CAROL,
   DAVE,
   currentVersion,
-  playExample85,
+  playSampleGame,
   setupGame,
 } from '../services/testing';
 import { createTestBot, type TestBot } from './testing';
@@ -33,8 +33,8 @@ async function startedGame(t: TestBot): Promise<string> {
 async function finishExample(
   t: TestBot,
   gameId: string,
-): Promise<Awaited<ReturnType<typeof playExample85>>> {
-  const ids = await playExample85(t.deps, gameId);
+): Promise<Awaited<ReturnType<typeof playSampleGame>>> {
+  const ids = await playSampleGame(t.deps, gameId);
   await finishGame(t.deps, BOB, gameId, {
     finalChips: { [ids.petya]: 71_000, [ids.kolya]: 52_000, [ids.dima]: 30_000 },
     mismatch: { mode: 'proportional' },
@@ -51,7 +51,7 @@ describe('BotMessageUpdater', () => {
     vi.useRealTimers();
   });
 
-  it('sends and pins the status message of a new game without notification (V1-MSG-01)', async () => {
+  it('sends and pins the status message of a new game without notification', async () => {
     const t = createTestBot();
     const { game } = await setupGame(t.deps);
     expect(t.telegram.calls).toEqual([]);
@@ -64,7 +64,7 @@ describe('BotMessageUpdater', () => {
     expect(gameRow(t, game.id).statusMessageId).toBe(100);
   });
 
-  it('folds changes within 2 s into one edit (V1-MSG-07)', async () => {
+  it('folds changes within 2 s into one edit', async () => {
     const t = createTestBot();
     const gameId = await startedGame(t);
     await buySelf(t.deps, BOB, gameId, { expect: 'buy_in' });
@@ -90,7 +90,7 @@ describe('BotMessageUpdater', () => {
     expect(t.telegram.calls.map((c) => c.method)).toEqual(['editMessageText']);
   });
 
-  it('sends and pins a new status message if the old one was deleted (V1-MSG-09)', async () => {
+  it('sends and pins a new status message if the old one was deleted', async () => {
     const t = createTestBot();
     const gameId = await startedGame(t);
     t.telegram.fail('editMessageText', 400, 'Bad Request: message to edit not found');
@@ -104,7 +104,7 @@ describe('BotMessageUpdater', () => {
     expect(gameRow(t, gameId).statusMessageId).toBe(101);
   });
 
-  it('says once that it cannot pin without the right (V1-CHAT-02)', async () => {
+  it('says once that it cannot pin without the right', async () => {
     const t = createTestBot();
     t.telegram.fail(
       'pinChatMessage',
@@ -123,7 +123,7 @@ describe('BotMessageUpdater', () => {
     expect(t.telegram.callsOf('sendMessage')).toHaveLength(2);
   });
 
-  it('on finish unpins the status and sends the result without pinning (V1-FIN-07)', async () => {
+  it('on finish unpins the status and sends the result without pinning', async () => {
     const t = createTestBot();
     const gameId = await startedGame(t);
     await finishExample(t, gameId);
@@ -140,7 +140,7 @@ describe('BotMessageUpdater', () => {
     expect(gameRow(t, gameId)).toMatchObject({ statusMessageId: null, resultMessageId: 101 });
   });
 
-  it('edits the result message after a settlement edit (V1-SETL-06)', async () => {
+  it('edits the result message after a settlement edit', async () => {
     const t = createTestBot();
     const gameId = await startedGame(t);
     const ids = await finishExample(t, gameId);
@@ -158,7 +158,7 @@ describe('BotMessageUpdater', () => {
     expect(t.telegram.callsOf('sendMessage')).toEqual([]);
   });
 
-  it('on reopen marks the result and pins a new status message (V1-EDIT-02)', async () => {
+  it('on reopen marks the result and pins a new status message', async () => {
     const t = createTestBot();
     const gameId = await startedGame(t);
     const ids = await finishExample(t, gameId);

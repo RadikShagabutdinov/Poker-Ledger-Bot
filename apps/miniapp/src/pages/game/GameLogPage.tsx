@@ -1,4 +1,4 @@
-// Game log (V1-LOG-02..04): cancelled events struck through, cancel a specific event.
+// Game log: cancelled events struck through, cancel a specific event.
 import type { GameStateResponse } from '@pokerledger/shared';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -65,7 +65,7 @@ function GameLog({ game }: { game: GameStateResponse }) {
         toast.info(t('log.cancelledToast', { what }));
       },
       onError: (error) => {
-        // V1-LOG-04: say which event has to be cancelled first.
+        // Say which event has to be cancelled first.
         const blockingId = isApiError(error, 'INVALID_EVENT_SEQUENCE')
           ? error.details?.blockingEventId
           : undefined;

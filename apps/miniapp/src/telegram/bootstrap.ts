@@ -1,4 +1,4 @@
-// Telegram environment (SPEC §12): SDK init, theme, viewport and native buttons. Only `@tma.js`
+// Telegram environment: SDK init, theme, viewport and native buttons. Only `@tma.js`
 // is used; the official `telegram-web-app.js` script must not be loaded next to it.
 import {
   backButton,
@@ -64,7 +64,7 @@ export function bootstrapTelegram(): void {
 }
 
 /**
- * Polling pauses while the Mini App is hidden (V1-PLAY-08): TanStack Query treats a minimized
+ * Polling pauses while the Mini App is hidden: TanStack Query treats a minimized
  * Mini App like a hidden tab and refetches when it comes back.
  */
 function syncFocusWithMiniApp(): void {

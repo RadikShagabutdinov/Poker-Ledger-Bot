@@ -6,7 +6,7 @@ import { MEMBERSHIP_TTL_MS, TelegramMembershipChecker } from './membership';
 import { PressRateLimiter } from './rateLimit';
 import { FakeTelegram, fakeApi } from './testing';
 
-describe('callback data (V1-MSG-08)', () => {
+describe('callback data', () => {
   it('round-trips and fits 64 bytes', () => {
     const data = gameCallback('rebuy', 'Ab_-0123456z');
     expect(data).toBe('r:Ab_-0123456z');
@@ -17,7 +17,7 @@ describe('callback data (V1-MSG-08)', () => {
   });
 });
 
-describe('PressRateLimiter (SEC-06)', () => {
+describe('PressRateLimiter', () => {
   it('allows one press per second per user', () => {
     let now = 0;
     const limiter = new PressRateLimiter(() => now);
@@ -31,7 +31,7 @@ describe('PressRateLimiter (SEC-06)', () => {
   });
 });
 
-describe('TelegramMembershipChecker (SPEC §3, SEC-02)', () => {
+describe('TelegramMembershipChecker', () => {
   it('maps statuses and caches them for 10 minutes', async () => {
     const telegram = new FakeTelegram();
     let now = 0;

@@ -10,7 +10,7 @@ const envDir = fileURLToPath(new URL('../..', import.meta.url));
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, envDir, '');
   return {
-    // VITE_BASE is '/<repo>/' for GitHub Pages (SPEC §16.3) and '/' locally.
+    // VITE_BASE is '/<repo>/' for GitHub Pages and '/' locally.
     base: env.VITE_BASE ?? '/',
     envDir,
     plugins: [react()],

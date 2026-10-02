@@ -36,7 +36,7 @@ function compute(input: Partial<CashGameInput>): CashGameResult {
 
 const money = (r: CashGameResult) => r.players.map((p) => p.moneyResult);
 
-describe('SPEC §8.5: no mismatch', () => {
+describe('sample game: no mismatch', () => {
   const result = compute({
     finalChips: { vasya: 12_000, petya: 71_000, kolya: 52_000, dima: 30_000 },
   });
@@ -85,7 +85,7 @@ describe('SPEC §8.5: no mismatch', () => {
   });
 });
 
-describe('SPEC §8.6: proportional mismatch', () => {
+describe('sample game: proportional mismatch', () => {
   const result = compute({
     finalChips: { vasya: 12_000, petya: 71_000, kolya: 52_000, dima: 29_000 },
   });
@@ -184,7 +184,7 @@ describe('computeCashGameResult edge cases', () => {
     expect(result.transfers).toEqual([{ from: 'a', to: 'b', amount: 2000 }]);
   });
 
-  it('requires final chips for every seated player (V1-FIN-05)', () => {
+  it('requires final chips for every seated player', () => {
     const result = computeCashGameResult({
       players,
       events: purchases,
@@ -262,7 +262,7 @@ describe('computeChipResults guards', () => {
 });
 
 describe('chipsToMoney', () => {
-  it('converts exactly for preliminary results (V1-PLAY-03)', () => {
+  it('converts exactly for preliminary results', () => {
     expect(chipsToMoney(fromInt(-48_000), stack)).toEqual(rat(-1600n));
     expect(chipsToMoney(fromInt(41_000), stack)).toEqual(rat(4100n, 3n));
   });

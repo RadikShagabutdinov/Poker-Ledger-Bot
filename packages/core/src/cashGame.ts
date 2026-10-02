@@ -18,7 +18,7 @@ export interface CashGameInput {
   readonly events: readonly CoreEvent[];
   readonly stack: Stack;
   /**
-   * Chips counted at the end for players who are still seated (V1-FIN-02).
+   * Chips counted at the end for players who are still seated.
    * Applied as a final `cash_out` of each of them. Required for every seated player.
    */
   readonly finalChips?: Readonly<Record<string, number>>;
@@ -31,7 +31,7 @@ export interface CashGamePlayerResult extends PlayerTotals {
   readonly adjustmentChips: { readonly num: number; readonly den: number };
   /** Exact chip result `c_i`. */
   readonly chipResult: Rational;
-  /** Money result rounded so that the results sum to 0 (V1-RES-02). */
+  /** Money result rounded so that the results sum to 0. */
   readonly moneyResult: number;
 }
 
@@ -53,7 +53,7 @@ export type CashGameError =
   | { readonly code: 'INVALID_MISMATCH_PLAYER' };
 
 /**
- * Full cash-game calculation (SPEC §8): totals, chip mismatch and its adjustment,
+ * Full cash-game calculation: totals, chip mismatch and its adjustment,
  * money results rounded to a zero sum, and the automatic settlement. Used for the
  * finish preview, the finish itself and recalculation of a finished game.
  */

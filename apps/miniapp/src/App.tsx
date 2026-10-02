@@ -17,7 +17,7 @@ import { GamePage } from './pages/game/GamePage';
 import { ChatSettingsPage, FinishGamePage, HistoryPage, MyChatsPage } from './pages/stubs';
 import { TelegramUiProvider } from './telegram/TelegramUi';
 
-/** Switches to the profile language once it is known (I18N-02). */
+/** Switches to the profile language once it is known. */
 function LanguageSync() {
   const { i18n } = useTranslation();
   const me = useMe();

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { startParamToPath } from './startParam';
 
 describe('startParamToPath', () => {
-  it('maps the prefixes of SPEC §12.1', () => {
+  it('maps the g_, c_ and s_ prefixes', () => {
     expect(startParamToPath('g_q7Xh2kLm9PaZ')).toBe('/games/q7Xh2kLm9PaZ');
     expect(startParamToPath('c_c9d8-x_1')).toBe('/chats/c9d8-x_1');
     expect(startParamToPath('s_c9d8')).toBe('/chats/c9d8/settings');

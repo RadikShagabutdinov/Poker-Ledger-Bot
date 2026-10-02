@@ -14,7 +14,7 @@ import { computeResult, storeFinishedResults } from './results';
 import { loadViewableGame } from './state';
 
 export interface FinishInput {
-  /** Chips counted for every player still seated (V1-FIN-02). */
+  /** Chips counted for every player still seated. */
   readonly finalChips: Readonly<Record<string, number>>;
   readonly mismatch: MismatchMode;
 }
@@ -55,7 +55,7 @@ function parseFinishInput(input: FinishInput): FinishInput {
   return { finalChips: input.finalChips, mismatch: parseInput(mismatchModeSchema, input.mismatch) };
 }
 
-/** A game without chip events can only be deleted (V1-FIN-08). */
+/** A game without chip events can only be deleted. */
 function assertNotEmpty(data: GameData): void {
   if (!data.events.some((e) => isChipEventType(e.type) && e.cancelledAt === null)) {
     throw new ServiceError('EMPTY_GAME');
@@ -63,7 +63,7 @@ function assertNotEmpty(data: GameData): void {
 }
 
 /**
- * `POST /games/:gameId/finish/preview` (V1-FIN-06): results, mismatch and the
+ * `POST /games/:gameId/finish/preview`: results, mismatch and the
  * automatic settlement. Writes nothing.
  */
 export async function previewFinish(
@@ -81,7 +81,7 @@ export async function previewFinish(
 }
 
 /**
- * `POST /games/:gameId/finish` with `expectedVersion` (V1-FIN-05..07). The counted
+ * `POST /games/:gameId/finish` with `expectedVersion`. The counted
  * chips of seated players are stored as their `cash_out` events
  * (`payload.source = 'finish'`); then results, mismatch and the automatic settlement
  * are stored and the game becomes finished.

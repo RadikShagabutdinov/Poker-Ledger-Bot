@@ -6,8 +6,8 @@ import type { AppEnv } from '../env';
 import { gameIdParam, readJson } from '../validate';
 
 /**
- * Settlement (SPEC §11). The only responses with payment details, and only for
- * players of the game (SEC-04): edits answer like `GET`, so the editor keeps them.
+ * Settlement. The only responses with payment details, and only for
+ * players of the game: edits answer like `GET`, so the editor keeps them.
  */
 export function settlementRoutes(services: ServiceDeps): Hono<AppEnv> {
   return new Hono<AppEnv>()

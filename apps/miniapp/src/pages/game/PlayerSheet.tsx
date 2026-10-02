@@ -1,4 +1,4 @@
-// Player actions (SPEC §12.5, V1-PLAY-01..05): buy chips, leave the table, undo.
+// Player actions: buy chips, leave the table, undo.
 import { chipsToMoneyRounded } from '@pokerledger/core';
 import type { GameStateResponse } from '@pokerledger/shared';
 import { useState } from 'react';
@@ -14,7 +14,7 @@ import { useFormat } from '../../i18n/hooks';
 import { useConfirm } from '../../telegram/nativeUi';
 import { describeEntry, isChipEvent } from './events';
 
-/** Chat default (V1-SET-05) while the chat settings load or if they cannot be read. */
+/** Chat default while the chat settings load or if they cannot be read. */
 const DEFAULT_QUICK_BUYINS = [1, 0.5];
 const FRACTIONS: Record<number, string> = { 0.25: '¼', 0.5: '½', 0.75: '¾' };
 

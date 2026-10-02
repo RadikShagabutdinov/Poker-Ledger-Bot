@@ -7,8 +7,8 @@ import type { MiniAppLinks } from '../links';
 import { approxMoney, urlButton, type RenderedMessage } from './common';
 
 /**
- * Result message of a finished game (SPEC §13.3, V1-FIN-07, V1-SETL-06): results
- * with mentions of Telegram players (§13.4), transfers without payment details,
+ * Result message of a finished game: results
+ * with mentions of Telegram players, transfers without payment details,
  * the chip mismatch and markers of a manual or unbalanced settlement.
  */
 export function renderResult(
@@ -89,12 +89,12 @@ export function renderResult(
   };
 }
 
-/** The old result message after the game was reopened (V1-EDIT-02). */
+/** The old result message after the game was reopened. */
 export function renderReopened(name: string, language: Language): RenderedMessage {
   return { text: translator(language)('result.reopened', { name: escapeHtml(name) }) };
 }
 
-/** Status or result message of a deleted game (V1-EDIT-03). */
+/** Status or result message of a deleted game. */
 export function renderDeleted(name: string, language: Language): RenderedMessage {
   return { text: translator(language)('result.deleted', { name: escapeHtml(name) }) };
 }

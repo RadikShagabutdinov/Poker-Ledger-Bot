@@ -4,7 +4,7 @@ import {
   addGuests,
   createTestDeps,
   currentVersion,
-  playExample85,
+  playSampleGame,
   setupGame,
   BOB,
   CAROL,
@@ -37,13 +37,13 @@ function messageData(deps: TestDeps, gameId: string): GameMessageData {
   return data;
 }
 
-/** SPEC §8.5 game finished with `finalChips` for Петя, Коля, Дима. */
+/** The sample game finished with `finalChips` for Петя, Коля, Дима. */
 async function finishedExample(
   dimaChips: number,
-): Promise<{ deps: TestDeps; gameId: string; ids: Awaited<ReturnType<typeof playExample85>> }> {
+): Promise<{ deps: TestDeps; gameId: string; ids: Awaited<ReturnType<typeof playSampleGame>> }> {
   const deps = createTestDeps();
   const { game } = await setupGame(deps);
-  const ids = await playExample85(deps, game.id);
+  const ids = await playSampleGame(deps, game.id);
   await finishGame(deps, BOB, game.id, {
     finalChips: { [ids.petya]: 71_000, [ids.kolya]: 52_000, [ids.dima]: dimaChips },
     mismatch: { mode: 'proportional' },
@@ -52,11 +52,11 @@ async function finishedExample(
   return { deps, gameId: game.id, ids };
 }
 
-describe('status message (SPEC §13.2)', () => {
+describe('status message', () => {
   it.each(['ru', 'en'] as const)('renders seated and left players in %s', async (language) => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
-    await playExample85(deps, game.id);
+    await playSampleGame(deps, game.id);
     const message = renderStatus(messageData(deps, game.id).state, language, links);
     expect(message.text).toMatchSnapshot();
     expect(withoutId(message.keyboard, game.id)).toMatchSnapshot();
@@ -82,7 +82,7 @@ describe('status message (SPEC §13.2)', () => {
     expect(text).not.toContain('докуп');
   });
 
-  it('escapes HTML in user strings (SEC-08)', async () => {
+  it('escapes HTML in user strings', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
     const [guest] = await addGuests(deps, game.id, ['<b>Tom</b> & Jerry']);
@@ -92,7 +92,7 @@ describe('status message (SPEC §13.2)', () => {
     expect(text).not.toContain('<b>Tom');
   });
 
-  it('has no mentions (SPEC §13.4)', async () => {
+  it('has no mentions', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
     await buySelf(deps, BOB, game.id, { expect: 'buy_in' });
@@ -109,7 +109,7 @@ describe('status message (SPEC §13.2)', () => {
   });
 });
 
-describe('result message (SPEC §13.3)', () => {
+describe('result message', () => {
   it.each(['ru', 'en'] as const)('renders results and transfers in %s', async (language) => {
     const { deps, gameId } = await finishedExample(30_000);
     const message = renderResult(messageData(deps, gameId), language, links);

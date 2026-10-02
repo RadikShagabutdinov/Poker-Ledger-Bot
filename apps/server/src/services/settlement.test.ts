@@ -36,7 +36,7 @@ async function finishedGame(deps: ReturnType<typeof createTestDeps>) {
 }
 
 describe('settlement', () => {
-  it('payment details are returned only to players of the game (SEC-04)', async () => {
+  it('payment details are returned only to players of the game', async () => {
     const deps = createTestDeps();
     const { game, carol, dave } = await finishedGame(deps);
 
@@ -65,7 +65,7 @@ describe('settlement', () => {
     expect(everything).not.toContain('Сбер');
   });
 
-  it('a player who left the chat can still view the finished game (SEC-02)', async () => {
+  it('a player who left the chat can still view the finished game', async () => {
     const deps = createTestDeps();
     const { game } = await finishedGame(deps);
     deps.setMembership(TG_CHAT_ID, DAVE.tgUserId, 'none');
@@ -80,7 +80,7 @@ describe('settlement', () => {
     ).rejects.toMatchObject({ code: 'NOT_CHAT_MEMBER' });
   });
 
-  it('manual settlement saves with warnings, is logged and can be reset (V1-SETL-03..07)', async () => {
+  it('manual settlement saves with warnings, is logged and can be reset', async () => {
     const deps = createTestDeps();
     const { game, carol, dave } = await finishedGame(deps);
     deps.scheduled.length = 0;
@@ -108,7 +108,7 @@ describe('settlement', () => {
     expect(reset.transfers).toEqual([{ from: dave, to: carol, amount: 1000 }]);
   });
 
-  it('rejects non-positive amounts, self-transfers and unknown players (V1-SETL-05)', async () => {
+  it('rejects non-positive amounts, self-transfers and unknown players', async () => {
     const deps = createTestDeps();
     const { game, carol, dave } = await finishedGame(deps);
     const expectedVersion = currentVersion(deps, game.id);
@@ -137,7 +137,7 @@ describe('settlement', () => {
     ).rejects.toMatchObject({ code: 'VALIDATION', details: { reason: 'UNKNOWN_PLAYER' } });
   });
 
-  it('only players, the creator and admins may edit the settlement (SPEC §3)', async () => {
+  it('only players, the creator and admins may edit the settlement', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
     const carol = await buySelf(deps, CAROL, game.id, { expect: 'buy_in' });

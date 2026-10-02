@@ -8,7 +8,7 @@ import { getGameState } from './state';
 import { BOB, CAROL, MALLORY, START_TIME, createTestDeps, setupChat, setupGame } from './testing';
 
 describe('createGame', () => {
-  it('names the game by the template and increments the counter (V1-SET-03)', async () => {
+  it('names the game by the template and increments the counter', async () => {
     const deps = createTestDeps();
     const chat = setupChat(deps);
     await updateChatSettings(deps, BOB, chat.id, { gameNameTemplate: 'Игра №{n}, {date}' });
@@ -31,7 +31,7 @@ describe('createGame', () => {
     ).toBe('09/15');
   });
 
-  it('allows one active game per chat (V1-GAME-03)', async () => {
+  it('allows one active game per chat', async () => {
     const deps = createTestDeps();
     const { chat, game } = await setupGame(deps);
     await expect(createGame(deps, CAROL, chat.id)).rejects.toMatchObject({

@@ -1,4 +1,4 @@
-// Shared zod schemas, API types and error codes (SPEC §9.3, §11).
+// Shared zod schemas, API types and error codes.
 export const SHARED_PACKAGE = '@pokerledger/shared';
 
 export { ERROR_CODES, type ApiError, type ErrorCode } from './errors';

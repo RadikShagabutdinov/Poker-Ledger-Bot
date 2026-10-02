@@ -15,7 +15,7 @@ export type { BotDeps } from './context';
 /** Updates the bot subscribes to (long polling). */
 export const ALLOWED_UPDATES = ['message', 'callback_query', 'my_chat_member'] as const;
 
-/** Bot transport over the services (SPEC §9.4): handlers hold no business logic. */
+/** Bot transport over the services: handlers hold no business logic. */
 export function installBotHandlers(bot: Bot, deps: BotDeps): void {
   registerChatHandlers(bot, deps);
   registerCommandHandlers(bot, deps);

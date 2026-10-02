@@ -21,7 +21,7 @@ async function status(
   return { status: response.status, code: errorBodySchema.parse(await response.json()).error.code };
 }
 
-describe('initData auth (SEC-01)', () => {
+describe('initData auth', () => {
   it('accepts valid initData and returns the profile', async () => {
     const app = createTestApp();
     const profile = profileResponseSchema.parse(await app.json(ALICE, 'GET', '/me'));
@@ -62,7 +62,7 @@ describe('initData auth (SEC-01)', () => {
     expect(await status(app, `tma ${raw}`)).toEqual({ status: 401, code: 'UNAUTHORIZED' });
   });
 
-  it('refreshes the user name on every request (V1-PROF-04)', async () => {
+  it('refreshes the user name on every request', async () => {
     const app = createTestApp();
     await app.json(ALICE, 'GET', '/me/chats');
     await app.json({ ...ALICE, firstName: 'Alicia', lastName: 'B.' }, 'GET', '/me/chats');

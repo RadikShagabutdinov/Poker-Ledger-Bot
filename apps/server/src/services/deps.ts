@@ -1,6 +1,6 @@
 import type { Db } from '../db/client';
 
-/** Membership of a user in a Telegram chat, from `getChatMember` (SPEC §3). */
+/** Membership of a user in a Telegram chat, from `getChatMember`. */
 export type Membership = 'admin' | 'member' | 'none';
 
 /**
@@ -11,7 +11,7 @@ export interface MembershipChecker {
   getMembership(tgChatId: number, tgUserId: number): Promise<Membership>;
 }
 
-/** Schedules a debounced update of the game's chat message (V1-MSG-07). */
+/** Schedules a debounced update of the game's chat message. */
 export interface MessageUpdater {
   schedule(gameId: string): void;
 }
@@ -22,7 +22,7 @@ export interface ServiceDeps {
   readonly messageUpdater: MessageUpdater;
   /** Current time, UTC milliseconds. */
   readonly now: () => number;
-  /** IANA time zone used for `{date}` in game names (V1-SET-03). */
+  /** IANA time zone used for `{date}` in game names. */
   readonly timeZone: string;
 }
 

@@ -8,7 +8,7 @@ export interface Balance {
   readonly amount: number;
 }
 
-/** Above this many non-zero balances the exact subset DP is skipped (SPEC §8.3). */
+/** Above this many non-zero balances the exact subset DP is skipped. */
 export const EXACT_SETTLEMENT_MAX_PLAYERS = 20;
 
 interface Entry {
@@ -108,7 +108,7 @@ function settleGreedy(group: readonly Entry[], out: Transfer[]): void {
 }
 
 /**
- * Settlement with the minimum number of transfers (SPEC §8.3, V1-SETL-01).
+ * Settlement with the minimum number of transfers.
  * Balances must be safe integers summing to 0. Zero balances are dropped; for at
  * most 20 remaining players the exact subset DP splits them into zero-sum groups,
  * otherwise all of them form one group (at most n − 1 transfers). Output is sorted

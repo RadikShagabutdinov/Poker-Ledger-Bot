@@ -1,4 +1,4 @@
-/** Mini App screens reachable by `start_param` (SPEC §12.1). */
+/** Mini App screens reachable by `start_param`. */
 export type StartTarget = 'game' | 'chat' | 'settings';
 
 const PREFIX: Record<StartTarget, string> = { game: 'g', chat: 'c', settings: 's' };
@@ -8,7 +8,7 @@ export interface LinkConfig {
   readonly miniAppShortName: string;
 }
 
-/** Builds Mini App direct links; in groups they are URL buttons (V1-MSG-05). */
+/** Builds Mini App direct links; in groups they are URL buttons. */
 export interface MiniAppLinks {
   /** `https://t.me/<bot>/<app>` without a start parameter. */
   readonly app: string;

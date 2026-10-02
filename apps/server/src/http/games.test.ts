@@ -48,7 +48,7 @@ describe('game flow through the API', () => {
     });
     expect(game).toMatchObject({ status: 'active', stack: { chips: 30_000, amount: 1_000 } });
     const gid = game.id;
-    // V1-GAME-03: one active game per chat.
+    // One active game per chat.
     const second = await t.call(BOB, 'POST', `/chats/${chat.id}/games`, { body: {} });
     expect(second.status).toBe(409);
     expect(await second.json()).toEqual({
@@ -77,7 +77,7 @@ describe('game flow through the API', () => {
       error: { code: 'GUEST_NAME_TAKEN', details: { playerId: vasya } },
     });
 
-    // `buy` becomes a buy-in, then a rebuy (V1-PLAY-05).
+    // `buy` becomes a buy-in, then a rebuy.
     const buy = (playerId: string, chips: number) =>
       t.json(BOB, 'POST', `/games/${gid}/events`, { type: 'buy', playerId, chips });
     await scheduledAfter(async () => {
@@ -146,7 +146,7 @@ describe('game flow through the API', () => {
     // 30 000 chips = 1 500, so ∓450.
     expect(finished.game.players.map((p) => p.moneyResult)).toEqual([-450, 450]);
 
-    // Finished-game edit: only the creator or an admin (V1-EDIT-01).
+    // Finished-game edit: only the creator or an admin.
     const byCarol = await t.call(CAROL, 'POST', `/games/${gid}/edit`, {
       body: { replace: [{ eventId: 1, chips: 1 }] },
     });
@@ -195,7 +195,7 @@ describe('game flow through the API', () => {
     expect((await t.call(BOB, 'GET', `/games/${gid}`)).status).toBe(404);
   });
 
-  it('pages history with a cursor and filters by period (V1-HIST-01/02/04)', async () => {
+  it('pages history with a cursor and filters by period', async () => {
     const t = createTestApp();
     const chat = setupChat(t.deps);
     const visible: string[] = [];

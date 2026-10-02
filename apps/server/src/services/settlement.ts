@@ -28,7 +28,7 @@ import {
 } from './permissions';
 import { loadViewableGame } from './state';
 
-/** Payment details of a recipient (V1-PROF-02). Only for players of the game (SEC-04). */
+/** Payment details of a recipient. Only for players of the game. */
 export interface PaymentDetails {
   readonly phone: string | null;
   readonly bank: string | null;
@@ -42,7 +42,7 @@ export interface SettlementView {
     /** Present only for players of the game and recipients who filled them in. */
     readonly recipientPayment?: PaymentDetails;
   })[];
-  /** Balance mismatches of a manual settlement (V1-SETL-04). */
+  /** Balance mismatches of a manual settlement. */
   readonly warnings: readonly SettlementWarning[];
 }
 
@@ -99,8 +99,8 @@ export function buildSettlementView(
 }
 
 /**
- * `GET /games/:gameId/settlement` (V1-SETL-02). The only place that returns payment
- * details, and only to players of the game (SEC-04).
+ * `GET /games/:gameId/settlement`. The only place that returns payment
+ * details, and only to players of the game.
  */
 export async function getSettlement(
   deps: ServiceDeps,
@@ -134,7 +134,7 @@ function afterEdit(ctx: MutationContext, payload: Record<string, unknown>): Sett
 }
 
 /**
- * `PUT /games/:gameId/settlement` (V1-SETL-03..05, V1-SETL-07). Rejects only
+ * `PUT /games/:gameId/settlement`. Rejects only
  * non-positive amounts and self-transfers; balance mismatches are returned as
  * warnings and do not block saving.
  */
@@ -170,7 +170,7 @@ export async function saveSettlement(
   );
 }
 
-/** `POST /games/:gameId/settlement/reset`: back to the automatic settlement (V1-SETL-03). */
+/** `POST /games/:gameId/settlement/reset`: back to the automatic settlement. */
 export async function resetSettlement(
   deps: ServiceDeps,
   actor: Actor,

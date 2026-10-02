@@ -8,7 +8,7 @@ export interface BottomSheetProps {
   readonly children: ReactNode;
 }
 
-/** A panel sliding up from the bottom (SPEC §12.5); a tap on the backdrop closes it. */
+/** A panel sliding up from the bottom; a tap on the backdrop closes it. */
 export function BottomSheet({ open, onClose, title, children }: BottomSheetProps) {
   useEffect(() => {
     if (!open) return;

@@ -14,7 +14,7 @@ export function useLanguage(): Language {
   return i18n.language === 'en' ? 'en' : 'ru';
 }
 
-/** Number and money formatting in the current language (I18N-04). */
+/** Number and money formatting in the current language. */
 export function useFormat() {
   const language = useLanguage();
   return {
@@ -26,7 +26,7 @@ export function useFormat() {
   };
 }
 
-/** Translates an error by its API code (I18N-06); unknown failures get a generic text. */
+/** Translates an error by its API code; unknown failures get a generic text. */
 export function useErrorText(): (error: unknown) => string {
   const { t } = useTranslation();
   return (error) => {

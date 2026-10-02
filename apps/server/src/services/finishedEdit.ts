@@ -29,7 +29,7 @@ export interface FinishedEventsEdit {
   /** Chip amount corrections: the new event takes the place of the old one. */
   readonly replace?: readonly { readonly eventId: number; readonly chips: number }[] | undefined;
   readonly expectedVersion?: number | undefined;
-  /** Required when a manual settlement exists and money results change (V1-SETL-07). */
+  /** Required when a manual settlement exists and money results change. */
   readonly settlementPolicy?: SettlementPolicy | undefined;
 }
 
@@ -49,10 +49,10 @@ function activeChipEvent(events: readonly GameEventRow[], eventId: number): Game
 }
 
 /**
- * Edits events of a finished game in one atomic batch (V1-EDIT-01): cancel, replace
+ * Edits events of a finished game in one atomic batch: cancel, replace
  * the chip amount of an event in place, add new events. After the batch the
  * sequence must be valid and nobody may be seated; then `game_results` and the
- * settlement are recalculated (V1-RES-03). Every change stays in the log (V1-EDIT-04).
+ * settlement are recalculated. Every change stays in the log.
  */
 export async function editFinishedEvents(
   deps: ServiceDeps,
@@ -123,8 +123,8 @@ export async function editFinishedEvents(
 }
 
 /**
- * Changes how the chip mismatch of a finished game is adjusted (V1-EDIT-01,
- * V1-FIN-04) and recalculates the results.
+ * Changes how the chip mismatch of a finished game is adjusted and recalculates the
+ * results.
  */
 export async function updateFinishedMismatch(
   deps: ServiceDeps,
@@ -176,7 +176,7 @@ export interface GameEventInput {
 
 /**
  * `POST /games/:gameId/events`: in an active game a buy or a cash-out; in a finished
- * game a one-event edit batch (V1-EDIT-01), where `buy` is a buy-in since nobody is
+ * game a one-event edit batch, where `buy` is a buy-in since nobody is
  * seated. Returns the recorded event of an active game, `null` for a finished one.
  */
 export async function recordGameEvent(
@@ -207,7 +207,7 @@ export async function recordGameEvent(
 
 /**
  * `POST /games/:gameId/events/:eventId/cancel`: in an active game a cancel; in a
- * finished game a one-event edit batch (V1-EDIT-01).
+ * finished game a one-event edit batch.
  */
 export async function cancelGameEvent(
   deps: ServiceDeps,

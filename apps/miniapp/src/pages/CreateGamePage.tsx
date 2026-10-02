@@ -1,4 +1,4 @@
-// Game creation (SPEC §12.4, V1-GAME-02): name from the template, stack value; type hidden.
+// Game creation: name from the template, stack value; type hidden.
 import { formatChipValue, type ChatResponse } from '@pokerledger/shared';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';

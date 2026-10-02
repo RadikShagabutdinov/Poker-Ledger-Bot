@@ -21,7 +21,7 @@ import {
 import type { AppEnv } from '../env';
 import { param, readJson, readQuery } from '../validate';
 
-/** Chats, players and history (SPEC §11): chat members. */
+/** Chats, players and history: chat members. */
 export function chatRoutes(services: ServiceDeps): Hono<AppEnv> {
   return new Hono<AppEnv>()
     .get('/chats/:chatId', async (c) =>

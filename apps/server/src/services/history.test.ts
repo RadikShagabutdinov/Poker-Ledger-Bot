@@ -33,7 +33,7 @@ async function playAndFinish(
 }
 
 describe('history', () => {
-  it('lists games newest first with cursor pagination, without deleted games (V1-HIST-01/04)', async () => {
+  it('lists games newest first with cursor pagination, without deleted games', async () => {
     const deps = createTestDeps();
     const chat = setupChat(deps);
     const games = [];
@@ -67,7 +67,7 @@ describe('history', () => {
     expect(second.nextCursor).toBeNull();
   });
 
-  it('filters by period and marks mismatches (V1-HIST-02)', async () => {
+  it('filters by period and marks mismatches', async () => {
     const deps = createTestDeps();
     const chat = setupChat(deps);
     await playAndFinish(deps, chat.id, 30_000);
@@ -84,7 +84,7 @@ describe('history', () => {
     });
   });
 
-  it('game details include state, settlement and log (V1-HIST-03)', async () => {
+  it('game details include state, settlement and log', async () => {
     const deps = createTestDeps();
     const chat = setupChat(deps);
     const game = await playAndFinish(deps, chat.id, 30_000);
@@ -103,7 +103,7 @@ describe('history', () => {
 });
 
 describe('history filters', () => {
-  it('filters by status and type (V1-HIST-02)', async () => {
+  it('filters by status and type', async () => {
     const deps = createTestDeps();
     const chat = setupChat(deps);
     const finished = await playAndFinish(deps, chat.id, 30_000);

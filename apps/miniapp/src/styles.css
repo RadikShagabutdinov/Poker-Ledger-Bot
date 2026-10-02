@@ -1,4 +1,4 @@
-/* Telegram theme (SPEC §12). themeParams.bindCssVars() writes --tg-theme-* into the inline
+/* Telegram theme. themeParams.bindCssVars() writes --tg-theme-* into the inline
    style of <html>, which overrides these defaults; the defaults follow the system theme
    when the page runs without Telegram. */
 :root {

@@ -22,7 +22,7 @@ export interface PlayerView {
   readonly isGuest: boolean;
 }
 
-/** Display name: the chat override, else the Telegram name (V1-PL-03). */
+/** Display name: the chat override, else the Telegram name. */
 export function playerName(player: ChatPlayerRow, user: UserRow | null): string {
   if (player.displayName) {
     return player.displayName;
@@ -38,7 +38,7 @@ export function toPlayerView({ player, user }: ChatPlayerWithUser): PlayerView {
 }
 
 /**
- * Chat player of a Telegram user, created on first interaction in the chat (V1-PL-01).
+ * Chat player of a Telegram user, created on first interaction in the chat.
  * The user row must exist (see `touchUser`).
  */
 export function ensureChatPlayer(
@@ -54,7 +54,7 @@ export function ensureChatPlayer(
 }
 
 /**
- * Guest names are unique per chat ignoring case (V1-PL-02). Compared in JS because
+ * Guest names are unique per chat ignoring case. Compared in JS because
  * SQLite `lower()` folds ASCII only; the DB index is a backstop for ASCII names.
  */
 function findGuestByName(db: DbOrTx, chatId: string, name: string): ChatPlayerRow | undefined {
@@ -85,7 +85,7 @@ export function insertGuest(
   });
 }
 
-/** `GET /chats/:chatId/players`: known players of the chat (V1-PL-04). */
+/** `GET /chats/:chatId/players`: known players of the chat. */
 export async function listPlayers(
   deps: ServiceDeps,
   actor: Actor,
@@ -108,7 +108,7 @@ export async function addGuest(
 }
 
 /**
- * `PATCH /chats/:chatId/players/:playerId` (V1-PL-03). For a Telegram player `null`
+ * `PATCH /chats/:chatId/players/:playerId`. For a Telegram player `null`
  * resets the override to the Telegram name.
  */
 export async function renamePlayer(

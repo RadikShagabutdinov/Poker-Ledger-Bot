@@ -1,10 +1,10 @@
 import { CoreError, assertSafeInt, type Result } from './errors';
 import type { ChipEventType, CoreEvent, CorePlayer } from './types';
 
-/** Player status at the table (V1-PLAY-07). */
+/** Player status at the table. */
 export type PlayerStatus = 'not_joined' | 'seated' | 'left';
 
-/** Per-player totals over non-cancelled events (SPEC §8.1). */
+/** Per-player totals over non-cancelled events. */
 export interface PlayerTotals {
   readonly playerId: string;
   readonly seatOrder: number;
@@ -17,7 +17,7 @@ export interface PlayerTotals {
   readonly status: PlayerStatus;
 }
 
-/** Game summary (V1-PLAY-06). */
+/** Game summary. */
 export interface GameSummary {
   /** Chips issued in total, `IN`. */
   readonly issuedChips: number;
@@ -45,7 +45,7 @@ export type CancelError =
   | { readonly code: 'EVENT_NOT_CANCELLABLE' }
   | {
       readonly code: 'INVALID_EVENT_SEQUENCE';
-      /** The event that has to be cancelled first (V1-LOG-04). */
+      /** The event that has to be cancelled first. */
       readonly blockingEventId: number;
     };
 
@@ -160,7 +160,7 @@ export function validateNewEvent(
 }
 
 /**
- * Per-player totals over non-cancelled events (SPEC §8.1), in the order of `players`.
+ * Per-player totals over non-cancelled events, in the order of `players`.
  * Throws `CoreError` if the event sequence is invalid: stored sequences are
  * always validated before they are written.
  */
@@ -180,7 +180,7 @@ export function computePlayerTotals(
   });
 }
 
-/** Game summary from player totals (V1-PLAY-06). */
+/** Game summary from player totals. */
 export function computeSummary(totals: readonly PlayerTotals[]): GameSummary {
   let issuedChips = 0;
   let cashedOutChips = 0;
@@ -203,7 +203,7 @@ export function computeSummary(totals: readonly PlayerTotals[]): GameSummary {
 }
 
 /**
- * Infers the purchase type (V1-PLAY-05): `rebuy` if the player is seated now,
+ * Infers the purchase type: `rebuy` if the player is seated now,
  * otherwise `buy_in`.
  */
 export function inferBuyType(
@@ -220,7 +220,7 @@ export function inferBuyType(
 }
 
 /**
- * Checks whether a chip event can be cancelled (V1-LOG-04). If cancelling it would
+ * Checks whether a chip event can be cancelled. If cancelling it would
  * make the sequence invalid, returns the first event that breaks: it has to be
  * cancelled first. Non-chip events are not cancellable here.
  */

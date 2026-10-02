@@ -1,4 +1,4 @@
-// HTTP API contract (SPEC §11): request bodies and queries the server validates, and
+// HTTP API contract: request bodies and queries the server validates, and
 // response shapes the Mini App relies on.
 import { z } from 'zod';
 
@@ -9,11 +9,11 @@ const id = z.string().min(1).max(64);
 const version = z.number().int().positive();
 const timestamp = z.number().int().nonnegative();
 
-/** What to do with a manual settlement when a finished-game edit changes results (V1-SETL-07). */
+/** What to do with a manual settlement when a finished-game edit changes results. */
 export const settlementPolicySchema = z.enum(['recalculate', 'keep']);
 export type SettlementPolicy = z.infer<typeof settlementPolicySchema>;
 
-/** Fields shared by edits of a finished game (V1-EDIT-01). */
+/** Fields shared by edits of a finished game. */
 const finishedEditFields = {
   expectedVersion: version.optional(),
   settlementPolicy: settlementPolicySchema.optional(),
@@ -28,7 +28,7 @@ export const addGuestBodySchema = z.object({ name: z.string() });
 /** `PATCH /chats/:chatId/players/:playerId`; `null` resets a Telegram player's name. */
 export const renamePlayerBodySchema = z.object({ name: z.string().nullable() });
 
-/** `GET /chats/:chatId/games` query (V1-HIST-01/02). `from`/`to` are UTC ms, `to` exclusive. */
+/** `GET /chats/:chatId/games` query. `from`/`to` are UTC ms, `to` exclusive. */
 export const historyQuerySchema = z.object({
   status: z.enum(['active', 'finished']).optional(),
   type: z.enum(['cash', 'tournament']).optional(),
@@ -47,15 +47,15 @@ export const createGameBodySchema = z.object({
 });
 export type CreateGameBody = z.infer<typeof createGameBodySchema>;
 
-/** Chip mismatch adjustment in the flat form of SPEC §11. */
+/** Chip mismatch adjustment in the flat form of the API body. */
 const mismatchFields = {
   mismatchMode: z.enum(['proportional', 'single_player']),
   mismatchPlayerId: id.optional(),
 };
 
 /**
- * `PATCH /games/:gameId`: name and stack (V1-GAME-04); for a finished game also the
- * mismatch adjustment (V1-EDIT-01).
+ * `PATCH /games/:gameId`: name and stack; for a finished game also the
+ * mismatch adjustment.
  */
 export const updateGameBodySchema = z.object({
   name: z.string().optional(),
@@ -74,7 +74,7 @@ export const addGamePlayerBodySchema = z.union([
 ]);
 export type AddGamePlayerBody = z.infer<typeof addGamePlayerBodySchema>;
 
-/** `POST /games/:gameId/events`; `buy` becomes `buy_in` or `rebuy` (V1-PLAY-05). */
+/** `POST /games/:gameId/events`; `buy` becomes `buy_in` or `rebuy`. */
 export const gameEventBodySchema = z.object({
   type: z.enum(['buy', 'cash_out']),
   playerId: id,
@@ -91,7 +91,7 @@ export const undoBodySchema = z.object({ mineOnly: z.boolean().optional() });
 
 /**
  * `POST /games/:gameId/edit`: one atomic batch of changes to a finished game
- * (V1-EDIT-01). `replace` corrects the chips of an event in place.
+ *. `replace` corrects the chips of an event in place.
  */
 export const editFinishedBodySchema = z.object({
   cancel: z.array(z.number().int().positive()).max(100).optional(),
@@ -109,7 +109,7 @@ export const editFinishedBodySchema = z.object({
 });
 export type EditFinishedBody = z.infer<typeof editFinishedBodySchema>;
 
-/** `POST /games/:gameId/finish/preview` (V1-FIN-06). */
+/** `POST /games/:gameId/finish/preview`. */
 export const finishPreviewBodySchema = z.object({
   finalChips: z.record(z.string(), z.number()),
   ...mismatchFields,
@@ -120,7 +120,7 @@ export type FinishPreviewBody = z.infer<typeof finishPreviewBodySchema>;
 export const finishBodySchema = finishPreviewBodySchema.extend({ expectedVersion: version });
 export type FinishBody = z.infer<typeof finishBodySchema>;
 
-/** `PUT /games/:gameId/settlement` (V1-SETL-03). */
+/** `PUT /games/:gameId/settlement`. */
 export const settlementPutBodySchema = z.object({
   transfers: z.array(transferSchema).max(1000),
   expectedVersion: version,
@@ -172,7 +172,7 @@ export const chatResponseSchema = z.object({
   quickBuyins: z.array(z.number()),
   botStatus: z.enum(['member', 'admin', 'left']),
   isAdmin: z.boolean(),
-  /** The name the next game gets from the template (V1-GAME-02). */
+  /** The name the next game gets from the template. */
   nextGameName: z.string(),
 });
 export type ChatResponse = z.infer<typeof chatResponseSchema>;
@@ -208,7 +208,7 @@ export const historyPageResponseSchema = z.object({
 });
 export type HistoryPageResponse = z.infer<typeof historyPageResponseSchema>;
 
-/** `GET /games/:gameId` (SPEC §11). */
+/** `GET /games/:gameId`. */
 export const gameStateSchema = z.object({
   id,
   chatId: id,
@@ -284,7 +284,7 @@ export const addGamePlayerResponseSchema = gameMutationResponseSchema.extend({
 });
 export type AddGamePlayerResponse = z.infer<typeof addGamePlayerResponseSchema>;
 
-/** `GET /games/:gameId/log` (V1-LOG-01/02). */
+/** `GET /games/:gameId/log`. */
 export const gameLogResponseSchema = z.object({
   entries: z.array(
     z.object({
@@ -304,7 +304,7 @@ export type GameLogResponse = z.infer<typeof gameLogResponseSchema>;
 
 const transferResponseSchema = z.object({ from: id, to: id, amount: z.number().int() });
 
-/** `POST /games/:gameId/finish/preview` (V1-FIN-06). */
+/** `POST /games/:gameId/finish/preview`. */
 export const finishPreviewResponseSchema = z.object({
   mismatchChips: z.number().int(),
   summary: z.object({
@@ -332,7 +332,7 @@ export const finishResponseSchema = gameMutationResponseSchema.extend({
 });
 export type FinishResponse = z.infer<typeof finishResponseSchema>;
 
-/** Payment details of a recipient; only for players of the game (SEC-04). */
+/** Payment details of a recipient; only for players of the game. */
 export const paymentDetailsSchema = z.object({
   phone: z.string().nullable(),
   bank: z.string().nullable(),

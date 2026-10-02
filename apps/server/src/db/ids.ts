@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 
-/** Game ID: nanoid(12), unpredictable (V1-GAME-05). */
+/** Game ID: nanoid(12), unpredictable. */
 export function newGameId(): string {
   return nanoid(12);
 }

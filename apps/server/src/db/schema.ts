@@ -1,5 +1,5 @@
-// Drizzle schema (SPEC §10). Times are UTC milliseconds, money and chips are integers.
-// Fields for V2 and "later" features exist from V1 (SPEC §4).
+// Drizzle schema. Times are UTC milliseconds, money and chips are integers.
+// Fields for V2 and "later" features exist from V1.
 import { sql } from 'drizzle-orm';
 import {
   index,

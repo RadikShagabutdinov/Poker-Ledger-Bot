@@ -20,14 +20,14 @@ export interface MutationContext {
 }
 
 export interface MutationOptions {
-  /** Optimistic concurrency: `CONFLICT` if the game version differs (SPEC §9.4). */
+  /** Optimistic concurrency: `CONFLICT` if the game version differs. */
   readonly expectedVersion?: number | undefined;
   /** Permission and status checks; throw `ServiceError` to reject. */
   readonly authorize: (game: GameRow, access: GameAccess) => void;
 }
 
 /**
- * The single path of every game mutation (SPEC §9.4):
+ * The single path of every game mutation:
  * membership lookup → transaction (permissions → version → writes → `version++`)
  * → `messageUpdater.schedule(gameId)` after the commit.
  */

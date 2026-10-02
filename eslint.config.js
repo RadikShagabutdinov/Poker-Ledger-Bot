@@ -28,7 +28,7 @@ export default tseslint.config(
     languageOptions: { globals: globals.browser },
   },
   {
-    // core is pure calculation code (SPEC §8, §9.3): no DB, bot, HTTP, Node APIs or app code.
+    // core is pure calculation code: no DB, bot, HTTP, Node APIs or app code.
     files: ['packages/core/**/*.ts'],
     rules: {
       'no-restricted-imports': [

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`result message (SPEC §13.3) > marks a manual settlement whose balances do not match 1`] = `
+exports[`result message > marks a manual settlement whose balances do not match 1`] = `
 "<b>✅ Покер 15.09 завершена · 4 игрока</b>
 
 Итоги:
@@ -16,7 +16,7 @@ exports[`result message (SPEC §13.3) > marks a manual settlement whose balances
 ⚠️ Переводы не совпадают с итогами"
 `;
 
-exports[`result message (SPEC §13.3) > mentions Telegram players and never shows payment details 1`] = `
+exports[`result message > mentions Telegram players and never shows payment details 1`] = `
 "<b>✅ Покер 15.09 finished · 2 players</b>
 
 Results:
@@ -27,7 +27,7 @@ Transfers:
 Guest → Carol: ₽500"
 `;
 
-exports[`result message (SPEC §13.3) > renders results and transfers in en 1`] = `
+exports[`result message > renders results and transfers in en 1`] = `
 "<b>✅ Покер 15.09 finished · 4 players</b>
 
 Results:
@@ -41,7 +41,7 @@ Transfers:
 Вася → Коля: ₽233"
 `;
 
-exports[`result message (SPEC §13.3) > renders results and transfers in en 2`] = `
+exports[`result message > renders results and transfers in en 2`] = `
 {
   "inline_keyboard": [
     [
@@ -54,7 +54,7 @@ exports[`result message (SPEC §13.3) > renders results and transfers in en 2`] 
 }
 `;
 
-exports[`result message (SPEC §13.3) > renders results and transfers in ru 1`] = `
+exports[`result message > renders results and transfers in ru 1`] = `
 "<b>✅ Покер 15.09 завершена · 4 игрока</b>
 
 Итоги:
@@ -68,7 +68,7 @@ exports[`result message (SPEC §13.3) > renders results and transfers in ru 1`] 
 Вася → Коля: 233 ₽"
 `;
 
-exports[`result message (SPEC §13.3) > renders results and transfers in ru 2`] = `
+exports[`result message > renders results and transfers in ru 2`] = `
 {
   "inline_keyboard": [
     [
@@ -81,7 +81,7 @@ exports[`result message (SPEC §13.3) > renders results and transfers in ru 2`] 
 }
 `;
 
-exports[`result message (SPEC §13.3) > warns about a chip mismatch in en 1`] = `
+exports[`result message > warns about a chip mismatch in en 1`] = `
 "<b>✅ Покер 15.09 finished · 4 players</b>
 
 Results:
@@ -98,7 +98,7 @@ Transfers:
 ⚠️ There are 1,000 chips (≈₽33) less on the table than issued. The difference is split in proportion to chips bought."
 `;
 
-exports[`result message (SPEC §13.3) > warns about a chip mismatch in ru 1`] = `
+exports[`result message > warns about a chip mismatch in ru 1`] = `
 "<b>✅ Покер 15.09 завершена · 4 игрока</b>
 
 Итоги:
@@ -115,7 +115,7 @@ exports[`result message (SPEC §13.3) > warns about a chip mismatch in ru 1`] = 
 ⚠️ На столе на 1 000 фишек (≈33 ₽) меньше, чем выдано. Разница распределена пропорционально купленным фишкам."
 `;
 
-exports[`status message (SPEC §13.2) > collapses more than 15 seated players to names and chips 1`] = `
+exports[`status message > collapses more than 15 seated players to names and chips 1`] = `
 "<b>🃏 Покер 15.09 · кэш</b>
 Стек: 30 000 фишек = 1 000 ₽
 
@@ -140,7 +140,7 @@ exports[`status message (SPEC §13.2) > collapses more than 15 seated players to
 Выдано: 495 000 (16 500 ₽) · На столе: 495 000"
 `;
 
-exports[`status message (SPEC §13.2) > renders an empty game 1`] = `
+exports[`status message > renders an empty game 1`] = `
 "<b>🃏 Покер 15.09 · кэш</b>
 Стек: 30 000 фишек = 1 000 ₽
 
@@ -149,7 +149,7 @@ exports[`status message (SPEC §13.2) > renders an empty game 1`] = `
 Выдано: 0 (0 ₽) · На столе: 0"
 `;
 
-exports[`status message (SPEC §13.2) > renders seated and left players in en 1`] = `
+exports[`status message > renders seated and left players in en 1`] = `
 "<b>🃏 Покер 15.09 · cash</b>
 Stack: 30,000 chips = ₽1,000
 
@@ -163,7 +163,7 @@ Left:
 Issued: 165,000 (₽5,500) · On the table: 153,000"
 `;
 
-exports[`status message (SPEC §13.2) > renders seated and left players in en 2`] = `
+exports[`status message > renders seated and left players in en 2`] = `
 {
   "inline_keyboard": [
     [
@@ -190,7 +190,7 @@ exports[`status message (SPEC §13.2) > renders seated and left players in en 2`
 }
 `;
 
-exports[`status message (SPEC §13.2) > renders seated and left players in ru 1`] = `
+exports[`status message > renders seated and left players in ru 1`] = `
 "<b>🃏 Покер 15.09 · кэш</b>
 Стек: 30 000 фишек = 1 000 ₽
 
@@ -204,7 +204,7 @@ exports[`status message (SPEC §13.2) > renders seated and left players in ru 1`
 Выдано: 165 000 (5 500 ₽) · На столе: 153 000"
 `;
 
-exports[`status message (SPEC §13.2) > renders seated and left players in ru 2`] = `
+exports[`status message > renders seated and left players in ru 2`] = `
 {
   "inline_keyboard": [
     [
@@ -231,7 +231,7 @@ exports[`status message (SPEC §13.2) > renders seated and left players in ru 2`
 }
 `;
 
-exports[`status message (SPEC §13.2) > renders the finished status without buttons 1`] = `
+exports[`status message > renders the finished status without buttons 1`] = `
 "<b>🃏 Покер 15.09 · кэш</b>
 Стек: 30 000 фишек = 1 000 ₽
 

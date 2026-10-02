@@ -32,7 +32,7 @@ const roles: Record<string, GameAccess> = {
   playerWhoLeftChat: { isMember: false, isAdmin: false, isCreator: false, isGamePlayer: true },
 };
 
-describe('permission matrix (SPEC §3)', () => {
+describe('permission matrix', () => {
   const finished = { status: 'finished' } as GameRow;
   const active = { status: 'active' } as GameRow;
 

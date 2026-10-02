@@ -11,7 +11,7 @@ export interface Actor {
   readonly languageCode?: string | undefined;
 }
 
-/** Creates the user or refreshes their name on every interaction (V1-PROF-04). */
+/** Creates the user or refreshes their name on every interaction. */
 export function touchUser(db: DbOrTx, actor: Actor, now: number): void {
   upsertUserName(
     db,
@@ -25,7 +25,7 @@ export function touchUser(db: DbOrTx, actor: Actor, now: number): void {
   );
 }
 
-/** `touchUser` in its own statement, for transports (V1-PROF-04 on every API request). */
+/** `touchUser` in its own statement, for transports: refreshes the user's name on every API request. */
 export function touchActor(
   deps: { readonly db: DbOrTx; readonly now: () => number },
   actor: Actor,

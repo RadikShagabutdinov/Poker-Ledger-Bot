@@ -1,7 +1,7 @@
 import type { Api } from 'grammy';
+import type { Logger } from 'pino';
 
 import type { Db } from '../db/client';
-import type { Logger } from '../logger';
 import { translator } from '../i18n';
 import {
   loadGameMessageData,
@@ -16,7 +16,7 @@ import type { RenderedMessage } from './render/common';
 import { renderDeleted, renderReopened, renderResult } from './render/result';
 import { renderFinishedStatus, renderStatus } from './render/status';
 
-/** Changes of a game are grouped for this long before its messages are updated (V1-MSG-07). */
+/** Changes of a game are grouped for this long before its messages are updated. */
 export const UPDATE_DELAY_MS = 2000;
 
 export type MessageApi = Pick<
@@ -34,8 +34,8 @@ export interface MessageUpdaterOptions {
 }
 
 /**
- * Keeps a game's chat messages in line with the database (V1-MSG-07/09, V1-FIN-07,
- * V1-SETL-06, V1-EDIT-02). The first change starts a 2 s timer; later changes within
+ * Keeps a game's chat messages in line with the database. The first change starts a 2 s
+ * timer; later changes within
  * it are folded into the same update, so a busy game is still updated every 2 s.
  * Updates of one game run one at a time; each renders the current state, so what
  * to do follows from the stored status and message ids alone.
@@ -166,7 +166,7 @@ export class BotMessageUpdater implements MessageUpdater {
     }
   }
 
-  /** Sends and pins a new status message (V1-MSG-01, V1-MSG-09). */
+  /** Sends and pins a new status message. */
   private async sendStatus(
     gameId: string,
     chatId: number,
@@ -181,7 +181,7 @@ export class BotMessageUpdater implements MessageUpdater {
       if (isBotRemoved(error)) {
         throw error;
       }
-      // No right to pin: the game works with a plain message, say so once (V1-CHAT-02).
+      // No right to pin: the game works with a plain message, say so once.
       this.options.logger.info({ gameId }, 'cannot pin the game message');
       await this.options.api.sendMessage(chatId, translator(language)('chat.pinFailed'));
     }

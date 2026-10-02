@@ -22,13 +22,13 @@ import {
   CAROL,
   createTestDeps,
   currentVersion,
-  playExample85,
+  playSampleGame,
   setupGame,
 } from './testing';
 
 async function finished85(deps: ReturnType<typeof createTestDeps>, dimaChips = 30_000) {
   const { game } = await setupGame(deps);
-  const p = await playExample85(deps, game.id);
+  const p = await playSampleGame(deps, game.id);
   await finishGame(deps, BOB, game.id, {
     finalChips: { [p.petya]: 71_000, [p.kolya]: 52_000, [p.dima]: dimaChips },
     mismatch: { mode: 'proportional' },
@@ -54,7 +54,7 @@ function eventOf(
 }
 
 describe('editing a finished game', () => {
-  it('replaces a chip amount in place and recalculates results (V1-EDIT-01, V1-RES-03)', async () => {
+  it('replaces a chip amount in place and recalculates results', async () => {
     const deps = createTestDeps();
     const { game, p } = await finished85(deps, 29_000);
     const ids = [p.vasya, p.petya, p.kolya, p.dima];
@@ -76,7 +76,7 @@ describe('editing a finished game', () => {
     });
     expect(listSettlement(deps.db, game.id).length).toBeGreaterThan(0);
 
-    // The same edit through the stack: SPEC §8.6 again after fixing Dima's count.
+    // The same edit through the stack: the mismatch example again after fixing Dima's count.
     const dimaOut = eventOf(deps, game.id, p.dima, 'cash_out');
     const rebuy2 = eventOf(deps, game.id, p.vasya, 'rebuy');
     await editFinishedEvents(deps, ALICE, game.id, {
@@ -142,7 +142,7 @@ describe('editing a finished game', () => {
     });
   });
 
-  it('a manual settlement requires a choice when results change (V1-SETL-07)', async () => {
+  it('a manual settlement requires a choice when results change', async () => {
     const deps = createTestDeps();
     const { game, p } = await finished85(deps);
     const manual = [{ from: p.vasya, to: p.petya, amount: 1600 }];
@@ -203,7 +203,7 @@ describe('events by game status (API)', () => {
   it('records and cancels events of an active game directly', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
-    const p = await playExample85(deps, game.id);
+    const p = await playSampleGame(deps, game.id);
     const event = await recordGameEvent(deps, BOB, game.id, {
       type: 'buy',
       playerId: p.dima,
@@ -215,7 +215,7 @@ describe('events by game status (API)', () => {
     });
   });
 
-  it('turns them into edit batches of a finished game (V1-EDIT-01)', async () => {
+  it('turns them into edit batches of a finished game', async () => {
     const deps = createTestDeps();
     const { game, p } = await finished85(deps);
     const rebuy = listGameEvents(deps.db, game.id).find(

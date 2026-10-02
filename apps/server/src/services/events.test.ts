@@ -22,7 +22,7 @@ import {
 } from './testing';
 
 describe('chip events', () => {
-  it('buy-in → rebuy → cash-out → buy-in again (V1-PLAY-01..05)', async () => {
+  it('buy-in → rebuy → cash-out → buy-in again', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
     const [vasya] = (await addGuests(deps, game.id, ['Вася'])) as [string];
@@ -135,7 +135,7 @@ describe('chat buttons (buySelf)', () => {
 });
 
 describe('cancel and undo', () => {
-  it('rejects a cancel that breaks the sequence and names the blocking event (V1-LOG-04)', async () => {
+  it('rejects a cancel that breaks the sequence and names the blocking event', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
     const [vasya] = (await addGuests(deps, game.id, ['Вася'])) as [string];
@@ -180,7 +180,7 @@ describe('cancel and undo', () => {
     expect(await undoLast(deps, BOB, game.id)).toMatchObject({ eventId: last.eventId });
   });
 
-  it('«Undo mine» cancels only the own last event and only within 15 minutes (V1-MSG-03)', async () => {
+  it('«Undo mine» cancels only the own last event and only within 15 minutes', async () => {
     const deps = createTestDeps();
     const { game } = await setupGame(deps);
     const mine = await buySelf(deps, CAROL, game.id, { expect: 'buy_in' });

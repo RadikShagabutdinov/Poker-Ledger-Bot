@@ -8,7 +8,7 @@ const results = [
   { playerId: 'kolya', money: 233 },
 ];
 
-describe('checkManualSettlement (V1-SETL-04)', () => {
+describe('checkManualSettlement', () => {
   it('has no warnings for a matching settlement', () => {
     expect(
       checkManualSettlement(
@@ -55,7 +55,7 @@ describe('checkManualSettlement (V1-SETL-04)', () => {
   });
 });
 
-describe('validateTransfers (V1-SETL-05)', () => {
+describe('validateTransfers', () => {
   it('accepts valid transfers', () => {
     expect(validateTransfers([{ from: 'a', to: 'b', amount: 1 }])).toEqual([]);
   });

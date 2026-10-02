@@ -12,7 +12,7 @@ export interface ConfirmOptions {
   readonly destructive?: boolean;
 }
 
-/** Asks for confirmation with the native `popup` (SPEC §12.7), `window.confirm` otherwise. */
+/** Asks for confirmation with the native `popup`, `window.confirm` otherwise. */
 export function useConfirm(): (options: ConfirmOptions) => Promise<boolean> {
   const native = useContext(NativeUiContext);
   return async ({ message, title, ok, destructive = false }) => {

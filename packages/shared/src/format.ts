@@ -1,4 +1,4 @@
-// Number and money formatting through `Intl` (I18N-04), shared by the bot and the Mini App.
+// Number and money formatting through `Intl`, shared by the bot and the Mini App.
 import type { Language } from './schemas';
 
 const LOCALES: Record<Language, string> = { ru: 'ru-RU', en: 'en-US' };
@@ -41,7 +41,7 @@ export function formatSignedMoney(amount: number, currency: string, language: La
 }
 
 /**
- * Approximate money value of one chip for previews (V1-GAME-02): `0,033 ₽` / `₽0.033`.
+ * Approximate money value of one chip for previews: `0,033 ₽` / `₽0.033`.
  * Display only; amounts use integer arithmetic.
  */
 export function formatChipValue(

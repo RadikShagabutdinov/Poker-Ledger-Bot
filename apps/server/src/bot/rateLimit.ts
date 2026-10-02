@@ -1,4 +1,4 @@
-/** One button press per second per user (SEC-06). In memory: one server process. */
+/** One button press per second per user. In memory: one server process. */
 export class PressRateLimiter {
   private readonly last = new Map<number, number>();
 

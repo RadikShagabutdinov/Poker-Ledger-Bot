@@ -14,7 +14,7 @@ export interface ProfileView {
   readonly firstName: string;
   readonly lastName: string | null;
   readonly username: string | null;
-  /** Chosen language, `null` when it follows Telegram (V1-PROF-01). */
+  /** Chosen language, `null` when it follows Telegram. */
   readonly language: Language | null;
   /** The language to use: the chosen one, else from Telegram `language_code`. */
   readonly effectiveLanguage: Language;
@@ -43,7 +43,7 @@ export function getProfile(deps: ServiceDeps, actor: Actor): ProfileView {
   return toProfileView(findUser(deps.db, actor.tgUserId) as UserRow, actor);
 }
 
-/** `PATCH /me`: language and payment details; `null` clears a field (V1-PROF-01..03). */
+/** `PATCH /me`: language and payment details; `null` clears a field. */
 export function updateProfile(deps: ServiceDeps, actor: Actor, patch: ProfilePatch): ProfileView {
   const input = parseInput(profilePatchSchema, patch);
   const now = deps.now();

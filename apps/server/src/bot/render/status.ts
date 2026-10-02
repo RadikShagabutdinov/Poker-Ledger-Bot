@@ -7,7 +7,7 @@ import { escapeHtml } from '../html';
 import type { MiniAppLinks } from '../links';
 import { approxMoney, urlButton, type RenderedMessage } from './common';
 
-/** More seated players than this collapse to names and chips (SPEC §13.2). */
+/** More seated players than this collapse to names and chips. */
 export const DETAILED_SEATED_LIMIT = 15;
 
 type Player = GameState['players'][number];
@@ -79,7 +79,7 @@ function statusBody(state: GameState, language: Language): string[] {
 }
 
 /**
- * Pinned status message of an active game (SPEC §13.2, V1-MSG-02/03): no mentions,
+ * Pinned status message of an active game: no mentions,
  * buttons `j:` / `r:` / `u:` and the «Open» link.
  */
 export function renderStatus(

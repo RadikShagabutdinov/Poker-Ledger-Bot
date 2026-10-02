@@ -9,8 +9,8 @@ import { actorFrom, type BotDeps } from '../context';
 import { notificationKey } from '../errors';
 
 /**
- * Game message buttons (V1-MSG-03/06): every press is answered with a notification
- * in the presser's language (I18N-03); at most one press per second (SEC-06).
+ * Game message buttons: every press is answered with a notification
+ * in the presser's language; at most one press per second.
  */
 export function registerButtonHandlers(bot: Bot, deps: BotDeps): void {
   const { services, logger, rateLimiter } = deps;

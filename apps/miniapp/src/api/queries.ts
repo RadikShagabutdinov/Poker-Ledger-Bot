@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useApi } from './apiContext';
 
-/** The game screen polls the server while it is open and visible (V1-PLAY-08). */
+/** The game screen polls the server while it is open and visible. */
 export const GAME_POLL_MS = 3_000;
 
 export const queryKeys = {

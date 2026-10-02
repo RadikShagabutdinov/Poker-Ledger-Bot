@@ -50,7 +50,7 @@ describe('domain schemas', () => {
     expect(profilePatchSchema.parse({ payPhone: null })).toEqual({ payPhone: null });
   });
 
-  it('error codes include the SPEC §11 codes', () => {
+  it('error codes include the main API codes', () => {
     for (const code of ['UNAUTHORIZED', 'NOT_CHAT_MEMBER', 'CONFLICT', 'MISSING_FINAL_CHIPS']) {
       expect(ERROR_CODES).toContain(code);
     }

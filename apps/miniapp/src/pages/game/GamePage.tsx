@@ -1,4 +1,4 @@
-// Active game (SPEC §12.5): header and menu, summary, players, actions, undo, finish.
+// Active game: header and menu, summary, players, actions, undo, finish.
 import { chipsToMoneyRounded } from '@pokerledger/core';
 import type { GameStateResponse } from '@pokerledger/shared';
 import { useState } from 'react';

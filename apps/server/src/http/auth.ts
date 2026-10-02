@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { ServiceError, touchActor, type Actor, type ServiceDeps } from '../services';
 import type { AppEnv } from './env';
 
-/** initData is accepted for 24 hours after `auth_date` (SEC-01). */
+/** initData is accepted for 24 hours after `auth_date`. */
 export const INIT_DATA_MAX_AGE_S = 24 * 60 * 60;
 
 const userSchema = z.object({
@@ -43,13 +43,13 @@ export function actorFromInitData(raw: string): Actor | undefined {
 
 export interface AuthOptions {
   readonly botToken: string;
-  /** Dev only (SPEC §16.6): skip the signature and age check, still read the user. */
+  /** Dev only: skip the signature and age check, still read the user. */
   readonly skipCheck: boolean;
 }
 
 /**
- * `Authorization: tma <initDataRaw>` (SEC-01). A valid request gets `c.var.actor`
- * and refreshes the user's name (V1-PROF-04); anything else is `401 UNAUTHORIZED`.
+ * `Authorization: tma <initDataRaw>`. A valid request gets `c.var.actor`
+ * and refreshes the user's name; anything else is `401 UNAUTHORIZED`.
  * initData is never logged.
  */
 export function initDataAuth(

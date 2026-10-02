@@ -96,9 +96,9 @@ export async function addGuests(
 }
 
 /**
- * SPEC §8.5 game up to the finish: Вася left with 12 000; Петя, Коля, Дима are seated.
+ * The sample game up to the finish: Вася left with 12 000; Петя, Коля, Дима are seated.
  */
-export async function playExample85(
+export async function playSampleGame(
   deps: TestDeps,
   gameId: string,
 ): Promise<{ vasya: string; petya: string; kolya: string; dima: string }> {

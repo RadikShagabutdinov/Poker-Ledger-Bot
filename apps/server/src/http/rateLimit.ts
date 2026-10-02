@@ -3,7 +3,7 @@ import type { MiddlewareHandler } from 'hono';
 import { errorResponse } from './errors';
 import type { AppEnv } from './env';
 
-/** 60 API requests per minute per user (SEC-06), fixed windows. In memory: one process. */
+/** 60 API requests per minute per user, fixed windows. In memory: one process. */
 export class ApiRateLimiter {
   private readonly windows = new Map<number, { start: number; count: number }>();
 
