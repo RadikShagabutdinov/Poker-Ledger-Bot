@@ -1,6 +1,6 @@
 import { CoreError } from './errors';
 import type { PlayerTotals } from './events';
-import { ZERO, add, fromInt, mul, rat, type Rational } from './rational';
+import { ZERO, add, floor, fromInt, mul, rat, toSafeInt, type Rational } from './rational';
 import type { MismatchMode, Stack } from './types';
 
 /** Chip result of one player after the mismatch adjustment. */
@@ -77,4 +77,13 @@ export function assertValidStack(stack: Stack): void {
 export function chipsToMoney(chips: Rational, stack: Stack): Rational {
   assertValidStack(stack);
   return mul(chips, rat(BigInt(stack.amount), BigInt(stack.chips)));
+}
+
+/**
+ * Money value of a whole number of chips rounded to the nearest unit (halves up), for
+ * display and provisional results (V1-PLAY-01/03). Final results use `roundLargestRemainder`.
+ */
+export function chipsToMoneyRounded(chips: number, stack: Stack): number {
+  const money = chipsToMoney(fromInt(chips), stack);
+  return toSafeInt(floor(add(money, rat(1n, 2n))), 'money');
 }

@@ -2,7 +2,7 @@
 export const SHARED_PACKAGE = '@pokerledger/shared';
 
 export { ERROR_CODES, type ApiError, type ErrorCode } from './errors';
-export { formatMoney, formatNumber, formatSignedMoney, localeOf } from './format';
+export { formatChipValue, formatMoney, formatNumber, formatSignedMoney, localeOf } from './format';
 export {
   buyChipsSchema,
   chatSettingsPatchSchema,

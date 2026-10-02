@@ -17,6 +17,7 @@ import type { BotStatus, ChatRow } from '../db/schema';
 import { languageFromCode, touchUser, type Actor } from './context';
 import type { ServiceDeps } from './deps';
 import { ServiceError, parseInput } from './errors';
+import { renderGameName } from './games';
 import { assertChatMember, resolveChatAccess } from './permissions';
 import { ensureChatPlayer } from './players';
 
@@ -40,9 +41,15 @@ export interface ChatView {
   readonly botStatus: BotStatus;
   /** The current user is a chat admin. */
   readonly isAdmin: boolean;
+  /** The name the next game gets from the template; prefills the create form (V1-GAME-02). */
+  readonly nextGameName: string;
 }
 
-export function toChatView(chat: ChatRow, isAdmin: boolean): ChatView {
+export function toChatView(
+  deps: Pick<ServiceDeps, 'now' | 'timeZone'>,
+  chat: ChatRow,
+  isAdmin: boolean,
+): ChatView {
   return {
     id: chat.id,
     title: chat.title,
@@ -53,6 +60,12 @@ export function toChatView(chat: ChatRow, isAdmin: boolean): ChatView {
     quickBuyins: chat.quickBuyins,
     botStatus: chat.botStatus,
     isAdmin,
+    nextGameName: renderGameName(chat.gameNameTemplate, {
+      language: chat.language,
+      timeZone: deps.timeZone,
+      now: deps.now(),
+      n: chat.gameCounter + 1,
+    }),
   };
 }
 
@@ -175,7 +188,7 @@ export async function loadChatForMember(
 /** `GET /chats/:chatId`. */
 export async function getChat(deps: ServiceDeps, actor: Actor, chatId: string): Promise<ChatView> {
   const { chat, isAdmin } = await loadChatForMember(deps, actor, chatId);
-  return toChatView(chat, isAdmin);
+  return toChatView(deps, chat, isAdmin);
 }
 
 /**
@@ -200,5 +213,5 @@ export async function updateChatSettings(
     ...(input.quickBuyins !== undefined ? { quickBuyins: input.quickBuyins } : {}),
     updatedAt: deps.now(),
   });
-  return toChatView(updated, isAdmin);
+  return toChatView(deps, updated, isAdmin);
 }

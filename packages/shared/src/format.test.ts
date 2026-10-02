@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatMoney, formatNumber, formatSignedMoney } from './format';
+import { formatChipValue, formatMoney, formatNumber, formatSignedMoney } from './format';
 
 // Intl separates groups with a no-break space in ru; compare with plain spaces.
 const plain = (text: string) => text.replace(/[\u00a0\u202f]/g, ' ');
@@ -30,5 +30,13 @@ describe('formatSignedMoney', () => {
     expect(plain(formatSignedMoney(-27, 'RUB', 'ru'))).toBe('−27 ₽');
     expect(plain(formatSignedMoney(0, 'RUB', 'ru'))).toBe('0 ₽');
     expect(formatSignedMoney(-27, 'RUB', 'en')).toBe('−₽27');
+  });
+});
+
+describe('formatChipValue', () => {
+  it('shows the value of one chip with two significant digits', () => {
+    expect(plain(formatChipValue({ chips: 30_000, amount: 1_000 }, 'RUB', 'ru'))).toBe('0,033 ₽');
+    expect(formatChipValue({ chips: 30_000, amount: 1_000 }, 'RUB', 'en')).toBe('₽0.033');
+    expect(formatChipValue({ chips: 100, amount: 500 }, 'USD', 'en')).toBe('$5');
   });
 });

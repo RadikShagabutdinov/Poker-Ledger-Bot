@@ -43,6 +43,7 @@ export {
 export {
   assertValidStack,
   chipsToMoney,
+  chipsToMoneyRounded,
   computeChipResults,
   type ChipResults,
   type PlayerChipResult,

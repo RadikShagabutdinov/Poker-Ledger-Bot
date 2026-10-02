@@ -36,6 +36,8 @@ describe('chats', () => {
     });
     expect(await getChat(deps, ALICE, chat.id)).toMatchObject({ isAdmin: true });
     expect(await getChat(deps, BOB, chat.id)).toMatchObject({ isAdmin: false });
+    // The template default is «Покер {date}» and no game exists yet.
+    expect((await getChat(deps, BOB, chat.id)).nextGameName).toMatch(/^Покер \d{2}\.\d{2}$/);
   });
 
   it('chooses the chat language by the adder: en for other codes, ru when unknown', () => {

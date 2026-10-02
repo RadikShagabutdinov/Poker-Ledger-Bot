@@ -1,0 +1,449 @@
+/* Telegram theme (SPEC §12). themeParams.bindCssVars() writes --tg-theme-* into the inline
+   style of <html>, which overrides these defaults; the defaults follow the system theme
+   when the page runs without Telegram. */
+:root {
+  --tg-theme-bg-color: #ffffff;
+  --tg-theme-secondary-bg-color: #efeff4;
+  --tg-theme-section-bg-color: #ffffff;
+  --tg-theme-bottom-bar-bg-color: #f8f8f8;
+  --tg-theme-text-color: #000000;
+  --tg-theme-hint-color: #8e8e93;
+  --tg-theme-link-color: #007aff;
+  --tg-theme-accent-text-color: #007aff;
+  --tg-theme-button-color: #007aff;
+  --tg-theme-button-text-color: #ffffff;
+  --tg-theme-destructive-text-color: #ff3b30;
+  --tg-theme-section-separator-color: #c8c7cc;
+  --tg-theme-section-header-text-color: #6d6d72;
+
+  --bg: var(--tg-theme-secondary-bg-color);
+  --section-bg: var(--tg-theme-section-bg-color);
+  --text: var(--tg-theme-text-color);
+  --hint: var(--tg-theme-hint-color);
+  --link: var(--tg-theme-link-color);
+  --accent: var(--tg-theme-accent-text-color);
+  --button: var(--tg-theme-button-color);
+  --button-text: var(--tg-theme-button-text-color);
+  --destructive: var(--tg-theme-destructive-text-color);
+  --separator: var(--tg-theme-section-separator-color);
+  --section-header: var(--tg-theme-section-header-text-color);
+  --positive: #2fa84f;
+  --warning: #e6a100;
+  --radius: 12px;
+
+  color-scheme: light dark;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.35;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tg-theme-bg-color: #000000;
+    --tg-theme-secondary-bg-color: #1c1c1d;
+    --tg-theme-section-bg-color: #2c2c2e;
+    --tg-theme-bottom-bar-bg-color: #1d1d1d;
+    --tg-theme-text-color: #ffffff;
+    --tg-theme-hint-color: #98989e;
+    --tg-theme-link-color: #3e88f7;
+    --tg-theme-accent-text-color: #3e88f7;
+    --tg-theme-button-color: #3e88f7;
+    --tg-theme-destructive-text-color: #eb5545;
+    --tg-theme-section-separator-color: #3d3d40;
+    --tg-theme-section-header-text-color: #8d8e93;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 12px 16px calc(96px + env(safe-area-inset-bottom));
+}
+
+.page-title {
+  margin: 4px 0;
+  font-size: 22px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.hint,
+.status {
+  color: var(--hint);
+  font-size: 14px;
+}
+
+.hint-link {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.status-error {
+  color: var(--destructive);
+}
+
+.positive {
+  color: var(--positive);
+}
+
+.negative {
+  color: var(--destructive);
+}
+
+/* Sections and rows */
+.section {
+  margin: 16px 0;
+}
+
+.section-title {
+  margin: 0 12px 6px;
+  color: var(--section-header);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.section-body {
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--section-bg);
+}
+
+.section-body > .hint,
+.section-body > .status {
+  margin: 0;
+  padding: 12px;
+}
+
+.section-body > .field,
+.section-body > .quick-buttons,
+.section-body > .button-wide,
+.section-body > .notice {
+  margin: 12px;
+}
+
+.section-footer {
+  margin: 6px 12px 0;
+  color: var(--hint);
+  font-size: 13px;
+}
+
+.item {
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--separator);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.item:last-child {
+  border-bottom: 0;
+}
+
+.item-button {
+  cursor: pointer;
+}
+
+.item-button:active {
+  background: color-mix(in srgb, var(--hint) 15%, transparent);
+}
+
+.item-main {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item-title {
+  overflow-wrap: anywhere;
+}
+
+.item-subtitle {
+  color: var(--hint);
+  font-size: 13px;
+}
+
+.item-after {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.item-cancelled .item-title {
+  color: var(--hint);
+  text-decoration: line-through;
+}
+
+.item-highlight {
+  background: color-mix(in srgb, var(--warning) 25%, transparent);
+}
+
+.badge {
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.badge-warning {
+  background: color-mix(in srgb, var(--warning) 25%, transparent);
+}
+
+.links {
+  display: flex;
+  gap: 20px;
+  padding: 8px 12px;
+}
+
+/* Buttons */
+.button {
+  display: inline-flex;
+  min-height: 44px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--button) 14%, transparent);
+  color: var(--button);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.button-primary {
+  background: var(--button);
+  color: var(--button-text);
+}
+
+.button-destructive {
+  background: color-mix(in srgb, var(--destructive) 12%, transparent);
+  color: var(--destructive);
+}
+
+.button-wide {
+  display: flex;
+  width: 100%;
+  margin: 12px 0;
+}
+
+.button-sub {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.quick-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.icon-button,
+.back-link {
+  min-width: 40px;
+  min-height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--link);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.back-link {
+  margin-left: -8px;
+}
+
+.game-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  z-index: 10;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--section-bg);
+  box-shadow: 0 2px 12px rgb(0 0 0 / 25%);
+  color: var(--link);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.fab:disabled {
+  opacity: 0.5;
+}
+
+/* Browser stand-in for Telegram's MainButton (dev mock and tests). */
+.main-button-bar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+  background: var(--tg-theme-bottom-bar-bg-color);
+}
+
+.main-button-bar .button-wide {
+  margin: 0 auto;
+  max-width: 608px;
+}
+
+body:has(.main-button-bar) .fab {
+  bottom: calc(84px + env(safe-area-inset-bottom));
+}
+
+/* Fields */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 12px 0;
+}
+
+.field-label {
+  color: var(--hint);
+  font-size: 13px;
+}
+
+.input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--separator);
+  border-radius: 10px;
+  background: var(--tg-theme-bg-color);
+  color: var(--text);
+  font: inherit;
+  font-size: 17px;
+}
+
+.input:focus {
+  border-color: var(--button);
+  outline: none;
+}
+
+.input-invalid {
+  border-color: var(--destructive);
+}
+
+.field-hint {
+  color: var(--hint);
+  font-size: 13px;
+}
+
+.field-error {
+  color: var(--destructive);
+  font-size: 13px;
+}
+
+.notice {
+  margin: 12px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--warning) 18%, transparent);
+  font-size: 14px;
+}
+
+.notice p {
+  margin: 0 0 8px;
+}
+
+/* Bottom sheet */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgb(0 0 0 / 40%);
+}
+
+.sheet {
+  width: 100%;
+  max-width: 640px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 8px 16px calc(16px + env(safe-area-inset-bottom));
+  border-radius: 16px 16px 0 0;
+  background: var(--bg);
+}
+
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  margin: 0 auto 8px;
+  border-radius: 2px;
+  background: var(--separator);
+}
+
+.sheet-title {
+  margin: 4px 0 8px;
+  font-size: 19px;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: calc(96px + env(safe-area-inset-bottom));
+  left: 16px;
+  z-index: 40;
+  max-width: 608px;
+  margin: 0 auto;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgb(30 30 30 / 92%);
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.toast-error {
+  background: color-mix(in srgb, var(--destructive) 92%, black);
+}

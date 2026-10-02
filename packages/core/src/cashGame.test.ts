@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { computeCashGameResult, type CashGameInput, type CashGameResult } from './cashGame';
 import { CoreError } from './errors';
 import { checkManualSettlement } from './manual';
-import { chipsToMoney, computeChipResults } from './mismatch';
+import { chipsToMoney, chipsToMoneyRounded, computeChipResults } from './mismatch';
 import { fromInt, rat } from './rational';
 import { log, seat } from './testUtils';
 import type { CoreEvent } from './types';
@@ -265,6 +265,14 @@ describe('chipsToMoney', () => {
   it('converts exactly for preliminary results (V1-PLAY-03)', () => {
     expect(chipsToMoney(fromInt(-48_000), stack)).toEqual(rat(-1600n));
     expect(chipsToMoney(fromInt(41_000), stack)).toEqual(rat(4100n, 3n));
+  });
+
+  it('rounds to the nearest unit, halves up', () => {
+    expect(chipsToMoneyRounded(41_000, stack)).toBe(1367);
+    expect(chipsToMoneyRounded(-41_000, stack)).toBe(-1367);
+    expect(chipsToMoneyRounded(15, stack)).toBe(1); // 0.5
+    expect(chipsToMoneyRounded(-15, stack)).toBe(0); // −0.5
+    expect(chipsToMoneyRounded(0, stack)).toBe(0);
   });
 });
 

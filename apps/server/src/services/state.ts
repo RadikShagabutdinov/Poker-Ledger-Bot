@@ -1,12 +1,7 @@
 import {
-  add,
-  chipsToMoney,
+  chipsToMoneyRounded,
   computePlayerTotals,
   computeSummary,
-  floor,
-  fromInt,
-  rat,
-  toSafeInt,
   type PlayerStatus,
 } from '@pokerledger/core';
 
@@ -94,8 +89,7 @@ export interface GameState {
 }
 
 function provisionalMoney(chips: number, game: GameRow): number {
-  const money = chipsToMoney(fromInt(chips), { chips: game.stackChips, amount: game.stackAmount });
-  return toSafeInt(floor(add(money, rat(1n, 2n))), 'provisional money');
+  return chipsToMoneyRounded(chips, { chips: game.stackChips, amount: game.stackAmount });
 }
 
 /** Players' names by player id. */

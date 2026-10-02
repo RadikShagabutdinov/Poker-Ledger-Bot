@@ -39,3 +39,20 @@ export function formatMoney(amount: number, currency: string, language: Language
 export function formatSignedMoney(amount: number, currency: string, language: Language): string {
   return withMinusSign(moneyFormat(language, currency, true).format(amount));
 }
+
+/**
+ * Approximate money value of one chip for previews (V1-GAME-02): `0,033 ₽` / `₽0.033`.
+ * Display only; amounts use integer arithmetic.
+ */
+export function formatChipValue(
+  stack: { chips: number; amount: number },
+  currency: string,
+  language: Language,
+): string {
+  return new Intl.NumberFormat(LOCALES[language], {
+    style: 'currency',
+    currency,
+    currencyDisplay: 'narrowSymbol',
+    maximumSignificantDigits: 2,
+  }).format(stack.amount / stack.chips);
+}

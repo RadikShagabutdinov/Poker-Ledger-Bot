@@ -172,6 +172,8 @@ export const chatResponseSchema = z.object({
   quickBuyins: z.array(z.number()),
   botStatus: z.enum(['member', 'admin', 'left']),
   isAdmin: z.boolean(),
+  /** The name the next game gets from the template (V1-GAME-02). */
+  nextGameName: z.string(),
 });
 export type ChatResponse = z.infer<typeof chatResponseSchema>;
 
