@@ -293,7 +293,7 @@ describe('GamePage', () => {
   it('opens the finish screen from the main button', async () => {
     renderApp(`/games/${GAME_ID}`, base());
     await userEvent.click(await screen.findByRole('button', { name: 'Завершить игру' }));
-    expect(await screen.findByText('Этот экран появится в следующей версии.')).toBeDefined();
+    expect(await screen.findByRole('heading', { name: 'Завершение игры' })).toBeDefined();
   });
 
   it('hides actions without the manage permission', async () => {

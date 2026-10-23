@@ -6,18 +6,25 @@ import {
   ERROR_CODES,
   errorBodySchema,
   eventMutationResponseSchema,
+  finishPreviewResponseSchema,
+  finishResponseSchema,
   gameLogResponseSchema,
   gameMutationResponseSchema,
   gameStateSchema,
   historyPageResponseSchema,
   playersResponseSchema,
   profileResponseSchema,
+  settlementResponseSchema,
   type AddGamePlayerBody,
   type AddGamePlayerResponse,
   type ChatResponse,
   type CreateGameBody,
   type ErrorCode,
   type EventMutationResponse,
+  type FinishBody,
+  type FinishPreviewBody,
+  type FinishPreviewResponse,
+  type FinishResponse,
   type GameEventBody,
   type GameLogResponse,
   type GameMutationResponse,
@@ -26,6 +33,8 @@ import {
   type HistoryQueryParams,
   type PlayersResponse,
   type ProfileResponse,
+  type SettlementPutBody,
+  type SettlementResponse,
   type UpdateGameBody,
 } from '@pokerledger/shared';
 import type { z } from 'zod';
@@ -60,6 +69,11 @@ export interface ApiClient {
   cancelEvent(gameId: string, eventId: number): Promise<EventMutationResponse>;
   undo(gameId: string): Promise<EventMutationResponse>;
   log(gameId: string): Promise<GameLogResponse>;
+  finishPreview(gameId: string, body: FinishPreviewBody): Promise<FinishPreviewResponse>;
+  finish(gameId: string, body: FinishBody): Promise<FinishResponse>;
+  settlement(gameId: string): Promise<SettlementResponse>;
+  saveSettlement(gameId: string, body: SettlementPutBody): Promise<SettlementResponse>;
+  resetSettlement(gameId: string, expectedVersion: number): Promise<SettlementResponse>;
 }
 
 export interface ApiClientOptions {
@@ -150,5 +164,17 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     undo: (gameId) =>
       request(eventMutationResponseSchema, 'POST', `/games/${enc(gameId)}/undo`, {}),
     log: (gameId) => request(gameLogResponseSchema, 'GET', `/games/${enc(gameId)}/log`),
+    finishPreview: (gameId, body) =>
+      request(finishPreviewResponseSchema, 'POST', `/games/${enc(gameId)}/finish/preview`, body),
+    finish: (gameId, body) =>
+      request(finishResponseSchema, 'POST', `/games/${enc(gameId)}/finish`, body),
+    settlement: (gameId) =>
+      request(settlementResponseSchema, 'GET', `/games/${enc(gameId)}/settlement`),
+    saveSettlement: (gameId, body) =>
+      request(settlementResponseSchema, 'PUT', `/games/${enc(gameId)}/settlement`, body),
+    resetSettlement: (gameId, expectedVersion) =>
+      request(settlementResponseSchema, 'POST', `/games/${enc(gameId)}/settlement/reset`, {
+        expectedVersion,
+      }),
   };
 }

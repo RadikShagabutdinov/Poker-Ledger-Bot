@@ -1,9 +1,11 @@
 // Component test harness: the real API client over a fake `fetch` with per-route handlers.
 import type {
   ChatResponse,
+  FinishPreviewResponse,
   GameLogResponse,
   GameStateResponse,
   ProfileResponse,
+  SettlementResponse,
 } from '@pokerledger/shared';
 import { QueryClient } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
@@ -125,6 +127,43 @@ export function game(overrides: Partial<GameStateResponse> = {}): GameStateRespo
     players: [player('p1', 'Вася')],
     myPlayerId: 'p1',
     permissions: { canManage: true, canEditFinished: false, canEditSettlement: false },
+    ...overrides,
+  };
+}
+
+export function finishPreview(
+  overrides: Partial<FinishPreviewResponse> = {},
+): FinishPreviewResponse {
+  return {
+    mismatchChips: 0,
+    summary: { issuedChips: 60_000, cashedOutChips: 60_000, expectedOnTable: 0, seatedCount: 0 },
+    players: [
+      {
+        playerId: 'p1',
+        inChips: 30_000,
+        outChips: 45_000,
+        adjustmentChips: { num: 0, den: 1 },
+        moneyResult: 500,
+      },
+      {
+        playerId: 'p2',
+        inChips: 30_000,
+        outChips: 15_000,
+        adjustmentChips: { num: 0, den: 1 },
+        moneyResult: -500,
+      },
+    ],
+    transfers: [{ from: 'p2', to: 'p1', amount: 500 }],
+    ...overrides,
+  };
+}
+
+export function settlement(overrides: Partial<SettlementResponse> = {}): SettlementResponse {
+  return {
+    version: 5,
+    isManual: false,
+    transfers: [],
+    warnings: [],
     ...overrides,
   };
 }

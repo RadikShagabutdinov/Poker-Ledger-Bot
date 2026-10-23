@@ -1,6 +1,6 @@
 // TanStack Query keys and hooks over the API client.
-import type { GameStateResponse, HistoryQueryParams } from '@pokerledger/shared';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { FinishPreviewBody, GameStateResponse, HistoryQueryParams } from '@pokerledger/shared';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useApi } from './apiContext';
 
@@ -15,6 +15,9 @@ export const queryKeys = {
     ['chat', chatId, 'games', query] as const,
   game: (gameId: string) => ['game', gameId] as const,
   log: (gameId: string) => ['game', gameId, 'log'] as const,
+  finishPreview: (gameId: string, version: number, body: FinishPreviewBody | null) =>
+    ['game', gameId, 'finishPreview', version, body] as const,
+  settlement: (gameId: string, version: number) => ['game', gameId, 'settlement', version] as const,
 };
 
 export function useMe() {
@@ -86,5 +89,32 @@ export function useGameMutation<V, R extends { game: GameStateResponse }>(
       queryClient.setQueryData(queryKeys.game(gameId), response.game);
       void queryClient.invalidateQueries({ queryKey: queryKeys.log(gameId) });
     },
+  });
+}
+
+/**
+ * Results and the automatic settlement for the counted chips. Disabled while `body` is
+ * `null` (not all chips entered); the previous preview stays shown while the next loads.
+ */
+export function useFinishPreview(gameId: string, version: number, body: FinishPreviewBody | null) {
+  const api = useApi();
+  return useQuery({
+    queryKey: queryKeys.finishPreview(gameId, version, body),
+    queryFn: () => api.finishPreview(gameId, body as FinishPreviewBody),
+    enabled: body !== null,
+    placeholderData: keepPreviousData,
+  });
+}
+
+/**
+ * Settlement of a finished game, keyed by the game version: any change of the game
+ * (seen through polling) refetches it.
+ */
+export function useSettlement(gameId: string, version: number) {
+  const api = useApi();
+  return useQuery({
+    queryKey: queryKeys.settlement(gameId, version),
+    queryFn: () => api.settlement(gameId),
+    placeholderData: keepPreviousData,
   });
 }

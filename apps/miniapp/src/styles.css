@@ -447,3 +447,143 @@ body:has(.main-button-bar) .fab {
 .toast-error {
   background: color-mix(in srgb, var(--destructive) 92%, black);
 }
+
+/* Finish */
+.section-body > .section-field {
+  margin: 0 12px;
+}
+
+.reconcile-ok .item-after {
+  color: var(--positive);
+}
+
+.reconcile-bad .item-after {
+  color: var(--destructive);
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 12px 12px;
+}
+
+.choice {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Finished game */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0 4px;
+  padding: 3px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--hint) 18%, transparent);
+}
+
+.tab {
+  flex: 1;
+  min-height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.tab[aria-selected='true'] {
+  background: var(--section-bg);
+  font-weight: 600;
+}
+
+.transfer {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--separator);
+}
+
+.transfer:last-child {
+  border-bottom: 0;
+}
+
+.transfer-mine {
+  background: color-mix(in srgb, var(--button) 12%, transparent);
+}
+
+.transfer-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.transfer-names {
+  overflow-wrap: anywhere;
+}
+
+.transfer-amount {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.payment {
+  margin: 6px 0 0;
+  font-size: 14px;
+}
+
+.payment-line {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.payment-line dt {
+  color: var(--hint);
+}
+
+.payment-line dd {
+  flex: 1;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.link-button {
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--link);
+  font: inherit;
+  cursor: pointer;
+}
+
+.warning-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.transfer-edit {
+  margin: 12px 0;
+  padding: 4px 12px 12px;
+  border-radius: var(--radius);
+  background: var(--section-bg);
+}
+
+.transfer-invalid {
+  box-shadow: inset 0 0 0 1px var(--destructive);
+}
+
+.transfer-edit-players {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.transfer-edit-players .field {
+  margin-bottom: 0;
+}

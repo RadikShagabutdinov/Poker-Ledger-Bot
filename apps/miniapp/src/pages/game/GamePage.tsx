@@ -1,4 +1,5 @@
-// Active game: header and menu, summary, players, actions, undo, finish.
+// A game: the active game screen (header and menu, summary, players, actions, undo,
+// finish) or the details of a finished one.
 import { chipsToMoneyRounded } from '@pokerledger/core';
 import type { GameStateResponse } from '@pokerledger/shared';
 import { useState } from 'react';
@@ -13,6 +14,7 @@ import { QueryView } from '../../components/Status';
 import { useToast } from '../../components/toastContext';
 import { useFormat } from '../../i18n/hooks';
 import { useConfirm } from '../../telegram/nativeUi';
+import { FinishedGame } from '../finished/FinishedGame';
 import { BackButton, MainButton } from '../../telegram/TelegramUi';
 import { AddPlayerSheet } from './AddPlayerSheet';
 import { describeChipEvent, playerNameOf } from './events';
@@ -28,15 +30,23 @@ export function GamePage() {
     <main className="page page-game">
       <BackButton />
       <QueryView query={game}>
-        {(data) => (data.status === 'active' ? <ActiveGame game={data} /> : <NotActive />)}
+        {(data) =>
+          data.status === 'active' ? (
+            <ActiveGame game={data} />
+          ) : data.status === 'finished' ? (
+            <FinishedGame game={data} />
+          ) : (
+            <Deleted />
+          )
+        }
       </QueryView>
     </main>
   );
 }
 
-function NotActive() {
+function Deleted() {
   const { t } = useTranslation();
-  return <p className="hint">{t('game.notActive')}</p>;
+  return <p className="hint">{t('game.deleted')}</p>;
 }
 
 type Sheet =

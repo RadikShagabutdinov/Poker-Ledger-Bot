@@ -12,9 +12,10 @@ import { ToastProvider } from './components/Toast';
 import { createI18n, languageFromCode } from './i18n';
 import { ChatHomePage } from './pages/ChatHomePage';
 import { CreateGamePage } from './pages/CreateGamePage';
+import { FinishGamePage } from './pages/finish/FinishGamePage';
 import { GameLogPage } from './pages/game/GameLogPage';
 import { GamePage } from './pages/game/GamePage';
-import { ChatSettingsPage, FinishGamePage, HistoryPage, MyChatsPage } from './pages/stubs';
+import { ChatSettingsPage, HistoryPage, MyChatsPage } from './pages/stubs';
 import { TelegramUiProvider } from './telegram/TelegramUi';
 
 /** Switches to the profile language once it is known. */
