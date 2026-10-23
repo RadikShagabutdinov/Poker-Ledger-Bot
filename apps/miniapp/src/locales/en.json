@@ -6,7 +6,6 @@
     "save": "Save",
     "close": "Close",
     "chips": "chips",
-    "comingSoon": "This screen is coming in the next version.",
     "notInTelegram": "Open the app from Telegram."
   },
   "errors": {
@@ -40,7 +39,9 @@
     "too_large": "The number is too large"
   },
   "myChats": {
-    "title": "My chats"
+    "title": "My chats",
+    "empty": "No chats yet. Add the bot to a group and open the app from a game message there.",
+    "activeGame": "game on"
   },
   "chat": {
     "activeGame": "Game in progress",
@@ -195,7 +196,9 @@
     "mismatchMore_other": "There are {{chips}} chips (≈{{money}}) more on the table than issued.",
     "mismatchProportional": "The difference is split in proportion to chips bought.",
     "mismatchSingle": "The difference is assigned to {{name}}.",
-    "noResults": "The game has no results."
+    "noResults": "The game has no results.",
+    "tabDetails": "Details",
+    "tabLog": "Log"
   },
   "settlement": {
     "title": "Transfers",
@@ -229,5 +232,111 @@
     "save": "Save",
     "saved": "Transfers saved",
     "savedWithWarnings": "Saved, but the transfers do not match the results"
+  },
+  "profile": {
+    "title": "Profile",
+    "language": "App language",
+    "languageTelegram": "Same as Telegram",
+    "payment": "Payment details",
+    "paymentVisibility": "Only players of games where you receive a transfer see your details, and only in the app. They never appear in the chat. The details are the same for all chats.",
+    "phone": "Phone for transfers",
+    "bank": "Bank",
+    "note": "Note",
+    "notePlaceholder": "E.g. card number or “cash only”",
+    "invalid": "Too long",
+    "saved": "Payment details saved",
+    "clear": "Clear payment details",
+    "clearConfirm": "Remove all payment details?",
+    "clearOk": "Clear",
+    "cleared": "Payment details removed"
+  },
+  "settings": {
+    "title": "Chat settings",
+    "currency": "Currency",
+    "currencyHint": "ISO 4217 code, e.g. RUB, USD, EUR",
+    "currencyInvalid": "Unknown currency code",
+    "template": "Game name",
+    "templateLabel": "Template",
+    "templateHint": "{date} is the date, {n} the game number in the chat",
+    "templateInvalid": "The template cannot be empty",
+    "templatePreview": "Next game: {{name}}",
+    "botLanguage": "Bot language in the chat",
+    "quickBuyins": "Quick buy buttons",
+    "quickBuyinsHint": "1 to 4 sizes in fractions of a stack.",
+    "existingGames": "Changes do not affect games already created.",
+    "saved": "Settings saved"
+  },
+  "history": {
+    "title": "Game history",
+    "period": "Period",
+    "periods": {
+      "30d": "30 days",
+      "365d": "365 days",
+      "all": "All time"
+    },
+    "empty": "No games in this period.",
+    "more": "Show more"
+  },
+  "details": {
+    "parameters": "Parameters",
+    "stack": "Stack",
+    "stackValue": "{{chips}} = {{amount}}",
+    "currency": "Currency",
+    "creator": "Created by",
+    "started": "Started",
+    "finished": "Finished",
+    "players": "Players",
+    "inOut": "{{in}} → {{out}}"
+  },
+  "gameMenu": {
+    "edit": "Edit",
+    "reopen": "Reopen",
+    "reopenConfirm": "Reopen the game? Results and transfers will be recalculated when it is finished again.",
+    "reopenOk": "Reopen",
+    "reopened": "Game reopened",
+    "activeExists": "Another game is running in the chat. You can reopen this one once it is finished.",
+    "openActive": "Open it",
+    "delete": "Delete game",
+    "deleteConfirm": "Delete the game? It will disappear from history.",
+    "deleteOk": "Delete",
+    "deleted": "Game deleted"
+  },
+  "edit": {
+    "title": "Editing",
+    "back": "Back to results",
+    "parameters": "Parameters",
+    "noEvents": "No buys.",
+    "session": "Entry {{n}}",
+    "event": {
+      "buy_in": "Buy-in {{chips}}",
+      "rebuy": "Rebuy {{chips}}",
+      "cash_out": "Left with {{chips}}"
+    },
+    "eventType": {
+      "buy_in": "buy-in",
+      "rebuy": "rebuy",
+      "cash_out": "cash-out"
+    },
+    "chips": "Chips",
+    "removeSession": "Remove the whole entry",
+    "removeSessionConfirm": "Remove {{name}}'s entry with all rebuys and the cash-out?",
+    "removeSessionOk": "Remove",
+    "addRebuy": "+ Rebuy",
+    "addRebuyTitle": "Rebuy: {{name}}",
+    "rebuyChips": "Rebuy chips",
+    "addEntry": "+ Entry",
+    "addEntryTitle": "New entry: {{name}}",
+    "buyInChips": "Buy-in chips",
+    "finalChips": "Chips at cash-out",
+    "cancelRebuy": "Cancel rebuy",
+    "cancelRebuyConfirm": "Cancel this rebuy?",
+    "cancelRebuyOk": "Cancel rebuy",
+    "applyAdjustment": "Apply",
+    "saved": "Changes saved",
+    "policyTitle": "Transfers were edited by hand",
+    "policyMessage": "The game results changed. What should happen to the transfers?",
+    "policyRecalculate": "Recalculate automatically",
+    "policyKeep": "Keep the manual ones",
+    "policyKeepHint": "with a mismatch warning"
   }
 }

@@ -1,6 +1,12 @@
 // TanStack Query keys and hooks over the API client.
 import type { FinishPreviewBody, GameStateResponse, HistoryQueryParams } from '@pokerledger/shared';
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { useApi } from './apiContext';
 
@@ -9,10 +15,15 @@ export const GAME_POLL_MS = 3_000;
 
 export const queryKeys = {
   me: ['me'] as const,
+  myChats: ['me', 'chats'] as const,
   chat: (chatId: string) => ['chat', chatId] as const,
   chatPlayers: (chatId: string) => ['chat', chatId, 'players'] as const,
   chatGames: (chatId: string, query: HistoryQueryParams) =>
     ['chat', chatId, 'games', query] as const,
+  /** Prefix of every game list of a chat: home, history pages. */
+  chatGameLists: (chatId: string) => ['chat', chatId, 'games'] as const,
+  chatHistory: (chatId: string, from: number | undefined) =>
+    ['chat', chatId, 'games', 'history', from ?? null] as const,
   game: (gameId: string) => ['game', gameId] as const,
   log: (gameId: string) => ['game', gameId, 'log'] as const,
   finishPreview: (gameId: string, version: number, body: FinishPreviewBody | null) =>
@@ -23,6 +34,11 @@ export const queryKeys = {
 export function useMe() {
   const api = useApi();
   return useQuery({ queryKey: queryKeys.me, queryFn: () => api.me(), staleTime: Infinity });
+}
+
+export function useMyChats() {
+  const api = useApi();
+  return useQuery({ queryKey: queryKeys.myChats, queryFn: () => api.myChats() });
 }
 
 export function useChat(chatId: string | undefined) {
@@ -48,6 +64,21 @@ export function useChatGames(chatId: string, query: HistoryQueryParams = {}) {
   return useQuery({
     queryKey: queryKeys.chatGames(chatId, query),
     queryFn: () => api.chatGames(chatId, query),
+  });
+}
+
+/** All games of a chat since `from` (UTC ms), page by page through the cursor. */
+export function useChatHistory(chatId: string, from: number | undefined) {
+  const api = useApi();
+  return useInfiniteQuery({
+    queryKey: queryKeys.chatHistory(chatId, from),
+    queryFn: ({ pageParam }) =>
+      api.chatGames(chatId, {
+        ...(from !== undefined ? { from } : {}),
+        ...(pageParam !== null ? { cursor: pageParam } : {}),
+      }),
+    initialPageParam: null as string | null,
+    getNextPageParam: (page) => page.nextCursor,
   });
 }
 

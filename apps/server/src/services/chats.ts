@@ -1,5 +1,6 @@
 import {
   chatSettingsPatchSchema,
+  renderGameName,
   type ChatSettingsPatch,
   type Language,
 } from '@pokerledger/shared';
@@ -17,7 +18,6 @@ import type { BotStatus, ChatRow } from '../db/schema';
 import { languageFromCode, touchUser, type Actor } from './context';
 import type { ServiceDeps } from './deps';
 import { ServiceError, parseInput } from './errors';
-import { renderGameName } from './games';
 import { assertChatMember, resolveChatAccess } from './permissions';
 import { ensureChatPlayer } from './players';
 
@@ -43,6 +43,8 @@ export interface ChatView {
   readonly isAdmin: boolean;
   /** The name the next game gets from the template; prefills the create form. */
   readonly nextGameName: string;
+  /** `{n}` of the next game, for previews of an edited template. */
+  readonly nextGameNumber: number;
 }
 
 export function toChatView(
@@ -66,6 +68,7 @@ export function toChatView(
       now: deps.now(),
       n: chat.gameCounter + 1,
     }),
+    nextGameNumber: chat.gameCounter + 1,
   };
 }
 

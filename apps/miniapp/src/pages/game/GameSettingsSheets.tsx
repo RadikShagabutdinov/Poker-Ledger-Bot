@@ -1,5 +1,5 @@
 // Game menu actions: rename and change the stack value.
-import { gameNameSchema, type GameStateResponse } from '@pokerledger/shared';
+import { gameNameSchema, type GameStateResponse, type UpdateGameBody } from '@pokerledger/shared';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -11,9 +11,15 @@ import { TextField } from '../../components/TextField';
 import { useToast } from '../../components/toastContext';
 import { useConfirm } from '../../telegram/nativeUi';
 
-type Props = { game: GameStateResponse; onClose: () => void };
+type Props = {
+  game: GameStateResponse;
+  onClose: () => void;
+  /** Replaces the plain update, e.g. by an edit of a finished game; calls `done` on success. */
+  save?: (body: UpdateGameBody, done: () => void) => void;
+  saving?: boolean;
+};
 
-export function RenameSheet({ game, onClose }: Props) {
+export function RenameSheet({ game, onClose, save, saving = false }: Props) {
   const { t } = useTranslation();
   const api = useApi();
   const toast = useToast();
@@ -28,9 +34,10 @@ export function RenameSheet({ game, onClose }: Props) {
       <button
         type="button"
         className="button button-primary button-wide"
-        disabled={!valid || update.isPending}
+        disabled={!valid || update.isPending || saving}
         onClick={() => {
-          update.mutate(name.trim(), { onSuccess: onClose, onError: toast.error });
+          if (save) save({ name: name.trim() }, onClose);
+          else update.mutate(name.trim(), { onSuccess: onClose, onError: toast.error });
         }}
       >
         {t('common.save')}
@@ -39,7 +46,7 @@ export function RenameSheet({ game, onClose }: Props) {
   );
 }
 
-export function StackSheet({ game, onClose }: Props) {
+export function StackSheet({ game, onClose, save: saveOverride, saving = false }: Props) {
   const { t } = useTranslation();
   const api = useApi();
   const toast = useToast();
@@ -53,7 +60,9 @@ export function StackSheet({ game, onClose }: Props) {
   const save = async () => {
     if (!valid) return;
     const ok = await confirm({ message: t('game.stackConfirm'), ok: t('game.stackOk') });
-    if (ok) update.mutate({ chips, amount }, { onSuccess: onClose, onError: toast.error });
+    if (!ok) return;
+    if (saveOverride) saveOverride({ stack: { chips, amount } }, onClose);
+    else update.mutate({ chips, amount }, { onSuccess: onClose, onError: toast.error });
   };
   return (
     <BottomSheet open onClose={onClose} title={t('game.stackTitle')}>
@@ -67,7 +76,7 @@ export function StackSheet({ game, onClose }: Props) {
       <button
         type="button"
         className="button button-primary button-wide"
-        disabled={!valid || update.isPending}
+        disabled={!valid || update.isPending || saving}
         onClick={() => void save()}
       >
         {t('common.save')}

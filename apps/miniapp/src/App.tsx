@@ -11,11 +11,15 @@ import { useMe } from './api/queries';
 import { ToastProvider } from './components/Toast';
 import { createI18n, languageFromCode } from './i18n';
 import { ChatHomePage } from './pages/ChatHomePage';
+import { ChatSettingsPage } from './pages/ChatSettingsPage';
 import { CreateGamePage } from './pages/CreateGamePage';
+import { EditGamePage } from './pages/edit/EditGamePage';
 import { FinishGamePage } from './pages/finish/FinishGamePage';
 import { GameLogPage } from './pages/game/GameLogPage';
 import { GamePage } from './pages/game/GamePage';
-import { ChatSettingsPage, HistoryPage, MyChatsPage } from './pages/stubs';
+import { HistoryPage } from './pages/HistoryPage';
+import { MyChatsPage } from './pages/MyChatsPage';
+import { ProfilePage } from './pages/ProfilePage';
 import { TelegramUiProvider } from './telegram/TelegramUi';
 
 /** Switches to the profile language once it is known. */
@@ -73,6 +77,7 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<MyChatsPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
       <Route path="/chats/:chatId" element={<ChatHomePage />} />
       <Route path="/chats/:chatId/new" element={<CreateGamePage />} />
       <Route path="/chats/:chatId/settings" element={<ChatSettingsPage />} />
@@ -80,6 +85,7 @@ export function AppRoutes() {
       <Route path="/games/:gameId" element={<GamePage />} />
       <Route path="/games/:gameId/log" element={<GameLogPage />} />
       <Route path="/games/:gameId/finish" element={<FinishGamePage />} />
+      <Route path="/games/:gameId/edit" element={<EditGamePage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

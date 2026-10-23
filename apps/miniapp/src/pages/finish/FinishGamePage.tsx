@@ -15,6 +15,7 @@ import { ErrorState, QueryView } from '../../components/Status';
 import { useToast } from '../../components/toastContext';
 import { useFormat } from '../../i18n/hooks';
 import { BackButton, MainButton } from '../../telegram/TelegramUi';
+import { useDeleteGame } from '../game/lifecycle';
 import { MismatchNotice, ResultsSection, TransferItem } from '../finished/results';
 import { roundForDisplay, type ResultRow } from '../finished/resultRows';
 
@@ -97,6 +98,7 @@ function FinishForm({ game }: { game: GameStateResponse }) {
       <>
         <h1 className="page-title">{t('finish.title')}</h1>
         <p className="notice">{t('finish.empty')}</p>
+        {game.permissions.canEditFinished ? <DeleteEmptyGame game={game} /> : null}
       </>
     );
   }
@@ -279,5 +281,20 @@ function FinishForm({ game }: { game: GameStateResponse }) {
         onClick={submit}
       />
     </>
+  );
+}
+
+function DeleteEmptyGame({ game }: { game: GameStateResponse }) {
+  const { t } = useTranslation();
+  const remove = useDeleteGame(game);
+  return (
+    <button
+      type="button"
+      className="button button-destructive button-wide"
+      disabled={remove.isPending}
+      onClick={() => void remove.run()}
+    >
+      {t('gameMenu.delete')}
+    </button>
   );
 }

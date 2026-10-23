@@ -587,3 +587,35 @@ body:has(.main-button-bar) .fab {
 .transfer-edit-players .field {
   margin-bottom: 0;
 }
+
+/* Settings, profile, editing */
+.quick-toggles {
+  grid-template-columns: repeat(auto-fit, minmax(76px, 1fr));
+  padding: 12px;
+}
+
+.item-destructive,
+.link-destructive {
+  color: var(--destructive);
+}
+
+.edit-session {
+  border-bottom: 1px solid var(--separator);
+}
+
+.edit-session .link-button {
+  padding: 8px 12px;
+}
+
+.section-body > .quick-buttons {
+  padding: 12px;
+}
+
+.button-choice {
+  min-height: 52px;
+}
+
+.tab {
+  padding: 0 4px;
+  font-size: 14px;
+}

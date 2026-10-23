@@ -56,3 +56,19 @@ export function formatChipValue(
     maximumSignificantDigits: 2,
   }).format(stack.amount / stack.chips);
 }
+
+/**
+ * Game name from a chat template: `{date}` is the day and month in the language's
+ * locale, `{n}` the game number. Without `timeZone` the runtime's zone is used.
+ */
+export function renderGameName(
+  template: string,
+  values: { language: Language; timeZone?: string; now: number; n: number },
+): string {
+  const date = new Intl.DateTimeFormat(LOCALES[values.language], {
+    day: '2-digit',
+    month: '2-digit',
+    ...(values.timeZone !== undefined ? { timeZone: values.timeZone } : {}),
+  }).format(values.now);
+  return template.replaceAll('{date}', date).replaceAll('{n}', String(values.n));
+}

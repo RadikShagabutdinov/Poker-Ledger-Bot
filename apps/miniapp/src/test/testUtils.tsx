@@ -79,6 +79,7 @@ export const CHAT: ChatResponse = {
   botStatus: 'admin',
   isAdmin: false,
   nextGameName: 'Покер 15.09',
+  nextGameNumber: 1,
 };
 
 type GamePlayer = GameStateResponse['players'][number];

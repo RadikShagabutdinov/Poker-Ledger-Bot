@@ -3,9 +3,9 @@ import { describe, expect, it } from 'vitest';
 import { listGameEvents } from '../db/repositories/gameEvents';
 import { findChat } from '../db/repositories/chats';
 import { updateChatSettings } from './chats';
-import { addPlayerToGame, createGame, renderGameName, updateGame } from './games';
+import { addPlayerToGame, createGame, updateGame } from './games';
 import { getGameState } from './state';
-import { BOB, CAROL, MALLORY, START_TIME, createTestDeps, setupChat, setupGame } from './testing';
+import { BOB, CAROL, MALLORY, createTestDeps, setupChat, setupGame } from './testing';
 
 describe('createGame', () => {
   it('names the game by the template and increments the counter', async () => {
@@ -18,17 +18,6 @@ describe('createGame', () => {
     expect(game.id).toMatch(/^[A-Za-z0-9_-]{12}$/);
     expect(listGameEvents(deps.db, game.id).map((e) => e.type)).toEqual(['game_created']);
     expect(deps.scheduled).toEqual([game.id]);
-  });
-
-  it('formats {date} in the configured time zone and chat locale', () => {
-    // 22:30 UTC on 15.09 is already 16.09 in Moscow.
-    const late = Date.UTC(2026, 8, 15, 22, 30);
-    expect(
-      renderGameName('{date}', { language: 'ru', timeZone: 'Europe/Moscow', now: late, n: 1 }),
-    ).toBe('16.09');
-    expect(
-      renderGameName('{date}', { language: 'en', timeZone: 'UTC', now: START_TIME, n: 1 }),
-    ).toBe('09/15');
   });
 
   it('allows one active game per chat', async () => {

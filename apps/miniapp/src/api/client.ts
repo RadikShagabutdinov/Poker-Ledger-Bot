@@ -12,13 +12,16 @@ import {
   gameMutationResponseSchema,
   gameStateSchema,
   historyPageResponseSchema,
+  myChatsResponseSchema,
   playersResponseSchema,
   profileResponseSchema,
   settlementResponseSchema,
   type AddGamePlayerBody,
   type AddGamePlayerResponse,
   type ChatResponse,
+  type ChatSettingsPatch,
   type CreateGameBody,
+  type EditFinishedBody,
   type ErrorCode,
   type EventMutationResponse,
   type FinishBody,
@@ -31,7 +34,9 @@ import {
   type GameStateResponse,
   type HistoryPageResponse,
   type HistoryQueryParams,
+  type MyChatsResponse,
   type PlayersResponse,
+  type ProfilePatch,
   type ProfileResponse,
   type SettlementPutBody,
   type SettlementResponse,
@@ -58,12 +63,19 @@ export function isApiError(error: unknown, code?: ErrorCode): error is ApiError 
 
 export interface ApiClient {
   me(): Promise<ProfileResponse>;
+  updateMe(patch: ProfilePatch): Promise<ProfileResponse>;
+  myChats(): Promise<MyChatsResponse>;
   chat(chatId: string): Promise<ChatResponse>;
+  updateChatSettings(chatId: string, patch: ChatSettingsPatch): Promise<ChatResponse>;
   chatPlayers(chatId: string): Promise<PlayersResponse>;
   chatGames(chatId: string, query?: HistoryQueryParams): Promise<HistoryPageResponse>;
   createGame(chatId: string, body: CreateGameBody): Promise<GameMutationResponse>;
   game(gameId: string): Promise<GameStateResponse>;
   updateGame(gameId: string, body: UpdateGameBody): Promise<GameMutationResponse>;
+  /** An atomic batch of event changes of a finished game. */
+  editFinished(gameId: string, body: EditFinishedBody): Promise<GameMutationResponse>;
+  reopen(gameId: string, expectedVersion: number): Promise<GameMutationResponse>;
+  deleteGame(gameId: string): Promise<void>;
   addPlayer(gameId: string, body: AddGamePlayerBody): Promise<AddGamePlayerResponse>;
   addEvent(gameId: string, body: GameEventBody): Promise<EventMutationResponse>;
   cancelEvent(gameId: string, eventId: number): Promise<EventMutationResponse>;
@@ -101,12 +113,7 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
   const doFetch = options.fetch ?? globalThis.fetch.bind(globalThis);
   const enc = encodeURIComponent;
 
-  async function request<S extends z.ZodType>(
-    schema: S,
-    method: string,
-    path: string,
-    body?: unknown,
-  ): Promise<z.infer<S>> {
+  async function send(method: string, path: string, body?: unknown): Promise<Response> {
     const headers: Record<string, string> = { authorization: `tma ${options.initDataRaw}` };
     if (body !== undefined) {
       headers['content-type'] = 'application/json';
@@ -124,6 +131,16 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     if (!response.ok) {
       throw await toApiError(response);
     }
+    return response;
+  }
+
+  async function request<S extends z.ZodType>(
+    schema: S,
+    method: string,
+    path: string,
+    body?: unknown,
+  ): Promise<z.infer<S>> {
+    const response = await send(method, path, body);
     const parsed = schema.safeParse(await response.json().catch(() => undefined));
     if (!parsed.success) {
       throw new ApiError('INTERNAL_ERROR', { reason: 'BAD_RESPONSE' }, response.status);
@@ -133,7 +150,11 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
 
   return {
     me: () => request(profileResponseSchema, 'GET', '/me'),
+    updateMe: (patch) => request(profileResponseSchema, 'PATCH', '/me', patch),
+    myChats: () => request(myChatsResponseSchema, 'GET', '/me/chats'),
     chat: (chatId) => request(chatResponseSchema, 'GET', `/chats/${enc(chatId)}`),
+    updateChatSettings: (chatId, patch) =>
+      request(chatResponseSchema, 'PATCH', `/chats/${enc(chatId)}/settings`, patch),
     chatPlayers: (chatId) => request(playersResponseSchema, 'GET', `/chats/${enc(chatId)}/players`),
     chatGames: (chatId, query = {}) => {
       const params = new URLSearchParams();
@@ -150,6 +171,15 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     game: (gameId) => request(gameStateSchema, 'GET', `/games/${enc(gameId)}`),
     updateGame: (gameId, body) =>
       request(gameMutationResponseSchema, 'PATCH', `/games/${enc(gameId)}`, body),
+    editFinished: (gameId, body) =>
+      request(gameMutationResponseSchema, 'POST', `/games/${enc(gameId)}/edit`, body),
+    reopen: (gameId, expectedVersion) =>
+      request(gameMutationResponseSchema, 'POST', `/games/${enc(gameId)}/reopen`, {
+        expectedVersion,
+      }),
+    deleteGame: async (gameId) => {
+      await send('DELETE', `/games/${enc(gameId)}`);
+    },
     addPlayer: (gameId, body) =>
       request(addGamePlayerResponseSchema, 'POST', `/games/${enc(gameId)}/players`, body),
     addEvent: (gameId, body) =>

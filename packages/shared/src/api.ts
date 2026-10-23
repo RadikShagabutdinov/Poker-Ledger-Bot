@@ -174,6 +174,8 @@ export const chatResponseSchema = z.object({
   isAdmin: z.boolean(),
   /** The name the next game gets from the template. */
   nextGameName: z.string(),
+  /** `{n}` of the next game, for previews of an edited template. */
+  nextGameNumber: z.number().int().positive(),
 });
 export type ChatResponse = z.infer<typeof chatResponseSchema>;
 

@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatChipValue, formatMoney, formatNumber, formatSignedMoney } from './format';
+import {
+  formatChipValue,
+  formatMoney,
+  formatNumber,
+  formatSignedMoney,
+  renderGameName,
+} from './format';
 
 // Intl separates groups with a no-break space in ru; compare with plain spaces.
 const plain = (text: string) => text.replace(/[\u00a0\u202f]/g, ' ');
@@ -38,5 +44,34 @@ describe('formatChipValue', () => {
     expect(plain(formatChipValue({ chips: 30_000, amount: 1_000 }, 'RUB', 'ru'))).toBe('0,033 ₽');
     expect(formatChipValue({ chips: 30_000, amount: 1_000 }, 'RUB', 'en')).toBe('₽0.033');
     expect(formatChipValue({ chips: 100, amount: 500 }, 'USD', 'en')).toBe('$5');
+  });
+});
+
+describe('renderGameName', () => {
+  it('formats {date} in the configured time zone and chat locale', () => {
+    // 22:30 UTC on 15.09 is already 16.09 in Moscow.
+    const late = Date.UTC(2026, 8, 15, 22, 30);
+    expect(
+      renderGameName('{date}', { language: 'ru', timeZone: 'Europe/Moscow', now: late, n: 1 }),
+    ).toBe('16.09');
+    expect(
+      renderGameName('{date}', {
+        language: 'en',
+        timeZone: 'UTC',
+        now: Date.UTC(2026, 8, 15, 12),
+        n: 1,
+      }),
+    ).toBe('09/15');
+  });
+
+  it('fills {n} and keeps other text', () => {
+    expect(
+      renderGameName('Игра №{n}, {date}', {
+        language: 'ru',
+        timeZone: 'UTC',
+        now: Date.UTC(2026, 8, 15, 12),
+        n: 7,
+      }),
+    ).toBe('Игра №7, 15.09');
   });
 });

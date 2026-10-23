@@ -30,7 +30,7 @@ export function GameLogPage() {
 
 const entryDomId = (id: number) => `log-entry-${String(id)}`;
 
-function GameLog({ game }: { game: GameStateResponse }) {
+export function GameLog({ game }: { game: GameStateResponse }) {
   const { t } = useTranslation();
   const format = useFormat();
   const api = useApi();

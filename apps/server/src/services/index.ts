@@ -32,7 +32,6 @@ export {
   assertCanHaveAnotherActiveGame,
   createGame,
   listActiveGames,
-  renderGameName,
   updateGame,
   type AddGamePlayerInput,
   type CreateGameInput,

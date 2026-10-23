@@ -1,18 +1,14 @@
 // Chat home: the active game or «New game», the last 5 games, links.
-import { chipsToMoneyRounded } from '@pokerledger/core';
-import type { HistoryPageResponse } from '@pokerledger/shared';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useParams } from 'react-router';
 
 import { useChat, useChatGames } from '../api/queries';
-import { ListItem, Section } from '../components/List';
+import { GameCard } from '../components/GameCard';
+import { Section } from '../components/List';
 import { QueryView } from '../components/Status';
-import { useFormat } from '../i18n/hooks';
 import { BackButton, MainButton } from '../telegram/TelegramUi';
 
 const RECENT_GAMES = 5;
-
-type GameItem = HistoryPageResponse['items'][number];
 
 export function ChatHomePage() {
   const { chatId = '' } = useParams();
@@ -33,7 +29,7 @@ export function ChatHomePage() {
         {() =>
           activeGame ? (
             <Section title={t('chat.activeGame')}>
-              <GameRow game={activeGame} onOpen={() => void navigate(`/games/${activeGame.id}`)} />
+              <GameCard game={activeGame} onOpen={() => void navigate(`/games/${activeGame.id}`)} />
             </Section>
           ) : (
             <MainButton
@@ -53,7 +49,7 @@ export function ChatHomePage() {
               data.items
                 .slice(0, RECENT_GAMES)
                 .map((game) => (
-                  <GameRow
+                  <GameCard
                     key={game.id}
                     game={game}
                     onOpen={() => void navigate(`/games/${game.id}`)}
@@ -67,32 +63,8 @@ export function ChatHomePage() {
       <nav className="links">
         <Link to={`/chats/${chatId}/history`}>{t('chat.allHistory')}</Link>
         <Link to={`/chats/${chatId}/settings`}>{t('chat.settings')}</Link>
+        <Link to="/profile">{t('profile.title')}</Link>
       </nav>
     </main>
-  );
-}
-
-function GameRow({ game, onOpen }: { game: GameItem; onOpen: () => void }) {
-  const { t } = useTranslation();
-  const format = useFormat();
-  const date = new Intl.DateTimeFormat(format.language === 'ru' ? 'ru-RU' : 'en-US', {
-    day: 'numeric',
-    month: 'short',
-  }).format(game.startedAt);
-  const issued = format.money(chipsToMoneyRounded(game.issuedChips, game.stack), game.currency);
-  const status = game.status === 'active' ? t('chat.statusActive') : t('chat.statusFinished');
-  const mismatch = game.mismatchChips !== null && game.mismatchChips !== 0;
-  return (
-    <ListItem
-      title={game.name}
-      subtitle={[date, status, t('chat.players', { count: game.playerCount })].join(' · ')}
-      after={
-        <>
-          {issued}
-          {mismatch ? <span className="badge badge-warning">{t('chat.mismatch')}</span> : null}
-        </>
-      }
-      onClick={onOpen}
-    />
   );
 }

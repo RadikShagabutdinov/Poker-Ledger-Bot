@@ -19,6 +19,7 @@ import { BackButton, MainButton } from '../../telegram/TelegramUi';
 import { AddPlayerSheet } from './AddPlayerSheet';
 import { describeChipEvent, playerNameOf } from './events';
 import { RenameSheet, StackSheet } from './GameSettingsSheets';
+import { useDeleteGame } from './lifecycle';
 import { PlayerSheet } from './PlayerSheet';
 
 type GamePlayer = GameStateResponse['players'][number];
@@ -68,6 +69,7 @@ function ActiveGame({ game }: { game: GameStateResponse }) {
     setSheet(null);
   };
   const canManage = game.permissions.canManage;
+  const remove = useDeleteGame(game);
 
   const undo = useGameMutation(game.id, () => api.undo(game.id));
   const onUndo = async () => {
@@ -203,6 +205,17 @@ function ActiveGame({ game }: { game: GameStateResponse }) {
           </>
         ) : null}
         <ListItem title={t('game.log')} onClick={() => void navigate(`/games/${game.id}/log`)} />
+        {game.permissions.canEditFinished ? (
+          <ListItem
+            title={t('gameMenu.delete')}
+            className="item-destructive"
+            onClick={() => {
+              if (remove.isPending) return;
+              close();
+              void remove.run();
+            }}
+          />
+        ) : null}
       </BottomSheet>
       {sheet?.kind === 'rename' ? <RenameSheet game={game} onClose={close} /> : null}
       {sheet?.kind === 'stack' ? <StackSheet game={game} onClose={close} /> : null}

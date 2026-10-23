@@ -61,4 +61,11 @@ describe('createApiClient', () => {
     await api.chatGames('chat1', { status: 'active' }).catch(() => undefined);
     expect(calls[0]?.path).toBe('/chats/chat1/games?status=active');
   });
+
+  it('accepts an empty 204 answer to a delete', async () => {
+    const { fetch, calls } = fakeFetch({ 'DELETE /games/g1': { status: 204 } });
+    const api = createApiClient({ baseUrl: '/api', initDataRaw: 'x', fetch });
+    await expect(api.deleteGame('g1')).resolves.toBeUndefined();
+    expect(calls[0]).toMatchObject({ method: 'DELETE', path: '/games/g1' });
+  });
 });

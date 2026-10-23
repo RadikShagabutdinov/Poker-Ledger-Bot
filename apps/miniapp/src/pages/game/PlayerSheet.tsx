@@ -11,12 +11,12 @@ import { Section } from '../../components/List';
 import { NumberField } from '../../components/NumberField';
 import { useToast } from '../../components/toastContext';
 import { useFormat } from '../../i18n/hooks';
+import { useStackFractionLabel } from '../../i18n/stackFraction';
 import { useConfirm } from '../../telegram/nativeUi';
 import { describeEntry, isChipEvent } from './events';
 
 /** Chat default while the chat settings load or if they cannot be read. */
 const DEFAULT_QUICK_BUYINS = [1, 0.5];
-const FRACTIONS: Record<number, string> = { 0.25: '¼', 0.5: '½', 0.75: '¾' };
 
 export function PlayerSheet({
   game,
@@ -29,6 +29,7 @@ export function PlayerSheet({
 }) {
   const { t } = useTranslation();
   const format = useFormat();
+  const stackLabel = useStackFractionLabel();
   const api = useApi();
   const toast = useToast();
   const confirm = useConfirm();
@@ -89,12 +90,6 @@ export function PlayerSheet({
   const quickBuyins = (chat.data?.quickBuyins ?? DEFAULT_QUICK_BUYINS)
     .map((fraction) => ({ fraction, chips: Math.round(fraction * game.stack.chips) }))
     .filter((q) => q.chips > 0);
-  const stackLabel = (fraction: number) =>
-    fraction === 1
-      ? t('player.fullStack')
-      : t('player.stacks', {
-          fraction: FRACTIONS[fraction] ?? format.number(fraction),
-        });
   const preliminary =
     outChips === null
       ? null
